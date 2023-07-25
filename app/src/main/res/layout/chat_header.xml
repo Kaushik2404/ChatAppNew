@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="60dp"
+android:background="#4DB7EE"
+android:orientation="horizontal">
+
+<ImageView
+    android:id="@+id/back"
+    android:layout_width="30dp"
+    android:layout_height="30dp"
+    android:layout_gravity="center_vertical"
+    android:layout_marginLeft="15dp"
+    android:src="@drawable/baseline_arrow_back_24"
+    />
+
+    <ImageView
+        android:id="@+id/profilePic"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="15dp"
+        android:src="@drawable/profile"
+        />
+
+
+    <TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+   android:layout_gravity="center_vertical"
+   android:textStyle="bold"
+    android:text="Kasuhik"
+    android:textAlignment="center"
+    android:gravity="center"
+    android:textColor="#FFFFFF"
+    android:textSize="25dp"
+        android:id="@+id/chatUserName"
+        android:layout_weight="1"
+    />
+    <ImageView
+        android:id="@+id/call"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="15dp"
+        android:src="@drawable/baseline_call_24"
+        />
+    <ImageView
+        android:id="@+id/video"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="15dp"
+        android:src="@drawable/baseline_videocam_24"
+        />
+    <ImageView
+        android:id="@+id/info"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="15dp"
+        android:src="@drawable/baseline_info_24"
+        android:layout_marginRight="15dp"
+        />
+
+
+
+</LinearLayout>

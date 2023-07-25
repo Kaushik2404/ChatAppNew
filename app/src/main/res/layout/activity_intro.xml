@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.IntroActivity"
+    android:orientation="vertical"
+    android:background="@drawable/chat_back">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Messenger"
+        android:textColor="@color/white"
+        android:textSize="40dp"
+        android:layout_gravity="center_horizontal"
+        android:fontFamily="@font/sgeopersonalusemedium"
+        android:textStyle="bold"
+        android:layout_marginTop="30dp"
+        />
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:src="@drawable/chatlogo"
+        android:layout_gravity="center_horizontal"
+        android:padding="20dp"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        />
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign up with social account"
+        android:textColor="#7C000000"
+        android:textSize="18dp"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal"
+        android:fontFamily="@font/sgeopersonalusemedium"
+        android:textStyle="bold"
+        />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal"
+        >
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/google"
+            android:padding="2dp"
+            app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+            app:strokeColor="#E94335"
+            app:strokeWidth="1dp"
+            android:id="@+id/google"
+            android:layout_margin="10dp"/>
+        <com.google.android.material.imageview.ShapeableImageView
+            android:layout_width="50dp"
+
+            android:layout_height="50dp"
+            android:src="@drawable/fb"
+            app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+            app:strokeColor="#5179AD"
+            app:strokeWidth="1dp"
+            android:padding="2dp"
+            android:id="@+id/fb"
+            android:layout_margin="10dp"/>
+
+    </LinearLayout>
+
+    
+    <Button
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:text="Sign up"
+        android:fontFamily="@font/sgeopersonalusemedium"
+        android:textSize="25dp"
+        android:id="@+id/signup"
+        android:background="@drawable/btnback"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        android:elevation="3dp"
+        android:layout_marginTop="40dp"
+        />
+    <Button
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:text="Log in"
+        android:fontFamily="@font/sgeopersonalusemedium"
+        android:textSize="25dp"
+        android:id="@+id/login"
+        android:background="@drawable/btnback"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        android:elevation="3dp"
+        android:layout_marginBottom="50dp"
+
+        />
+
+
+
+
+
+</LinearLayout>

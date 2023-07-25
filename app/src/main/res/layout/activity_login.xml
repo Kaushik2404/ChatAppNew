@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.LoginActivity"
+    android:orientation="vertical"
+    android:background="@drawable/chat_back"
+    android:weightSum="1">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Log in"
+        android:textColor="@color/white"
+        android:textSize="30dp"
+        android:layout_gravity="center_horizontal"
+        android:fontFamily="@font/sgeopersonalusemedium"
+        android:textStyle="bold"
+        android:layout_marginTop="30dp"
+        android:layout_weight="0.3"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email :"
+        android:textColor="@color/white"
+        android:fontFamily="@font/sgeopersonalusemedium"
+        android:textSize="18dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="50dp"
+        android:textStyle="bold"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:hint="Enter Email...."
+        android:drawableEnd="@drawable/baseline_email_24"
+        android:id="@+id/email"
+        android:padding="10dp"
+        android:textColorHint="#75000000"
+        android:textColor="@color/black"
+        android:inputType="text"
+        android:background="@drawable/edtback"
+        android:elevation="3dp"
+        android:textSize="15dp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Password :"
+        android:textColor="@color/white"
+        android:fontFamily="@font/sgeopersonalusemedium"
+        android:textSize="18dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:hint="Enter Password...."
+        android:textSize="15dp"
+        android:drawableEnd="@drawable/baseline_lock_24"
+        android:id="@+id/password"
+        android:padding="10dp"
+        android:textColorHint="#75000000"
+        android:textColor="@color/black"
+        android:inputType="textPassword"
+        android:background="@drawable/edtback"
+        android:elevation="3dp"
+        />
+    <Button
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:text="Log in"
+        android:fontFamily="@font/sgeopersonalusemedium"
+        android:textSize="25dp"
+        android:id="@+id/login"
+        android:background="@drawable/btnback"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="150dp"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        android:elevation="3dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New User ? go to Sign up"
+        android:textColor="#86000000"
+        android:textSize="15dp"
+        android:layout_gravity="center_horizontal"
+        android:fontFamily="@font/sgeopersonalusemedium"
+        android:layout_marginTop="40dp"
+        android:id="@+id/signup"
+        />
+
+
+
+
+</LinearLayout>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="50dp"
+android:background="#4DB7EE"
+android:orientation="horizontal"
+    android:elevation="5dp">
+
+<ImageView
+    android:id="@+id/back"
+    android:layout_width="40dp"
+    android:layout_height="40dp"
+    android:layout_centerVertical="true"
+    android:layout_marginLeft="15dp"
+    android:src="@drawable/profile" />
+
+
+<TextView
+    android:id="@+id/title"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
+    android:fontFamily="@font/sgeopersonalusemedium"
+    android:text="Chat Message"
+    android:textAlignment="center"
+    android:gravity="center"
+    android:textColor="#FFFFFF"
+    android:textSize="25dp"
+    android:textStyle="bold" />
+    <ImageView
+        android:id="@+id/btnPageFollow"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="15dp"
+        android:src="@drawable/baseline_person_add_alt_1_24"
+        android:layout_alignParentEnd="true"
+        android:visibility="visible"/>
+
+
+
+</RelativeLayout>

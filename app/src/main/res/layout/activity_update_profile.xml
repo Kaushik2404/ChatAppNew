@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.UpdateProfileActivity"
+    android:orientation="vertical"
+    >
+
+    <include layout="@layout/update_header"
+        android:id="@+id/updateHeader"
+        />
+
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="20dp"
+        android:padding="20dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/profile"
+        android:id="@+id/update_pic"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name :"
+                android:textColor="@color/black"
+                android:fontFamily="@font/sgeopersonalusemedium"
+                android:textSize="18dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+
+                />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:hint="Enter Name...."
+                android:drawableEnd="@drawable/baseline_person_white_24"
+                android:id="@+id/updateName"
+                android:padding="10dp"
+                android:textColorHint="#75000000"
+                android:textColor="@color/black"
+                android:inputType="text"
+                android:background="@drawable/edtback"
+                android:elevation="3dp"
+                android:textSize="15dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Number :"
+                android:textColor="@color/black"
+                android:fontFamily="@font/sgeopersonalusemedium"
+                android:textSize="18dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+
+                />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:hint="Enter Number...."
+                android:drawableEnd="@drawable/baseline_call_24"
+                android:id="@+id/updateNumber"
+                android:padding="10dp"
+                android:textColorHint="#75000000"
+                android:textColor="@color/black"
+                android:inputType="number"
+                android:maxLength="10"
+                android:background="@drawable/edtback"
+                android:elevation="3dp"
+                android:textSize="15dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email :"
+                android:textColor="@color/black"
+                android:fontFamily="@font/sgeopersonalusemedium"
+                android:textSize="18dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:hint="Enter Email...."
+                android:drawableEnd="@drawable/baseline_email_24"
+                android:id="@+id/updateEmail"
+                android:padding="10dp"
+                android:textColorHint="#75000000"
+                android:textColor="@color/black"
+                android:inputType="text"
+                android:background="@drawable/edtback"
+                android:elevation="3dp"
+                android:textSize="15dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" old Password :"
+                android:textColor="@color/black"
+                android:fontFamily="@font/sgeopersonalusemedium"
+                android:textSize="18dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+
+                />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:hint="Enter old Password...."
+                android:textSize="15dp"
+                android:drawableEnd="@drawable/baseline_lock_24"
+                android:id="@+id/oldPassword"
+                android:padding="10dp"
+                android:textColorHint="#75000000"
+                android:textColor="@color/black"
+                android:inputType="text"
+                android:background="@drawable/edtback"
+                android:elevation="3dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Password :"
+                android:textColor="@color/black"
+                android:fontFamily="@font/sgeopersonalusemedium"
+                android:textSize="18dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+
+                />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:hint="Enter Password...."
+                android:textSize="15dp"
+                android:drawableEnd="@drawable/baseline_lock_24"
+                android:id="@+id/UpdatePassword"
+                android:padding="10dp"
+                android:textColorHint="#75000000"
+                android:textColor="@color/black"
+                android:inputType="text"
+                android:background="@drawable/edtback"
+                android:elevation="3dp"
+                android:layout_marginBottom="5dp"
+                />
+        </LinearLayout>
+
+    </ScrollView>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="Update Profile"
+        android:background="@drawable/edtbackserch"
+        android:layout_marginTop="20dp"
+        android:textStyle="bold"
+        android:layout_marginBottom="20dp"
+        android:textSize="18dp"
+        android:textAllCaps="false"
+        android:id="@+id/update"
+        />
+
+
+
+
+
+</LinearLayout>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.CallFragment"
+    android:orientation="vertical"
+    >
+    <SearchView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_margin="10dp"
+        android:id="@+id/serch"
+        android:background="@drawable/edtbackserch"
+        android:elevation="5dp"
+        android:queryHint="Serch Name"
+        android:iconifiedByDefault="false"
+        android:queryBackground="@drawable/selectediteamedttext"
+
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp"
+        android:id="@+id/rvViewCAll"
+        android:layout_weight="1"
+        />
+
+</LinearLayout>

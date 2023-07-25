@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:padding="5dp"
+    android:layout_margin="3dp"
+    >
+    <ImageView
+        android:id="@+id/getImg"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/logochat"
+        android:textColor="@color/black"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+
+
+        />
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        >
+        <LinearLayout
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            >
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:id="@+id/recprogress"
+                android:indeterminateDrawable="@drawable/custom_progress_bar"
+                />
+
+        </LinearLayout>
+    </FrameLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

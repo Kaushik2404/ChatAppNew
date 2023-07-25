@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.ChatActivity"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+    <include layout="@layout/chat_header"
+        android:id="@+id/chatBar"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/recyclerview"
+            android:layout_weight="1"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:background="@drawable/edtbacktextchat"
+            android:layout_margin="10dp">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="10dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/baseline_camera_alt_24"
+                android:layout_marginLeft="10dp"
+                android:id="@+id/image"
+                />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:id="@+id/edtMsg"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:hint="Message..."
+                android:inputType="text"
+                android:textColorHint="#97000000"
+                android:textColor="@color/black"
+                android:padding="10dp"
+
+                />
+
+            <ImageView
+                android:id="@+id/sendMsg"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:padding="10dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/baseline_send_24"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+
+
+
+
+
+
+
+</LinearLayout>

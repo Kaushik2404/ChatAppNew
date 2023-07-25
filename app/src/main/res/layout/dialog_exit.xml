@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:cardCornerRadius="10sp"
+    android:elevation="5dp"
+    >
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:background="@android:color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <View
+            android:visibility="gone"
+            android:background="#452196F3"
+            android:layout_width="match_parent"
+            android:layout_height="2dp" />
+
+        <TextView
+            android:textSize="16sp"
+            android:textColor="#2196F3"
+            android:id="@+id/tv_msg"
+            android:padding="20sp"
+            android:textStyle="bold"
+
+            android:gravity="center"
+            android:layout_marginVertical="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Are You Confirm Delete this Chat?" />
+
+        <View
+            android:visibility="visible"
+            android:background="#452196F3"
+            android:layout_width="match_parent"
+            android:layout_height="1dp" />
+
+        <LinearLayout
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:textSize="14sp"
+                android:textColor="#2196F3"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:id="@+id/tv_no"
+                android:padding="10sp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="No"
+                android:elevation="3dp"
+                android:layout_weight="1"
+                android:background="@drawable/canselbtn"/>
+
+            <View
+                android:background="#452196F3"
+                android:layout_width="1dp"
+                android:layout_height="match_parent" />
+
+            <TextView
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:id="@+id/tv_yes"
+                android:layout_marginHorizontal="10dp"
+                android:padding="10sp"
+                android:layout_width="0dp"
+                android:background="@drawable/btnback"
+                android:layout_height="wrap_content"
+                android:text="Yes"
+                android:elevation="3dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
