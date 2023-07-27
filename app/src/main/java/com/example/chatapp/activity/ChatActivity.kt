@@ -1,33 +1,44 @@
 package com.example.chatapp.activity
 
+import android.Manifest
+import android.app.Activity
 import android.app.ProgressDialog
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.database.Cursor
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.util.Log
 import android.view.KeyEvent
+import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chatapp.adapter.MesssageAdapter
 import com.example.chatapp.databinding.ActivityChatBinding
 import com.example.chatapp.modal.Message
 import com.example.chatapp.modal.User
+import com.example.chatapp.modell.Data
+import com.example.chatapp.modell.NotificationModel
 import com.example.chatapp.ui.NotificationViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.example.chatapp.modell.Data
-import com.example.chatapp.modell.NotificationModel
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 
 
 @AndroidEntryPoint
@@ -36,10 +47,13 @@ class ChatActivity : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
     var msgList = ArrayList<Message>()
 
+    private val CAMERA_REQ = 101
+
     private var reciveRoom: String? = null
     private var sendRoom: String? = null
     private lateinit var msgAdapter: MesssageAdapter
     private lateinit var ImageUri:String
+    private lateinit var photo:Uri
     final private var Count = 0
     lateinit var name:String
     lateinit var ID:String
@@ -50,15 +64,10 @@ class ChatActivity : AppCompatActivity() {
     lateinit var currentMsg:String
     lateinit var type:String
 //    lateinit var Email:String
-
     lateinit var launcher: ActivityResultLauncher<String>
-
-
-
     private  val TAG = "Chat"
+    var clickCount=0
     private val notificationViewModel: NotificationViewModel by viewModels()
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,12 +79,118 @@ class ChatActivity : AppCompatActivity() {
         binding.chatBar.chatUserName.text = intent.getStringExtra("NAME")
         ID = intent.getStringExtra("ID").toString()
         userID = intent.getStringExtra("USERID").toString()
-         reciverEmail = intent.getStringExtra("UID").toString()
+        reciverEmail = intent.getStringExtra("UID").toString()
 
         currentUserName()
         getToken()
         uplodeimage()
+        onclick()
+        listenNewMessage()
+        onClickDilogFile()
+    }
 
+    private fun sendCaptureImage() {
+
+        val photoName=getFileName(photo).toString()
+        val mProgressDialog = ProgressDialog(this)
+        mProgressDialog.setMessage("Sending Image")
+        mProgressDialog.show()
+
+        val reference: StorageReference =
+            FirebaseStorage.getInstance().getReference().child(photoName)
+        reference.putFile(photo).addOnSuccessListener {
+
+            val reference1: StorageReference =
+                FirebaseStorage.getInstance().getReference().child(photoName)
+            reference1.downloadUrl.addOnSuccessListener { uri ->
+//
+                currentMsg = uri.toString()
+                Log.d("Okmsg", currentMsg)
+
+                userMsgAdd("image","image")
+                type="image"
+
+                val id = db.collection("Chat_Test").document().id
+
+                val reciverid = intent.getStringExtra("UID").toString()
+                val senderid = FirebaseAuth.getInstance().currentUser?.email.toString()
+
+                val calendar: Calendar = Calendar.getInstance()
+                val format = SimpleDateFormat(" d MMM yyyy HH:mm:ss ")
+                val time: String = format.format(calendar.time)
+
+                val msg = Message(id,currentMsg, senderid, reciverid, time,type)
+
+                db.collection("Chat_Test").document(id).set(msg).addOnCompleteListener {
+                    Log.d("result", "ok save photo$type")
+                    mProgressDialog.dismiss()
+//            msgList.add(msg)
+//            msgAdapter.notifyItemInserted(msgList.size - 1)
+                }.addOnFailureListener {
+                    mProgressDialog.dismiss()
+                    Toast.makeText(applicationContext, "Failed..Sending Image", Toast.LENGTH_SHORT).show()
+                }
+
+                notificationCheckCondition()
+                push("photo")
+
+            }.addOnFailureListener {
+                mProgressDialog.dismiss()
+                Toast.makeText(applicationContext, "Failed send Image..", Toast.LENGTH_SHORT).show()
+            }
+        }.addOnFailureListener {
+            mProgressDialog.dismiss()
+            Toast.makeText(applicationContext, "error sending", Toast.LENGTH_SHORT).show()
+        }
+
+    }
+
+    private fun onClickDilogFile() {
+        binding.file.setOnClickListener {
+
+        }
+        binding.camera.setOnClickListener {
+            clickCount=0
+            binding.attachFileview.visibility=View.GONE
+        if (ContextCompat.checkSelfPermission(this@ChatActivity, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+
+                // Requesting permission
+            ActivityCompat.requestPermissions(this@ChatActivity, arrayOf(Manifest.permission.CAMERA), 101)
+
+            } else {
+//                    Toast.makeText(context, "Permission already granted", Toast.LENGTH_SHORT).show()
+                val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                startActivityForResult(cameraIntent, CAMERA_REQ)
+                Log.d("Permission","Permissiono_Granted CAMERA")
+            }
+
+        }
+        binding.galary.setOnClickListener {
+            clickCount=0
+            binding.attachFileview.visibility=View.GONE
+            getImageId()
+        }
+        binding.location.setOnClickListener {
+
+        }
+        binding.audio.setOnClickListener {
+
+        }
+        binding.contact.setOnClickListener {
+
+        }
+    }
+    private fun onclick() {
+        binding.btnattachFile.setOnClickListener {
+            if(clickCount==0){
+                binding.attachFileview.visibility=View.VISIBLE
+                clickCount=1
+            }
+            else{
+                binding.attachFileview.visibility=View.GONE
+                clickCount=0
+            }
+        }
         binding.image.setOnClickListener {
             getImageId()
         }
@@ -91,6 +206,7 @@ class ChatActivity : AppCompatActivity() {
             }
             false
         }
+
         binding.edtMsg.setOnClickListener {
             binding.recyclerview.post(Runnable { binding.recyclerview.scrollToPosition(msgList.size - 1) })
         }
@@ -105,7 +221,6 @@ class ChatActivity : AppCompatActivity() {
 
             }
         }
-        listenNewMessage()
 
     }
 
@@ -299,7 +414,6 @@ class ChatActivity : AppCompatActivity() {
         binding.recyclerview.layoutManager = LinearLayoutManager(this)
         binding.recyclerview.setHasFixedSize(true)
         binding.recyclerview.adapter = msgAdapter
-
         binding.recyclerview.post(Runnable { binding.recyclerview.scrollToPosition(msgList.size - 1) })
     }
 
@@ -379,5 +493,47 @@ class ChatActivity : AppCompatActivity() {
         }
         return result
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if ( resultCode == Activity.RESULT_OK) {
+            Log.d("IMAGE URI","true")
+            if(requestCode == CAMERA_REQ ){
+                Log.d("IMAGE URI","true1")
+                    val bitphoto = data?.extras?.get("data") as Bitmap
+                    getImageUri(this@ChatActivity,bitphoto)
+                    Log.d("IMAGE URI",photo.toString())
+                    sendCaptureImage()
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray,
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 101) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                startActivityForResult(cameraIntent, CAMERA_REQ)
+            } else {
+                Toast.makeText(this@ChatActivity, "CAMERA Permission Denied", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+    private fun getImageUri(context: Activity, inImage: Bitmap) {
+        val bytes = ByteArrayOutputStream()
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path = MediaStore.Images.Media.insertImage(
+            context.getContentResolver(),
+            inImage,
+            "Capture_"+Calendar.getInstance().getTime().toString(),
+            null
+        )
+        photo=Uri.parse(path)
+    }
+
 
 }

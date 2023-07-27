@@ -21,6 +21,8 @@ class IntroActivity : AppCompatActivity() {
         private const val POST_NOTI = 101
 
         private const val CALL = 102
+        private const val CAMERA  = 103
+        private const val LOCATION  = 14
 
     }
    private lateinit var binding: ActivityIntroBinding
@@ -49,7 +51,13 @@ class IntroActivity : AppCompatActivity() {
             checkPermission(
                 Manifest.permission.CALL_PHONE,CALL
             )
-            checkPermission(
+        checkPermission(
+            Manifest.permission.CAMERA,CAMERA
+        )
+        checkPermission(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            LOCATION)
+        checkPermission(
             Manifest.permission.POST_NOTIFICATIONS,
             INTERNET_PERMISSION)
 
@@ -76,14 +84,28 @@ class IntroActivity : AppCompatActivity() {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this@IntroActivity, "Notification Permission Granted", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this@IntroActivity, "Notification Permission Denied", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this@IntroActivity, "Notification Permission Denied", Toast.LENGTH_SHORT).show()
             }
         }
         else if (requestCode == CALL) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 Toast.makeText(this@IntroActivity, "CALL Permission Granted", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this@IntroActivity, "CALL Permission Denied", Toast.LENGTH_SHORT).show()
+//                Toast.makeText(this@IntroActivity, "CALL Permission Denied", Toast.LENGTH_SHORT).show()
+            }
+        }
+        else if (requestCode == CAMERA) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this@IntroActivity, "CAMERA Permission Granted", Toast.LENGTH_SHORT).show()
+            } else {
+//                Toast.makeText(this@IntroActivity, "CAMERA Permission Denied", Toast.LENGTH_SHORT).show()
+            }
+        }
+        else if (requestCode == LOCATION) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this@IntroActivity, "LOCATION Permission Granted", Toast.LENGTH_SHORT).show()
+            } else {
+//                Toast.makeText(this@IntroActivity, "CAMERA Permission Denied", Toast.LENGTH_SHORT).show()
             }
         }
     }

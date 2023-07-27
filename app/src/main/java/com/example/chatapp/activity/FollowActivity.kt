@@ -14,7 +14,9 @@ import com.example.chatapp.modell.NotificationModel
 import com.example.chatapp.ui.NotificationViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class FollowActivity : AppCompatActivity() {
     lateinit var binding: ActivityFollowBinding
     lateinit var userList: ArrayList<User>
@@ -28,26 +30,19 @@ class FollowActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFollowBinding.inflate(layoutInflater)
-
         setContentView(binding.root)
-
         userList = arrayListOf()
         userList2 = arrayListOf()
-
         followList()
         onClick()
-
     }
-
     private fun onClick() {
         binding.headerFollow.back.setOnClickListener {
             onBackPressed()
         }
     }
-
     private fun listenNewMessage() {
     }
-
     private fun followList() {
         FirebaseFirestore.getInstance()
             .collection(FirebaseAuth.getInstance().currentUser?.email.toString())
@@ -115,8 +110,8 @@ class FollowActivity : AppCompatActivity() {
                                                     .set(okuser)
                                                     .addOnSuccessListener {
                                                         Log.d("TAG11", "User Follow")
-//                        notificationCheckCondition()
-//                        push("Follow request")
+                                                        notificationCheckCondition()
+                                                        push("Follow request")
                                                     }
                                                     .addOnFailureListener {
                                                         Log.d("TAG11", "User not Follow")
