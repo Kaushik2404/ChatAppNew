@@ -1,6 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:padding="5dp"
+    android:layout_margin="3dp"
+    android:id="@+id/msgLayout"
+    >
+    <TextView
+        android:id="@+id/sendMsg"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="hello"
+        android:textColor="#5099E4"
+        android:padding="10dp"
+        android:textSize="18dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/messagesendback"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
+        />
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/getMsg"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="hello"
+        android:textColor="#5099E4"
+        android:padding="10dp"
+        android:textSize="18dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/messagesendbackget"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+    <ImageView
+        android:visibility="gone"
+        android:id="@+id/sendimg"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:textColor="#5099E4"
+        android:src="@drawable/logochat"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/flsendImg"
+        android:visibility="gone"
+        >
+        <LinearLayout
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            >
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:id="@+id/sendrecprogress"
+                android:indeterminateDrawable="@drawable/custom_progress_bar"
+                />
+
+        </LinearLayout>
+    </FrameLayout>
+
+    <ImageView
+        android:visibility="gone"
+        android:id="@+id/getImg"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/logochat"
+        android:textColor="@color/black"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+
+
+        />
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/flgetImg"
+        android:visibility="gone"
+
+        >
+        <LinearLayout
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:orientation="vertical"
+            android:gravity="center"
+            >
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:id="@+id/recprogress"
+                android:indeterminateDrawable="@drawable/custom_progress_bar"
+                />
+
+        </LinearLayout>
+    </FrameLayout>
+
+
+
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

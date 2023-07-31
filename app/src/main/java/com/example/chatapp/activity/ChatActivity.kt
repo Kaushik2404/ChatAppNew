@@ -8,27 +8,35 @@ import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.util.Log
 import android.view.KeyEvent
-import android.view.View
+import android.view.MenuItem
 import android.view.inputmethod.EditorInfo
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.chatapp.R
+import com.example.chatapp.adapter.FileDialog
 import com.example.chatapp.adapter.MesssageAdapter
 import com.example.chatapp.databinding.ActivityChatBinding
+import com.example.chatapp.interfacefile.OnClickDilogFile
 import com.example.chatapp.modal.Message
 import com.example.chatapp.modal.User
 import com.example.chatapp.modell.Data
 import com.example.chatapp.modell.NotificationModel
+import com.example.chatapp.onClickMsg
 import com.example.chatapp.ui.NotificationViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -38,8 +46,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
-
 
 @AndroidEntryPoint
 class ChatActivity : AppCompatActivity() {
@@ -88,8 +94,8 @@ class ChatActivity : AppCompatActivity() {
         listenNewMessage()
         onClickDilogFile()
     }
-
     private fun sendCaptureImage() {
+
 
         val photoName=getFileName(photo).toString()
         val mProgressDialog = ProgressDialog(this)
@@ -130,7 +136,6 @@ class ChatActivity : AppCompatActivity() {
                     mProgressDialog.dismiss()
                     Toast.makeText(applicationContext, "Failed..Sending Image", Toast.LENGTH_SHORT).show()
                 }
-
                 notificationCheckCondition()
                 push("photo")
 
@@ -146,50 +151,60 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun onClickDilogFile() {
-        binding.file.setOnClickListener {
+//        binding.file.setOnClickListener {
+//
+//        }
+//        binding.camera.setOnClickListener {
+//            clickCount=0
+//            binding.attachFileview.visibility=View.GONE
+//
+//
+//        }
 
-        }
-        binding.camera.setOnClickListener {
-            clickCount=0
-            binding.attachFileview.visibility=View.GONE
-        if (ContextCompat.checkSelfPermission(this@ChatActivity, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
 
-                // Requesting permission
-            ActivityCompat.requestPermissions(this@ChatActivity, arrayOf(Manifest.permission.CAMERA), 101)
-
-            } else {
-//                    Toast.makeText(context, "Permission already granted", Toast.LENGTH_SHORT).show()
-                val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                startActivityForResult(cameraIntent, CAMERA_REQ)
-                Log.d("Permission","Permissiono_Granted CAMERA")
-            }
-
-        }
-        binding.galary.setOnClickListener {
-            clickCount=0
-            binding.attachFileview.visibility=View.GONE
-            getImageId()
-        }
-        binding.location.setOnClickListener {
-
-        }
-        binding.audio.setOnClickListener {
-
-        }
-        binding.contact.setOnClickListener {
-
-        }
     }
     private fun onclick() {
         binding.btnattachFile.setOnClickListener {
-            if(clickCount==0){
-                binding.attachFileview.visibility=View.VISIBLE
-                clickCount=1
-            }
-            else{
-                binding.attachFileview.visibility=View.GONE
-                clickCount=0
-            }
+
+            val bottomSheet = FileDialog(object :OnClickDilogFile {
+                override fun onClickGalary() {
+                    getImageId()
+                }
+
+                override fun onClickCamera() {
+                    if (ContextCompat.checkSelfPermission(this@ChatActivity, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+
+                        // Requesting permission
+                     ActivityCompat.requestPermissions(this@ChatActivity, arrayOf(Manifest.permission.CAMERA), 101)
+
+                 } else {
+                         Toast.makeText(applicationContext, "Permission already granted", Toast.LENGTH_SHORT).show()
+                        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                        startActivityForResult(cameraIntent, CAMERA_REQ)
+                        Log.d("Permission","Permissiono_Granted CAMERA")
+                        }
+                }
+
+                override fun onClickFile() {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onClickAudio() {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onClickLocation() {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onClickContact() {
+                    TODO("Not yet implemented")
+                }
+
+            })
+
+            bottomSheet.show(supportFragmentManager, "ModalBottomSheet")
+
         }
         binding.image.setOnClickListener {
             getImageId()
@@ -234,7 +249,6 @@ class ChatActivity : AppCompatActivity() {
         val calendar: Calendar = Calendar.getInstance()
         val format = SimpleDateFormat(" d MMM yyyy HH:mm:ss ")
         val time: String = format.format(calendar.time)
-
         db.collection(FirebaseAuth.getInstance().currentUser?.email.toString()).document(reciverEmail)
             .update("lastMsg", currentMsg, "lastMsgTime", time)
             .addOnSuccessListener {
@@ -383,7 +397,6 @@ class ChatActivity : AppCompatActivity() {
                             val msg = document.toObject(Message::class.java)
                             msg?.let { msg ->
 
-
                                 if ((msg?.sendId == senderid && msg?.reciverID == reciverid) || (msg?.reciverID == senderid && msg?.sendId == reciverid)) {
                                     if (msgList.any { it.msgID == msg.msgID }) {
 
@@ -410,11 +423,45 @@ class ChatActivity : AppCompatActivity() {
         }
     }
     private fun setDataRec() {
-        msgAdapter = MesssageAdapter(this, msgList)
+        msgAdapter = MesssageAdapter(this, msgList, object : onClickMsg {
+            override fun onLongClickMsg(pos: Int) {
+                val builder= AlertDialog.Builder(this@ChatActivity)
+                builder.setCancelable(true)
+                builder.setIcon(R.drawable.baseline_delete_24)
+                builder.setTitle("Delete Data !")
+                builder.setMessage("Are you Confirm Delete this Data....")
+                builder.setPositiveButton("yes"){dialog, which->
+
+                    updateMsgView(msgList[pos].msgID.toString(),pos)
+
+//                    msgList.removeAt(pos)
+//                    msgAdapter.notifyItemRemoved(pos)
+                }
+                builder.setNegativeButton("NO"){dialog,which->
+                    dialog.dismiss()
+                }
+                val dialog=builder.create()
+                dialog.show()
+//                msgList.removeAt(pos)
+//                msgAdapter.notifyItemRemoved(pos)
+//                performOptionsMenuClick(pos)
+                }
+        })
         binding.recyclerview.layoutManager = LinearLayoutManager(this)
         binding.recyclerview.setHasFixedSize(true)
         binding.recyclerview.adapter = msgAdapter
         binding.recyclerview.post(Runnable { binding.recyclerview.scrollToPosition(msgList.size - 1) })
+    }
+
+    private fun updateMsgView(msgId:String,pos: Int) {
+        FirebaseFirestore.getInstance().collection("Chat_Test").document(msgId).update("view","OF")
+            .addOnSuccessListener {
+                Log.d("TAGID", "update view$msgId,of")
+                msgList.removeAt(pos)
+                msgAdapter.notifyItemRemoved(pos)
+            }
+
+
     }
 
     override fun onStart() {
@@ -425,16 +472,16 @@ class ChatActivity : AppCompatActivity() {
             .addOnSuccessListener {
                 Log.d("TAG11", "update last message on start")
             }
-
     }
     override fun onBackPressed() {
         super.onBackPressed()
         Count = 0
         val ID = intent.getStringExtra("ID").toString()
-        db.collection(FirebaseAuth.getInstance().currentUser?.email.toString()).document(reciverEmail).update("count", Count)
+        db.collection(FirebaseAuth.getInstance().currentUser?.email.toString()).document(reciverEmail).update("lastMsg",msgList[msgList.size-1].msg.toString(),"count", Count)
             .addOnSuccessListener {
                 Log.d("TAG11", "update last message on start")
             }
+
     }
 
     private fun notificationCheckCondition() {
@@ -533,6 +580,47 @@ class ChatActivity : AppCompatActivity() {
             null
         )
         photo=Uri.parse(path)
+    }
+
+    private fun performOptionsMenuClick(pos: Int) {
+        val popupMenu = PopupMenu(this,binding.recyclerview[pos],R.id.msgLayout)
+//         add the menu
+        popupMenu.inflate(R.menu.options_menu)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            popupMenu.setForceShowIcon(true)
+        }
+        // implement on menu item click Listener
+        popupMenu.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener{
+            override fun onMenuItemClick(item: MenuItem?): Boolean {
+                when(item?.itemId){
+                    R.id.delete-> {
+                        val builder= AlertDialog.Builder(this@ChatActivity)
+                        builder.setCancelable(true)
+                        builder.setIcon(R.drawable.baseline_delete_24)
+                        builder.setTitle("Delete Data !")
+                        builder.setMessage("Are you Confirm Delete this Data....")
+                        builder.setPositiveButton("yes"){dialog, which->
+                           msgList.removeAt(pos)
+                            msgAdapter.notifyItemRemoved(pos)
+                        }
+                        builder.setNegativeButton("NO"){dialog,which->
+                            dialog.dismiss()
+                        }
+                        val dialog=builder.create()
+                        dialog.show()
+                        return true
+                    }
+                    // in the same way you can implement others
+                    R.id.reply -> {
+
+                    }
+
+                }
+                return false
+            }
+        })
+        popupMenu.show()
+
     }
 
 

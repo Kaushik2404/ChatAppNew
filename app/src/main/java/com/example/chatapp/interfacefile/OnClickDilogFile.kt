@@ -1,6 +1,11 @@
 package com.example.chatapp.interfacefile
 
-interface OnClickGlaray {
-   fun onClickGalarySendImage()
+interface OnClickDilogFile {
+   fun onClickGalary()
+   fun onClickCamera()
+   fun onClickFile()
+   fun onClickAudio()
+   fun onClickLocation()
+   fun onClickContact()
 
 }
