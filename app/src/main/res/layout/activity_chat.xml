@@ -7,285 +7,326 @@
     tools:context=".activity.ChatActivity"
     android:orientation="vertical"
     android:background="@color/white">
-
-    <include layout="@layout/chat_header"
-        android:id="@+id/chatBar"
-        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_weight="1"
+        android:background="@color/white"
+        android:id="@+id/chatView"
+        android:visibility="visible"
         >
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            >
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:id="@+id/recyclerview"
-                />
-
-<!--            <FrameLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintStart_toEndOf="parent"-->
-<!--                android:background="@drawable/backattchfile"-->
-<!--                android:layout_marginHorizontal="10sp"-->
-<!--                android:layout_marginVertical="10sp"-->
-<!--                android:visibility="gone"-->
-<!--                android:id="@+id/attachFileview"-->
-<!--                android:elevation="5dp">-->
-<!--                <LinearLayout-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:orientation="vertical"-->
-<!--                    android:padding="20dp"-->
-<!--                    >-->
-<!--                    <LinearLayout-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:orientation="horizontal"-->
-<!--                        android:padding="10sp">-->
-<!--                        <LinearLayout-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:orientation="vertical"-->
-<!--                            android:layout_weight="1"-->
-<!--                            android:id="@+id/file"-->
-<!--                            >-->
-
-<!--                            <ImageView-->
-<!--                                android:layout_width="60dp"-->
-<!--                                android:layout_height="60dp"-->
-<!--                                android:src="@drawable/file"-->
-<!--                                android:layout_weight="1"-->
-<!--                                android:layout_gravity="center"-->
-<!--                                android:padding="2dp"-->
-<!--                                android:elevation="3dp"-->
-<!--                                />-->
-<!--                            <TextView-->
-<!--                                android:layout_width="wrap_content"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:text="File"-->
-<!--                                android:textColor="@color/black"-->
-<!--                                android:layout_marginTop="5dp"-->
-<!--                                android:layout_gravity="center"-->
-<!--                                android:textSize="16sp"-->
-<!--                                />-->
-<!--                        </LinearLayout>-->
-<!--                        <LinearLayout-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:orientation="vertical"-->
-<!--                            android:layout_weight="1"-->
-<!--                            android:id="@+id/camera"-->
-<!--                            >-->
-
-<!--                            <ImageView-->
-<!--                                android:layout_width="60dp"-->
-<!--                                android:layout_height="60dp"-->
-<!--                                android:src="@drawable/camera"-->
-<!--                                android:layout_weight="1"-->
-<!--                                android:layout_gravity="center"-->
-<!--                                android:padding="2dp"-->
-<!--                                android:elevation="3dp"-->
-<!--                                />-->
-<!--                            <TextView-->
-<!--                                android:layout_width="wrap_content"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:text="Camera"-->
-<!--                                android:textColor="@color/black"-->
-<!--                                android:layout_marginTop="5dp"-->
-<!--                                android:layout_gravity="center"-->
-<!--                                android:textSize="16sp"-->
-<!--                                />-->
-<!--                        </LinearLayout>-->
-<!--                        <LinearLayout-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:orientation="vertical"-->
-<!--                            android:layout_weight="1"-->
-<!--                            android:id="@+id/galary"-->
-<!--                            >-->
-
-<!--                            <ImageView-->
-<!--                                android:layout_width="60dp"-->
-<!--                                android:layout_height="60dp"-->
-<!--                                android:src="@drawable/galary"-->
-<!--                                android:layout_weight="1"-->
-<!--                                android:layout_gravity="center"-->
-<!--                                android:padding="2dp"-->
-<!--                                android:elevation="3dp"-->
-<!--                                />-->
-<!--                            <TextView-->
-<!--                                android:layout_width="wrap_content"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:text="Gallery"-->
-<!--                                android:textColor="@color/black"-->
-<!--                                android:layout_marginTop="5dp"-->
-<!--                                android:textSize="16sp"-->
-<!--                                android:layout_gravity="center"-->
-<!--                                />-->
-<!--                        </LinearLayout>-->
-
-<!--                    </LinearLayout>-->
-<!--                    <LinearLayout-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:orientation="horizontal"-->
-<!--                        android:padding="10sp">-->
-<!--                        <LinearLayout-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:orientation="vertical"-->
-<!--                            android:layout_weight="1"-->
-<!--                            android:id="@+id/location"-->
-<!--                            >-->
-
-<!--                            <ImageView-->
-<!--                                android:layout_width="60dp"-->
-<!--                                android:layout_height="60dp"-->
-<!--                                android:src="@drawable/loaction"-->
-<!--                                android:layout_weight="1"-->
-<!--                                android:layout_gravity="center"-->
-<!--                                android:padding="2dp"-->
-<!--                                android:elevation="3dp"-->
-<!--                                />-->
-<!--                            <TextView-->
-<!--                                android:layout_width="wrap_content"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:text="Location"-->
-<!--                                android:textColor="@color/black"-->
-<!--                                android:layout_marginTop="5dp"-->
-<!--                                android:layout_gravity="center"-->
-<!--                                android:textSize="16sp"-->
-<!--                                />-->
-<!--                        </LinearLayout>-->
-<!--                        <LinearLayout-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:orientation="vertical"-->
-<!--                            android:layout_weight="1"-->
-<!--                            android:id="@+id/audio"-->
-<!--                            android:elevation="3dp"-->
-<!--                            >-->
-
-<!--                            <ImageView-->
-<!--                                android:layout_width="60dp"-->
-<!--                                android:layout_height="60dp"-->
-<!--                                android:src="@drawable/audio"-->
-<!--                                android:layout_weight="1"-->
-<!--                                android:layout_gravity="center"-->
-<!--                                android:padding="2dp"-->
-<!--                                />-->
-<!--                            <TextView-->
-<!--                                android:layout_width="wrap_content"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:text="Audio"-->
-<!--                                android:textColor="@color/black"-->
-<!--                                android:layout_marginTop="5dp"-->
-<!--                                android:layout_gravity="center"-->
-<!--                                android:textSize="16sp"-->
-<!--                                />-->
-<!--                        </LinearLayout>-->
-<!--                        <LinearLayout-->
-<!--                            android:layout_width="wrap_content"-->
-<!--                            android:layout_height="wrap_content"-->
-<!--                            android:orientation="vertical"-->
-<!--                            android:layout_weight="1"-->
-<!--                            android:id="@+id/contact"-->
-<!--                            >-->
-
-<!--                            <ImageView-->
-<!--                                android:layout_width="60dp"-->
-<!--                                android:layout_height="60dp"-->
-<!--                                android:src="@drawable/contact"-->
-<!--                                android:layout_weight="1"-->
-<!--                                android:layout_gravity="center"-->
-<!--                                android:padding="2dp"-->
-<!--                                android:elevation="3dp"-->
-<!--                                />-->
-<!--                            <TextView-->
-<!--                                android:layout_width="wrap_content"-->
-<!--                                android:layout_height="wrap_content"-->
-<!--                                android:text="Contact"-->
-<!--                                android:textColor="@color/black"-->
-<!--                                android:layout_marginTop="5dp"-->
-<!--                                android:textSize="16sp"-->
-<!--                                android:layout_gravity="center"-->
-<!--                                />-->
-<!--                        </LinearLayout>-->
-
-<!--                    </LinearLayout>-->
-<!--                </LinearLayout>-->
-
-<!--            </FrameLayout>-->
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
+        <include layout="@layout/chat_header"
+            android:id="@+id/chatBar"
+            />
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:orientation="horizontal"
-            android:background="@drawable/edtbacktextchat"
-            android:layout_margin="10dp"
-            android:id="@id/chatBar">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            >
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                >
 
-            <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:padding="10dp"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/baseline_camera_alt_24"
-                android:layout_marginLeft="10dp"
-                android:id="@+id/image"
-                />
-            <EditText
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:id="@+id/recyclerview"
+                    />
+
+                <!--            <FrameLayout-->
+                <!--                android:layout_width="match_parent"-->
+                <!--                android:layout_height="wrap_content"-->
+                <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--                app:layout_constraintStart_toEndOf="parent"-->
+                <!--                android:background="@drawable/backattchfile"-->
+                <!--                android:layout_marginHorizontal="10sp"-->
+                <!--                android:layout_marginVertical="10sp"-->
+                <!--                android:visibility="gone"-->
+                <!--                android:id="@+id/attachFileview"-->
+                <!--                android:elevation="5dp">-->
+                <!--                <LinearLayout-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:orientation="vertical"-->
+                <!--                    android:padding="20dp"-->
+                <!--                    >-->
+                <!--                    <LinearLayout-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        android:orientation="horizontal"-->
+                <!--                        android:padding="10sp">-->
+                <!--                        <LinearLayout-->
+                <!--                            android:layout_width="wrap_content"-->
+                <!--                            android:layout_height="wrap_content"-->
+                <!--                            android:orientation="vertical"-->
+                <!--                            android:layout_weight="1"-->
+                <!--                            android:id="@+id/file"-->
+                <!--                            >-->
+
+                <!--                            <ImageView-->
+                <!--                                android:layout_width="60dp"-->
+                <!--                                android:layout_height="60dp"-->
+                <!--                                android:src="@drawable/file"-->
+                <!--                                android:layout_weight="1"-->
+                <!--                                android:layout_gravity="center"-->
+                <!--                                android:padding="2dp"-->
+                <!--                                android:elevation="3dp"-->
+                <!--                                />-->
+                <!--                            <TextView-->
+                <!--                                android:layout_width="wrap_content"-->
+                <!--                                android:layout_height="wrap_content"-->
+                <!--                                android:text="File"-->
+                <!--                                android:textColor="@color/black"-->
+                <!--                                android:layout_marginTop="5dp"-->
+                <!--                                android:layout_gravity="center"-->
+                <!--                                android:textSize="16sp"-->
+                <!--                                />-->
+                <!--                        </LinearLayout>-->
+                <!--                        <LinearLayout-->
+                <!--                            android:layout_width="wrap_content"-->
+                <!--                            android:layout_height="wrap_content"-->
+                <!--                            android:orientation="vertical"-->
+                <!--                            android:layout_weight="1"-->
+                <!--                            android:id="@+id/camera"-->
+                <!--                            >-->
+
+                <!--                            <ImageView-->
+                <!--                                android:layout_width="60dp"-->
+                <!--                                android:layout_height="60dp"-->
+                <!--                                android:src="@drawable/camera"-->
+                <!--                                android:layout_weight="1"-->
+                <!--                                android:layout_gravity="center"-->
+                <!--                                android:padding="2dp"-->
+                <!--                                android:elevation="3dp"-->
+                <!--                                />-->
+                <!--                            <TextView-->
+                <!--                                android:layout_width="wrap_content"-->
+                <!--                                android:layout_height="wrap_content"-->
+                <!--                                android:text="Camera"-->
+                <!--                                android:textColor="@color/black"-->
+                <!--                                android:layout_marginTop="5dp"-->
+                <!--                                android:layout_gravity="center"-->
+                <!--                                android:textSize="16sp"-->
+                <!--                                />-->
+                <!--                        </LinearLayout>-->
+                <!--                        <LinearLayout-->
+                <!--                            android:layout_width="wrap_content"-->
+                <!--                            android:layout_height="wrap_content"-->
+                <!--                            android:orientation="vertical"-->
+                <!--                            android:layout_weight="1"-->
+                <!--                            android:id="@+id/galary"-->
+                <!--                            >-->
+
+                <!--                            <ImageView-->
+                <!--                                android:layout_width="60dp"-->
+                <!--                                android:layout_height="60dp"-->
+                <!--                                android:src="@drawable/galary"-->
+                <!--                                android:layout_weight="1"-->
+                <!--                                android:layout_gravity="center"-->
+                <!--                                android:padding="2dp"-->
+                <!--                                android:elevation="3dp"-->
+                <!--                                />-->
+                <!--                            <TextView-->
+                <!--                                android:layout_width="wrap_content"-->
+                <!--                                android:layout_height="wrap_content"-->
+                <!--                                android:text="Gallery"-->
+                <!--                                android:textColor="@color/black"-->
+                <!--                                android:layout_marginTop="5dp"-->
+                <!--                                android:textSize="16sp"-->
+                <!--                                android:layout_gravity="center"-->
+                <!--                                />-->
+                <!--                        </LinearLayout>-->
+
+                <!--                    </LinearLayout>-->
+                <!--                    <LinearLayout-->
+                <!--                        android:layout_width="match_parent"-->
+                <!--                        android:layout_height="wrap_content"-->
+                <!--                        android:orientation="horizontal"-->
+                <!--                        android:padding="10sp">-->
+                <!--                        <LinearLayout-->
+                <!--                            android:layout_width="wrap_content"-->
+                <!--                            android:layout_height="wrap_content"-->
+                <!--                            android:orientation="vertical"-->
+                <!--                            android:layout_weight="1"-->
+                <!--                            android:id="@+id/location"-->
+                <!--                            >-->
+
+                <!--                            <ImageView-->
+                <!--                                android:layout_width="60dp"-->
+                <!--                                android:layout_height="60dp"-->
+                <!--                                android:src="@drawable/loaction"-->
+                <!--                                android:layout_weight="1"-->
+                <!--                                android:layout_gravity="center"-->
+                <!--                                android:padding="2dp"-->
+                <!--                                android:elevation="3dp"-->
+                <!--                                />-->
+                <!--                            <TextView-->
+                <!--                                android:layout_width="wrap_content"-->
+                <!--                                android:layout_height="wrap_content"-->
+                <!--                                android:text="Location"-->
+                <!--                                android:textColor="@color/black"-->
+                <!--                                android:layout_marginTop="5dp"-->
+                <!--                                android:layout_gravity="center"-->
+                <!--                                android:textSize="16sp"-->
+                <!--                                />-->
+                <!--                        </LinearLayout>-->
+                <!--                        <LinearLayout-->
+                <!--                            android:layout_width="wrap_content"-->
+                <!--                            android:layout_height="wrap_content"-->
+                <!--                            android:orientation="vertical"-->
+                <!--                            android:layout_weight="1"-->
+                <!--                            android:id="@+id/audio"-->
+                <!--                            android:elevation="3dp"-->
+                <!--                            >-->
+
+                <!--                            <ImageView-->
+                <!--                                android:layout_width="60dp"-->
+                <!--                                android:layout_height="60dp"-->
+                <!--                                android:src="@drawable/audio"-->
+                <!--                                android:layout_weight="1"-->
+                <!--                                android:layout_gravity="center"-->
+                <!--                                android:padding="2dp"-->
+                <!--                                />-->
+                <!--                            <TextView-->
+                <!--                                android:layout_width="wrap_content"-->
+                <!--                                android:layout_height="wrap_content"-->
+                <!--                                android:text="Audio"-->
+                <!--                                android:textColor="@color/black"-->
+                <!--                                android:layout_marginTop="5dp"-->
+                <!--                                android:layout_gravity="center"-->
+                <!--                                android:textSize="16sp"-->
+                <!--                                />-->
+                <!--                        </LinearLayout>-->
+                <!--                        <LinearLayout-->
+                <!--                            android:layout_width="wrap_content"-->
+                <!--                            android:layout_height="wrap_content"-->
+                <!--                            android:orientation="vertical"-->
+                <!--                            android:layout_weight="1"-->
+                <!--                            android:id="@+id/contact"-->
+                <!--                            >-->
+
+                <!--                            <ImageView-->
+                <!--                                android:layout_width="60dp"-->
+                <!--                                android:layout_height="60dp"-->
+                <!--                                android:src="@drawable/contact"-->
+                <!--                                android:layout_weight="1"-->
+                <!--                                android:layout_gravity="center"-->
+                <!--                                android:padding="2dp"-->
+                <!--                                android:elevation="3dp"-->
+                <!--                                />-->
+                <!--                            <TextView-->
+                <!--                                android:layout_width="wrap_content"-->
+                <!--                                android:layout_height="wrap_content"-->
+                <!--                                android:text="Contact"-->
+                <!--                                android:textColor="@color/black"-->
+                <!--                                android:layout_marginTop="5dp"-->
+                <!--                                android:textSize="16sp"-->
+                <!--                                android:layout_gravity="center"-->
+                <!--                                />-->
+                <!--                        </LinearLayout>-->
+
+                <!--                    </LinearLayout>-->
+                <!--                </LinearLayout>-->
+
+                <!--            </FrameLayout>-->
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:id="@+id/edtMsg"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:hint="Message..."
-                android:inputType="text"
-                android:textColorHint="#97000000"
-                android:textColor="@color/black"
-                android:padding="10dp"
+                android:orientation="horizontal"
+                android:background="@drawable/edtbacktextchat"
+                android:layout_margin="10dp"
+                android:id="@id/chatBar">
 
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/baseline_camera_alt_24"
+                    android:layout_marginLeft="10dp"
+                    android:id="@+id/image"
+                    />
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:id="@+id/edtMsg"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:hint="Message..."
+                    android:inputType="text"
+                    android:textColorHint="#97000000"
+                    android:textColor="@color/black"
+                    android:padding="10dp"
+
+                    />
+                <ImageView
+                    android:id="@+id/btnattachFile"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/baseline_attach_file_24"
+                    />
+                <ImageView
+                    android:id="@+id/sendMsg"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding="10dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/baseline_send_24"
+                    android:layout_marginRight="10dp"
+                    />
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/contactView"
+        android:visibility="gone"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <include layout="@layout/contact_header"
+                android:id="@+id/contactBar"
                 />
-            <ImageView
-                android:id="@+id/btnattachFile"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:padding="10dp"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/baseline_attach_file_24"
-                />
-            <ImageView
-                android:id="@+id/sendMsg"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:padding="10dp"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/baseline_send_24"
-                android:layout_marginRight="10dp"
+<!--            <androidx.recyclerview.widget.RecyclerView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:id="@+id/contactRvView"-->
+<!--                android:layout_margin="10dp"-->
+<!--                />-->
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/contactListView"
+                android:layout_margin="10dp"
                 />
         </LinearLayout>
+    </FrameLayout>
 
 
-    </LinearLayout>
+
+
 
 
 

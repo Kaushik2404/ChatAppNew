@@ -23,6 +23,7 @@ class FollowActivity : AppCompatActivity() {
     lateinit var userList2: ArrayList<User>
     lateinit var Token: String
     lateinit var name: String
+    lateinit var mainUser: String
 
     private val TAG = "Chat"
     private val notificationViewModel: NotificationViewModel by viewModels()
@@ -33,6 +34,7 @@ class FollowActivity : AppCompatActivity() {
         setContentView(binding.root)
         userList = arrayListOf()
         userList2 = arrayListOf()
+        currentUserName()
         followList()
         onClick()
     }
@@ -198,6 +200,24 @@ class FollowActivity : AppCompatActivity() {
 
     }
 
+    private fun currentUserName(){
+        FirebaseFirestore.getInstance().collection("User").addSnapshotListener { value, error ->
+            value?.let {
+                if (!it.isEmpty) {
+                    userList.clear()
+                    for (document in it.documents) {
+                        if (FirebaseAuth.getInstance().currentUser?.email == document.get("email")) {
+                            val user = document.toObject(User::class.java)
+                           mainUser = user?.name.toString()
+                        }
+                    }
+
+
+                }
+            }
+        }
+    }
+
     private fun setRecyclerView(){
 
     }
@@ -236,14 +256,13 @@ class FollowActivity : AppCompatActivity() {
                 Log.d(TAG, "Notification in Kotlin: $it ")
         }
     }
-
     fun push(msg: String) {
         Log.d("OK", Token)
         notificationViewModel
             .sendNotification(
                 NotificationModel(
                     Token,
-                    Data(name, msg)
+                    Data(mainUser, msg)
                 )
             )
     }

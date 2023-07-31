@@ -10,13 +10,17 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.util.Log
 import android.view.KeyEvent
 import android.view.MenuItem
+import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.ListView
 import android.widget.PopupMenu
+import android.widget.SimpleCursorAdapter
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,6 +36,7 @@ import com.example.chatapp.adapter.FileDialog
 import com.example.chatapp.adapter.MesssageAdapter
 import com.example.chatapp.databinding.ActivityChatBinding
 import com.example.chatapp.interfacefile.OnClickDilogFile
+import com.example.chatapp.modal.Contact
 import com.example.chatapp.modal.Message
 import com.example.chatapp.modal.User
 import com.example.chatapp.modell.Data
@@ -55,25 +60,29 @@ class ChatActivity : AppCompatActivity() {
 
     private val CAMERA_REQ = 101
 
-    private var reciveRoom: String? = null
-    private var sendRoom: String? = null
+    private val PERMISSIONS_REQUEST_READ_CONTACTS = 100
+
+
+    lateinit var bottomSheet:FileDialog
     private lateinit var msgAdapter: MesssageAdapter
     private lateinit var ImageUri:String
     private lateinit var photo:Uri
-    final private var Count = 0
     lateinit var name:String
     lateinit var ID:String
     lateinit var userID:String
     lateinit var Token:String
     lateinit var reciverEmail:String
-//    var msgOk=""
     lateinit var currentMsg:String
     lateinit var type:String
-//    lateinit var Email:String
     lateinit var launcher: ActivityResultLauncher<String>
+   lateinit var data:ArrayList<Contact>
+
+
+    private var Count = 0
     private  val TAG = "Chat"
-    var clickCount=0
     private val notificationViewModel: NotificationViewModel by viewModels()
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,6 +90,7 @@ class ChatActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         msgList = arrayListOf()
+        data= arrayListOf()
 
         binding.chatBar.chatUserName.text = intent.getStringExtra("NAME")
         ID = intent.getStringExtra("ID").toString()
@@ -92,7 +102,7 @@ class ChatActivity : AppCompatActivity() {
         uplodeimage()
         onclick()
         listenNewMessage()
-        onClickDilogFile()
+
     }
     private fun sendCaptureImage() {
 
@@ -149,28 +159,13 @@ class ChatActivity : AppCompatActivity() {
         }
 
     }
-
-    private fun onClickDilogFile() {
-//        binding.file.setOnClickListener {
-//
-//        }
-//        binding.camera.setOnClickListener {
-//            clickCount=0
-//            binding.attachFileview.visibility=View.GONE
-//
-//
-//        }
-
-
-    }
     private fun onclick() {
         binding.btnattachFile.setOnClickListener {
 
-            val bottomSheet = FileDialog(object :OnClickDilogFile {
+             bottomSheet = FileDialog(object :OnClickDilogFile {
                 override fun onClickGalary() {
                     getImageId()
                 }
-
                 override fun onClickCamera() {
                     if (ContextCompat.checkSelfPermission(this@ChatActivity, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
 
@@ -198,7 +193,10 @@ class ChatActivity : AppCompatActivity() {
                 }
 
                 override fun onClickContact() {
-                    TODO("Not yet implemented")
+
+                    binding.chatView.visibility=View.GONE
+                    binding.contactView.visibility=View.VISIBLE
+                    setContactView()
                 }
 
             })
@@ -239,6 +237,83 @@ class ChatActivity : AppCompatActivity() {
 
     }
 
+    private fun setContactView() {
+        bottomSheet.dismiss()
+        binding.contactBar.back.setOnClickListener {
+            binding.contactView.visibility=View.GONE
+            binding.chatView.visibility=View.VISIBLE
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(android.Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(
+                arrayOf<String>(android.Manifest.permission.READ_CONTACTS),
+                PERMISSIONS_REQUEST_READ_CONTACTS
+            )
+            //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
+        } else {
+            // Android version is lesser than 6.0 or the permission is already granted.
+            getContacts()
+        }
+
+
+    }
+
+    fun getContacts() {
+
+        // create cursor and query the data
+        var cursor = contentResolver.query(
+            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+            null,
+            null,
+            null,
+            null
+        )
+        startManagingCursor(cursor)
+
+        // data is a array of String type which is
+        // used to store Number ,Names and id.
+        val data = arrayOf(
+            ContactsContract.CommonDataKinds.Phone.NUMBER,
+            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+            ContactsContract.CommonDataKinds.Phone._ID
+        )
+        val to = intArrayOf(android.R.id.text1, android.R.id.text2)
+        // creation of adapter using SimpleCursorAdapter class
+        val adapter = SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, cursor, data, to)
+//        // Calling setAdaptor() method to set created adapter
+        binding.contactListView.setAdapter(adapter)
+        binding.contactListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE)
+
+        binding.contactListView.setOnItemClickListener { parent, view, position, id ->
+
+
+            val okNumber = cursor!!.getString(cursor!!.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+            val okName = cursor!!.getString(cursor!!.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
+
+
+            currentMsg = okName+""+okNumber
+            Log.d("Okmsg", currentMsg)
+
+            userMsgAdd("contact","Contact number")
+            type="contact"
+
+            val id = db.collection("Chat_Test").document().id
+
+            val reciverid = intent.getStringExtra("UID").toString()
+            val senderid = FirebaseAuth.getInstance().currentUser?.email.toString()
+            val calendar: Calendar = Calendar.getInstance()
+            val format = SimpleDateFormat(" d MMM yyyy HH:mm:ss")
+            val time: String = format.format(calendar.time)
+            val msg = Message(id,currentMsg, senderid, reciverid, time,type)
+            db.collection("Chat_Test").document(id).set(msg).addOnCompleteListener {
+                Toast.makeText(applicationContext, "Sending Contact", Toast.LENGTH_SHORT).show()
+                binding.contactView.visibility= View.GONE
+                binding.chatView.visibility= View.VISIBLE
+            }.addOnFailureListener {
+                Toast.makeText(applicationContext, "Failed..Sending Contact", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
     private fun userMsgAdd(typ:String,currentMsg:String) {
         type=typ
 //        val currentMsg = binding.edtMsg.text.toString()
@@ -287,7 +362,6 @@ class ChatActivity : AppCompatActivity() {
 //        val id = db.collection("Chat_Test").document().id
 
         val msg = Message(id, binding.edtMsg.text.toString(), senderid, reciverid, time,type)
-
         db.collection("Chat_Test").document(id).set(msg).addOnCompleteListener {
 //            msgList.add(msg)
 //            msgAdapter.notifyItemInserted(msgList.size - 1)
@@ -295,7 +369,9 @@ class ChatActivity : AppCompatActivity() {
         binding.edtMsg.text.clear()
     }
     private fun getImageId() {
+
         launcher.launch("image/*")
+        bottomSheet.dismiss()
     }
     private fun uplodeimage() {
         launcher = registerForActivityResult<String, Uri>(
@@ -432,7 +508,7 @@ class ChatActivity : AppCompatActivity() {
                 builder.setMessage("Are you Confirm Delete this Data....")
                 builder.setPositiveButton("yes"){dialog, which->
 
-                    updateMsgView(msgList[pos].msgID.toString(),pos)
+                    deleteMsgView(msgList[pos].msgID.toString(),pos)
 
 //                    msgList.removeAt(pos)
 //                    msgAdapter.notifyItemRemoved(pos)
@@ -460,8 +536,14 @@ class ChatActivity : AppCompatActivity() {
                 msgList.removeAt(pos)
                 msgAdapter.notifyItemRemoved(pos)
             }
-
-
+    }
+    private fun deleteMsgView(msgId:String,pos: Int) {
+        FirebaseFirestore.getInstance().collection("Chat_Test").document(msgId).delete()
+            .addOnSuccessListener {
+                Log.d("TAGID", "Delete view$msgId,of")
+                msgList.removeAt(pos)
+                msgAdapter.notifyItemRemoved(pos)
+            }
     }
 
     override fun onStart() {
@@ -477,13 +559,29 @@ class ChatActivity : AppCompatActivity() {
         super.onBackPressed()
         Count = 0
         val ID = intent.getStringExtra("ID").toString()
-        db.collection(FirebaseAuth.getInstance().currentUser?.email.toString()).document(reciverEmail).update("lastMsg",msgList[msgList.size-1].msg.toString(),"count", Count)
-            .addOnSuccessListener {
-                Log.d("TAG11", "update last message on start")
+
+        if(msgList.isEmpty()){
+            db.collection(FirebaseAuth.getInstance().currentUser?.email.toString()).document(reciverEmail).update("lastMsg","","count", Count)
+                .addOnSuccessListener {
+                    Log.d("TAG11", "update last message on back empty")
+                }
+        }else{
+            if(msgList[msgList.size-1].type.toString()=="image"){
+                db.collection(FirebaseAuth.getInstance().currentUser?.email.toString()).document(reciverEmail).update("lastMsg","image","count", Count)
+                    .addOnSuccessListener {
+                        Log.d("TAG11", "update last message on back image")
+                    }
+            }else{
+                db.collection(FirebaseAuth.getInstance().currentUser?.email.toString()).document(reciverEmail).update("lastMsg",msgList[msgList.size-1].msg.toString(),"count", Count)
+                    .addOnSuccessListener {
+                        Log.d("TAG11", "update last message on back")
+                    }
             }
 
-    }
+        }
 
+
+    }
     private fun notificationCheckCondition() {
         notificationViewModel.connectionError.observe(this){
             when(it){
@@ -550,6 +648,7 @@ class ChatActivity : AppCompatActivity() {
                     val bitphoto = data?.extras?.get("data") as Bitmap
                     getImageUri(this@ChatActivity,bitphoto)
                     Log.d("IMAGE URI",photo.toString())
+                        bottomSheet.dismiss()
                     sendCaptureImage()
             }
         }
@@ -569,6 +668,21 @@ class ChatActivity : AppCompatActivity() {
                 Toast.makeText(this@ChatActivity, "CAMERA Permission Denied", Toast.LENGTH_SHORT).show()
             }
         }
+
+        if (requestCode == PERMISSIONS_REQUEST_READ_CONTACTS) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission is granted
+//                showContacts()
+                getContacts()
+            } else {
+                Toast.makeText(
+                    this,
+                    "Until you grant the permission, we canot display the names",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
     }
     private fun getImageUri(context: Activity, inImage: Bitmap) {
         val bytes = ByteArrayOutputStream()

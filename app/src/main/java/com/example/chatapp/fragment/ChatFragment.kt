@@ -52,7 +52,13 @@ class ChatFragment : Fragment() {
 
 //        userList = getListOfPlaces()
 //        setAdapter()
-        listenNewMessage()
+        try {
+            listenNewMessage()
+        }catch (e:Exception){
+            e.printStackTrace()
+            Log.d("Loding","Load error")
+        }
+
 
         Log.d("TAG11111",userList.size.toString())
 
@@ -100,15 +106,6 @@ class ChatFragment : Fragment() {
         }
     }
     private fun setAdapter(){
-        if(userList.size==0){
-            txview.visibility=View.VISIBLE
-            recyclerView.visibility=View.GONE
-        }
-        else{
-            txview.visibility=View.GONE
-            recyclerView.visibility=View.VISIBLE
-        }
-
         adapter = UserAdapter(context, userList,object: OnIteamClickUser {
             override fun onClickUser(pos: Int) {
                 val intent= Intent(context,ChatActivity::class.java)
@@ -229,7 +226,28 @@ class ChatFragment : Fragment() {
                         }
                     }
                     userList.sortByDescending { it.lastMsgTime }
-                    setAdapter()
+
+                    if(userList.isNotEmpty()){
+                        txview.visibility=View.GONE
+                        recyclerView.visibility=View.VISIBLE
+                        setAdapter()
+                    }
+                    else{
+                        txview.visibility=View.VISIBLE
+                        recyclerView.visibility=View.GONE
+                    }
+
+                }else{
+                    if(userList.isNotEmpty()){
+                        txview.visibility=View.GONE
+                        recyclerView.visibility=View.VISIBLE
+                        setAdapter()
+                    }
+                    else{
+                        txview.visibility=View.VISIBLE
+                        recyclerView.visibility=View.GONE
+                    }
+
                 }
             }
         }

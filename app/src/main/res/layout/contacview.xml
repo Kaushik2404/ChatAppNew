@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:background="@drawable/back_user_list"
+    android:layout_margin="5dp">
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/baseline_person_24"
+        android:layout_marginLeft="10sp"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kaushik"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10sp"
+            android:textSize="20dp"
+            android:textColor="@color/black"
+            android:id="@+id/cName"
+            android:textStyle="bold"
+
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="6351478024"
+            android:layout_marginLeft="10dp"
+            android:textSize="16dp"
+            android:textColor="#D8000000"
+            android:id="@+id/cNumber"
+            android:layout_marginBottom="10sp"
+            />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/cSend"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/baseline_send_24"
+        android:padding="10sp"
+        android:layout_marginRight="10dp"
+        />
+
+
+
+</LinearLayout>

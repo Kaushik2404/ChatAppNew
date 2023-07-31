@@ -160,7 +160,87 @@ class MesssageAdapter(val context: android.content.Context,val msgList: ArrayLis
 
                     }
                 }
-            } else {
+            }
+            else if(msgList[position].type.toString()=="contact"){
+                if(FirebaseAuth.getInstance().currentUser?.email.toString()==msgList[position].sendId){
+                    if(holder.javaClass==GetViewHolder::class.java){
+                        val viewHolder=holder as GetViewHolder
+                        viewHolder.sendimg.visibility=View.VISIBLE
+                        viewHolder.flsendImg.visibility=View.VISIBLE
+                        viewHolder.flgetImg.visibility=View.GONE
+                        viewHolder.getimg.visibility=View.GONE
+                        viewHolder.getMsg.visibility=View.GONE
+                        viewHolder.sendMsg.visibility=View.GONE
+//                       Glide.with(context).load(msgList[position].msg).into(viewHolder.sendimg)
+                        holder.sendprogress.visibility=View.VISIBLE
+                        Glide.with(context).load(msgList[position].msg)
+                            .listener(object :RequestListener<Drawable>{
+                                override fun onLoadFailed(
+                                    e: GlideException?,
+                                    model: Any?,
+                                    target: Target<Drawable>?,
+                                    isFirstResource: Boolean,
+                                ): Boolean {
+                                    holder.sendprogress.visibility=View.GONE
+                                    return false
+                                }
+
+                                override fun onResourceReady(
+                                    resource: Drawable?,
+                                    model: Any?,
+                                    target: Target<Drawable>?,
+                                    dataSource: DataSource?,
+                                    isFirstResource: Boolean,
+                                ): Boolean {
+                                    holder.sendprogress.visibility=View.GONE
+                                    return false
+                                }
+
+                            })
+                            .into(viewHolder.sendimg)
+                    }
+                }else{
+                    if(holder.javaClass==GetViewHolder::class.java){
+                        val viewHolder=holder as GetViewHolder
+
+                        viewHolder.flsendImg.visibility=View.GONE
+                        viewHolder.flgetImg.visibility=View.VISIBLE
+                        viewHolder.getimg.visibility=View.VISIBLE
+                        viewHolder.sendimg.visibility=View.GONE
+                        viewHolder.sendMsg.visibility=View.GONE
+                        viewHolder.getMsg.visibility=View.GONE
+//                        Glide.with(context).load(msgList[position].msg).into(viewHolder.getimg)
+                        holder.recprogress.visibility=View.VISIBLE
+                        Glide.with(context).load(msgList[position].msg)
+                            .listener(object :RequestListener<Drawable>{
+                                override fun onLoadFailed(
+                                    e: GlideException?,
+                                    model: Any?,
+                                    target: Target<Drawable>?,
+                                    isFirstResource: Boolean,
+                                ): Boolean {
+                                    holder.recprogress.visibility=View.GONE
+                                    return false
+                                }
+
+                                override fun onResourceReady(
+                                    resource: Drawable?,
+                                    model: Any?,
+                                    target: Target<Drawable>?,
+                                    dataSource: DataSource?,
+                                    isFirstResource: Boolean,
+                                ): Boolean {
+                                    holder.recprogress.visibility=View.GONE
+                                    return false
+                                }
+
+                            })
+                            .into(viewHolder.getimg)
+
+                    }
+                }
+            }
+            else {
                 if(FirebaseAuth.getInstance().currentUser?.email.toString()==msgList[position].sendId){
 
                     if(holder.javaClass==GetViewHolder::class.java){

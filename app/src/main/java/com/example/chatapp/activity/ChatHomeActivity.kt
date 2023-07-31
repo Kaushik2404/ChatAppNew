@@ -191,7 +191,6 @@ class ChatHomeActivity : AppCompatActivity() {
         }
 
     }
-
     private fun setDataProfile() {
         db.collection("User").addSnapshotListener { value, error ->
             value?.let {

@@ -48,6 +48,9 @@ class FileDialog(val onclickFile: OnClickDilogFile) : BottomSheetDialogFragment(
         camera.setOnClickListener {
             onclickFile.onClickCamera()
         }
+        contact.setOnClickListener {
+            onclickFile.onClickContact()
+        }
 
     }
 

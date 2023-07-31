@@ -8,6 +8,7 @@
     android:layout_margin="3dp"
     android:id="@+id/msgLayout"
     >
+    <!--    sendMsg-->
     <TextView
         android:id="@+id/sendMsg"
         android:layout_width="0dp"
@@ -22,6 +23,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:visibility="gone"
         />
+    <!--    getMsg-->
     <TextView
         android:visibility="gone"
         android:id="@+id/getMsg"
@@ -36,6 +38,7 @@
         android:background="@drawable/messagesendbackget"
         app:layout_constraintStart_toStartOf="parent"
         />
+    <!--    sendImage-->
     <ImageView
         android:visibility="gone"
         android:id="@+id/sendimg"
@@ -71,7 +74,7 @@
 
         </LinearLayout>
     </FrameLayout>
-
+    <!--    getImage-->
     <ImageView
         android:visibility="gone"
         android:id="@+id/getImg"
@@ -81,7 +84,6 @@
         android:textColor="@color/black"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-
 
         />
     <FrameLayout
@@ -108,6 +110,76 @@
 
         </LinearLayout>
     </FrameLayout>
+    <!--    sentContact-->
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/sentContactView"
+        android:background="@drawable/messagesendback"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:padding="10dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kaushik"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="18dp"
+            android:id="@+id/mName"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="6351478024"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="18dp"
+            android:id="@+id/mNumber"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            />
+    </LinearLayout>
+    <!--    getContact-->
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/getContactView"
+        android:background="@drawable/messagesendbackget"
+        app:layout_constraintStart_toStartOf="parent"
+        android:padding="10dp"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kaushik"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="18dp"
+            android:id="@+id/mName"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="6351478024"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="18dp"
+            android:id="@+id/mNumber"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            />
+    </LinearLayout>
+
 
 
 
