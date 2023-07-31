@@ -50,7 +50,6 @@ class ChatFragment : Fragment() {
         userList = arrayListOf()
         recyclerView=view.findViewById(R.id.recyclerview)
 
-
 //        userList = getListOfPlaces()
 //        setAdapter()
         listenNewMessage()
@@ -108,7 +107,6 @@ class ChatFragment : Fragment() {
         else{
             txview.visibility=View.GONE
             recyclerView.visibility=View.VISIBLE
-
         }
 
         adapter = UserAdapter(context, userList,object: OnIteamClickUser {
@@ -136,7 +134,7 @@ class ChatFragment : Fragment() {
                         .delete()
                         .addOnSuccessListener {
                             Log.d("TAG11", "DocumentSnapshot successfully deleted!")
-//                            adapter.notifyDataSetChanged()
+                            adapter.notifyItemRemoved(pos)
                         }
                         .addOnFailureListener { e -> Log.w("TAG11", "Error deleting document", e) }
                     dialog.dismiss()
@@ -218,8 +216,8 @@ class ChatFragment : Fragment() {
     private fun listenNewMessage() {
         db.collection(FirebaseAuth.getInstance().currentUser?.email.toString()).addSnapshotListener { value, error ->
             value?.let {
+                userList.clear()
                 if (!it.isEmpty) {
-                    userList.clear()
                     for (document in it.documents) {
                         if(document.get("email")==FirebaseAuth.getInstance().currentUser?.email.toString()){
                             userId=document.get("id").toString()
