@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -86,6 +87,8 @@ class MesssageAdapter(val context: android.content.Context,val msgList: ArrayLis
                 if(FirebaseAuth.getInstance().currentUser?.email.toString()==msgList[position].sendId){
                     if(holder.javaClass==GetViewHolder::class.java){
                         val viewHolder=holder as GetViewHolder
+                        viewHolder.sentContactView.visibility=View.GONE
+                        viewHolder.getContactView.visibility=View.GONE
                         viewHolder.sendimg.visibility=View.VISIBLE
                         viewHolder.flsendImg.visibility=View.VISIBLE
                         viewHolder.flgetImg.visibility=View.GONE
@@ -123,7 +126,8 @@ class MesssageAdapter(val context: android.content.Context,val msgList: ArrayLis
                 }else{
                     if(holder.javaClass==GetViewHolder::class.java){
                         val viewHolder=holder as GetViewHolder
-
+                        viewHolder.sentContactView.visibility=View.GONE
+                        viewHolder.getContactView.visibility=View.GONE
                         viewHolder.flsendImg.visibility=View.GONE
                         viewHolder.flgetImg.visibility=View.VISIBLE
                         viewHolder.getimg.visibility=View.VISIBLE
@@ -165,78 +169,43 @@ class MesssageAdapter(val context: android.content.Context,val msgList: ArrayLis
                 if(FirebaseAuth.getInstance().currentUser?.email.toString()==msgList[position].sendId){
                     if(holder.javaClass==GetViewHolder::class.java){
                         val viewHolder=holder as GetViewHolder
-                        viewHolder.sendimg.visibility=View.VISIBLE
-                        viewHolder.flsendImg.visibility=View.VISIBLE
+                        viewHolder.sentContactView.visibility=View.VISIBLE
+                        viewHolder.getContactView.visibility=View.GONE
+                        viewHolder.sendimg.visibility=View.GONE
+                        viewHolder.flsendImg.visibility=View.GONE
                         viewHolder.flgetImg.visibility=View.GONE
                         viewHolder.getimg.visibility=View.GONE
                         viewHolder.getMsg.visibility=View.GONE
                         viewHolder.sendMsg.visibility=View.GONE
-//                       Glide.with(context).load(msgList[position].msg).into(viewHolder.sendimg)
-                        holder.sendprogress.visibility=View.VISIBLE
-                        Glide.with(context).load(msgList[position].msg)
-                            .listener(object :RequestListener<Drawable>{
-                                override fun onLoadFailed(
-                                    e: GlideException?,
-                                    model: Any?,
-                                    target: Target<Drawable>?,
-                                    isFirstResource: Boolean,
-                                ): Boolean {
-                                    holder.sendprogress.visibility=View.GONE
-                                    return false
-                                }
 
-                                override fun onResourceReady(
-                                    resource: Drawable?,
-                                    model: Any?,
-                                    target: Target<Drawable>?,
-                                    dataSource: DataSource?,
-                                    isFirstResource: Boolean,
-                                ): Boolean {
-                                    holder.sendprogress.visibility=View.GONE
-                                    return false
-                                }
+                        val ContactMsg=msgList[position].msg.toString()
+                        val list=ContactMsg.split("+")
+                        Log.d("TAGcontact",list[1].toString())
+                        Log.d("TAGcontact",list[0].toString())
+                        viewHolder.msName.text=list[0].toString()
+                        viewHolder.msNumber.text="+"+list[1]
 
-                            })
-                            .into(viewHolder.sendimg)
+
                     }
-                }else{
+                }
+                else{
                     if(holder.javaClass==GetViewHolder::class.java){
                         val viewHolder=holder as GetViewHolder
-
+                        viewHolder.sentContactView.visibility=View.GONE
+                        viewHolder.getContactView.visibility=View.VISIBLE
                         viewHolder.flsendImg.visibility=View.GONE
-                        viewHolder.flgetImg.visibility=View.VISIBLE
-                        viewHolder.getimg.visibility=View.VISIBLE
+                        viewHolder.flgetImg.visibility=View.GONE
+                        viewHolder.getimg.visibility=View.GONE
                         viewHolder.sendimg.visibility=View.GONE
                         viewHolder.sendMsg.visibility=View.GONE
                         viewHolder.getMsg.visibility=View.GONE
-//                        Glide.with(context).load(msgList[position].msg).into(viewHolder.getimg)
-                        holder.recprogress.visibility=View.VISIBLE
-                        Glide.with(context).load(msgList[position].msg)
-                            .listener(object :RequestListener<Drawable>{
-                                override fun onLoadFailed(
-                                    e: GlideException?,
-                                    model: Any?,
-                                    target: Target<Drawable>?,
-                                    isFirstResource: Boolean,
-                                ): Boolean {
-                                    holder.recprogress.visibility=View.GONE
-                                    return false
-                                }
 
-                                override fun onResourceReady(
-                                    resource: Drawable?,
-                                    model: Any?,
-                                    target: Target<Drawable>?,
-                                    dataSource: DataSource?,
-                                    isFirstResource: Boolean,
-                                ): Boolean {
-                                    holder.recprogress.visibility=View.GONE
-                                    return false
-                                }
-
-                            })
-                            .into(viewHolder.getimg)
-
+                        val ContactMsg=msgList[position].msg.toString()
+                        val list=ContactMsg.split("+")
+                        Log.d("TAGcontact",list[1].toString())
+                        Log.d("TAGcontact",list[0].toString())
+                        viewHolder.mgName.text=list[0].toString()
+                        viewHolder.mgNumber.text="+"+list[1]
                     }
                 }
             }
@@ -245,6 +214,8 @@ class MesssageAdapter(val context: android.content.Context,val msgList: ArrayLis
 
                     if(holder.javaClass==GetViewHolder::class.java){
                         val viewHolder=holder as GetViewHolder
+                        viewHolder.sentContactView.visibility=View.GONE
+                        viewHolder.getContactView.visibility=View.GONE
                         viewHolder.flsendImg.visibility=View.GONE
                         viewHolder.flgetImg.visibility=View.GONE
                         viewHolder.sendMsg.visibility=View.VISIBLE
@@ -256,6 +227,8 @@ class MesssageAdapter(val context: android.content.Context,val msgList: ArrayLis
                 }else{
                     if(holder.javaClass==GetViewHolder::class.java){
                         val viewHolder=holder as GetViewHolder
+                        viewHolder.sentContactView.visibility=View.GONE
+                        viewHolder.getContactView.visibility=View.GONE
                         viewHolder.flsendImg.visibility=View.GONE
                         viewHolder.flgetImg.visibility=View.GONE
                         viewHolder.getMsg.visibility=View.VISIBLE
@@ -389,6 +362,12 @@ class MesssageAdapter(val context: android.content.Context,val msgList: ArrayLis
         val flsendImg=view.findViewById<FrameLayout>(R.id.flsendImg)
         val flgetImg=view.findViewById<FrameLayout>(R.id.flgetImg)
         val msgLayout=view.findViewById<ConstraintLayout>(R.id.msgLayout)
+        val sentContactView=view.findViewById<LinearLayout>(R.id.sentContactView)
+        val getContactView=view.findViewById<LinearLayout>(R.id.getContactView)
+        val msName=view.findViewById<TextView>(R.id.msName)
+        val msNumber=view.findViewById<TextView>(R.id.msNumber)
+        val mgName=view.findViewById<TextView>(R.id.mgName)
+        val mgNumber=view.findViewById<TextView>(R.id.mgNumber)
 
     }
 //    class SentImage(view: View):RecyclerView.ViewHolder(view){

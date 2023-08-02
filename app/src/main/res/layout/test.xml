@@ -115,69 +115,97 @@
         android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:id="@+id/sentContactView"
         android:background="@drawable/messagesendback"
         app:layout_constraintEnd_toEndOf="parent"
         android:padding="10dp"
         >
-        <TextView
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/profile"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="5dp"
+            />
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Kaushik"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="18dp"
-            android:id="@+id/mName"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="6351478024"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="18dp"
-            android:id="@+id/mNumber"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            />
+            android:orientation="vertical"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kaushik"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="18dp"
+                android:id="@+id/msName"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="6351478024"
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                android:id="@+id/msNumber"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                />
+        </LinearLayout>
+
+
+
     </LinearLayout>
     <!--    getContact-->
     <LinearLayout
         android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:id="@+id/getContactView"
         android:background="@drawable/messagesendbackget"
         app:layout_constraintStart_toStartOf="parent"
         android:padding="10dp"
         >
-        <TextView
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/profile"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="5dp"
+            />
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Kaushik"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="18dp"
-            android:id="@+id/mName"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            />
+            android:orientation="vertical"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kaushik"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:textSize="18dp"
+                android:id="@+id/mgName"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="6351478024"
+                android:textColor="@color/black"
+                android:textSize="16dp"
+                android:id="@+id/mgNumber"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                />
+        </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="6351478024"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="18dp"
-            android:id="@+id/mNumber"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            />
     </LinearLayout>
 
 

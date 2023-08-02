@@ -294,6 +294,7 @@ class ChatActivity : AppCompatActivity() {
             currentMsg = okName+""+okNumber
             Log.d("Okmsg", currentMsg)
 
+
             userMsgAdd("contact","Contact number")
             type="contact"
 
@@ -309,6 +310,9 @@ class ChatActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext, "Sending Contact", Toast.LENGTH_SHORT).show()
                 binding.contactView.visibility= View.GONE
                 binding.chatView.visibility= View.VISIBLE
+
+                notificationCheckCondition()
+                push("Contact...")
             }.addOnFailureListener {
                 Toast.makeText(applicationContext, "Failed..Sending Contact", Toast.LENGTH_SHORT).show()
             }
@@ -571,7 +575,14 @@ class ChatActivity : AppCompatActivity() {
                     .addOnSuccessListener {
                         Log.d("TAG11", "update last message on back image")
                     }
-            }else{
+            }
+            if(msgList[msgList.size-1].type.toString()=="contact"){
+                db.collection(FirebaseAuth.getInstance().currentUser?.email.toString()).document(reciverEmail).update("lastMsg","Contact Number","count", Count)
+                    .addOnSuccessListener {
+                        Log.d("TAG11", "update last message on back contact")
+                    }
+            }
+            else{
                 db.collection(FirebaseAuth.getInstance().currentUser?.email.toString()).document(reciverEmail).update("lastMsg",msgList[msgList.size-1].msg.toString(),"count", Count)
                     .addOnSuccessListener {
                         Log.d("TAG11", "update last message on back")
@@ -696,46 +707,6 @@ class ChatActivity : AppCompatActivity() {
         photo=Uri.parse(path)
     }
 
-    private fun performOptionsMenuClick(pos: Int) {
-        val popupMenu = PopupMenu(this,binding.recyclerview[pos],R.id.msgLayout)
-//         add the menu
-        popupMenu.inflate(R.menu.options_menu)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            popupMenu.setForceShowIcon(true)
-        }
-        // implement on menu item click Listener
-        popupMenu.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener{
-            override fun onMenuItemClick(item: MenuItem?): Boolean {
-                when(item?.itemId){
-                    R.id.delete-> {
-                        val builder= AlertDialog.Builder(this@ChatActivity)
-                        builder.setCancelable(true)
-                        builder.setIcon(R.drawable.baseline_delete_24)
-                        builder.setTitle("Delete Data !")
-                        builder.setMessage("Are you Confirm Delete this Data....")
-                        builder.setPositiveButton("yes"){dialog, which->
-                           msgList.removeAt(pos)
-                            msgAdapter.notifyItemRemoved(pos)
-                        }
-                        builder.setNegativeButton("NO"){dialog,which->
-                            dialog.dismiss()
-                        }
-                        val dialog=builder.create()
-                        dialog.show()
-                        return true
-                    }
-                    // in the same way you can implement others
-                    R.id.reply -> {
-
-                    }
-
-                }
-                return false
-            }
-        })
-        popupMenu.show()
-
-    }
 
 
 }
