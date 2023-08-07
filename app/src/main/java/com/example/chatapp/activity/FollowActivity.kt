@@ -76,6 +76,7 @@ class FollowActivity : AppCompatActivity() {
                                 getToken(pos)
 
                                 val okuser = User(
+                                    userList[pos].profileImg,
                                     userList[pos].id,
                                     userList[pos].name,
                                     userList[pos].email,
@@ -160,6 +161,7 @@ class FollowActivity : AppCompatActivity() {
                                                 getToken(pos)
 
                                                 val okuser = User(
+                                                    userList[pos].profileImg,
                                                     userList[pos].id,
                                                     userList[pos].name,
                                                     userList[pos].email,

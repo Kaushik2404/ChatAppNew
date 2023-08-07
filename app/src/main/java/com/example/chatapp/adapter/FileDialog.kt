@@ -51,6 +51,9 @@ class FileDialog(val onclickFile: OnClickDilogFile) : BottomSheetDialogFragment(
         contact.setOnClickListener {
             onclickFile.onClickContact()
         }
+        file.setOnClickListener {
+            onclickFile.onClickFile()
+        }
 
     }
 

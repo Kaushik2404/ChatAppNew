@@ -7,10 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.chatapp.OnIteamClickUser
 import com.example.chatapp.R
 import com.example.chatapp.modal.User
+import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.coroutines.processNextEventInCurrentThread
 
 class UserAdapter(private val context: Context, private var userList:ArrayList<User>, val onIteamClickUser: OnIteamClickUser):RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
@@ -24,10 +28,16 @@ class UserAdapter(private val context: Context, private var userList:ArrayList<U
         val iteamView=LayoutInflater.from(parent.context).inflate(R.layout.list_user,parent,false)
         return ViewHolder(iteamView)
     }
-
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.name.text=userList[position].name.toString()
+
+        if(userList[position].profileImg!=null){
+            val image=userList[position].profileImg?.toUri()
+            Glide.with(context).load(image)
+                .into(holder.profile)
+        }else{
+            holder.profile.setImageResource(R.drawable.profile)
+        }
 
 
 
@@ -61,8 +71,6 @@ class UserAdapter(private val context: Context, private var userList:ArrayList<U
             holder.countbadge.visibility=View.GONE
         }
 
-
-
         else{
             holder.countbadge.visibility=View.VISIBLE
             holder.countbadge.text=userList[position].count.toString()
@@ -90,6 +98,7 @@ class UserAdapter(private val context: Context, private var userList:ArrayList<U
         var countbadge: TextView =iteamView.findViewById<TextView>(R.id.countBadge)
 //        var msg: TextView =iteamView.findViewById<TextView>(R.id.UserMessage)
         val layout:LinearLayout=iteamView.findViewById(R.id.userView)
+        val profile:CircleImageView=iteamView.findViewById(R.id.profileImage)
 
 
 

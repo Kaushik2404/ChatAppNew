@@ -32,6 +32,27 @@
             android:orientation="vertical"
             >
 
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profileImage"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                app:civ_border_width="2dp"
+                app:civ_border_color="#FFFFFF"
+                android:src="@drawable/profiledemo"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Profile Image:"
+                android:textColor="@color/white"
+                android:fontFamily="@font/sgeopersonalusemedium"
+                android:textSize="18dp"
+               android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
+                />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -41,7 +62,7 @@
                 android:fontFamily="@font/sgeopersonalusemedium"
                 android:textSize="18dp"
                 android:layout_marginLeft="30dp"
-                android:layout_marginTop="50dp"
+                android:layout_marginTop="20dp"
                 android:textStyle="bold"
                 />
             <EditText

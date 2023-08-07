@@ -7,6 +7,7 @@
     tools:context=".activity.ChatActivity"
     android:orientation="vertical"
     android:background="@color/white">
+<!--    Chat view-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -294,6 +295,7 @@
 
         </LinearLayout>
     </LinearLayout>
+<!--    contact view-->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -323,16 +325,25 @@
                 />
         </LinearLayout>
     </FrameLayout>
+<!--    pdf view-->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/PdfView"
+        android:visibility="gone"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+<!--            <include layout="@layout/pdf_header"-->
+<!--                android:id="@+id/pdfBar"-->
+<!--                />-->
 
 
-
-
-
-
-
-
-
-
+        </LinearLayout>
+    </FrameLayout>
 
 
 

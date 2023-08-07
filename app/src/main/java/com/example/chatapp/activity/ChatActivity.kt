@@ -3,6 +3,7 @@ package com.example.chatapp.activity
 import android.Manifest
 import android.app.Activity
 import android.app.ProgressDialog
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
@@ -15,11 +16,9 @@ import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.util.Log
 import android.view.KeyEvent
-import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.ListView
-import android.widget.PopupMenu
 import android.widget.SimpleCursorAdapter
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -29,7 +28,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.get
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chatapp.R
 import com.example.chatapp.adapter.FileDialog
@@ -52,6 +51,7 @@ import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
+
 @AndroidEntryPoint
 class ChatActivity : AppCompatActivity() {
     lateinit var binding: ActivityChatBinding
@@ -59,9 +59,9 @@ class ChatActivity : AppCompatActivity() {
     var msgList = ArrayList<Message>()
 
     private val CAMERA_REQ = 101
+    private val PDF_REQ = 102
 
     private val PERMISSIONS_REQUEST_READ_CONTACTS = 100
-
 
     lateinit var bottomSheet:FileDialog
     private lateinit var msgAdapter: MesssageAdapter
@@ -181,7 +181,8 @@ class ChatActivity : AppCompatActivity() {
                 }
 
                 override fun onClickFile() {
-                    TODO("Not yet implemented")
+                   uplodePdf()
+
                 }
 
                 override fun onClickAudio() {
@@ -235,6 +236,13 @@ class ChatActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    private fun uplodePdf() {
+        val pdfIntent = Intent()
+        pdfIntent.action = Intent.ACTION_GET_CONTENT
+        pdfIntent.type = "application/pdf"
+        startActivityForResult(pdfIntent,PDF_REQ )
     }
 
     private fun setContactView() {
@@ -291,7 +299,7 @@ class ChatActivity : AppCompatActivity() {
             val okName = cursor!!.getString(cursor!!.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
 
 
-            currentMsg = okName+""+okNumber
+            currentMsg = okName+"/"+okNumber
             Log.d("Okmsg", currentMsg)
 
 
@@ -504,7 +512,10 @@ class ChatActivity : AppCompatActivity() {
     }
     private fun setDataRec() {
         msgAdapter = MesssageAdapter(this, msgList, object : onClickMsg {
+
             override fun onLongClickMsg(pos: Int) {
+
+
                 val builder= AlertDialog.Builder(this@ChatActivity)
                 builder.setCancelable(true)
                 builder.setIcon(R.drawable.baseline_delete_24)
@@ -526,6 +537,20 @@ class ChatActivity : AppCompatActivity() {
 //                msgAdapter.notifyItemRemoved(pos)
 //                performOptionsMenuClick(pos)
                 }
+
+            override fun onClickMsg(pos: Int) {
+//                binding.PdfView.visibility=View.VISIBLE
+//                binding.chatView.visibility=View.GONE
+//                binding.contactView.visibility=View.GONE
+                val pdfPath = msgList[pos].msg?.toUri()
+                val intent = Intent(Intent.ACTION_VIEW)
+                intent.setDataAndType(pdfPath, "application/pdf")
+                try {
+                    startActivity(intent)
+                } catch (e: ActivityNotFoundException) {
+                    Log.d("PDFVIEW","ok VIEW PDF ")
+                }
+            }
         })
         binding.recyclerview.layoutManager = LinearLayoutManager(this)
         binding.recyclerview.setHasFixedSize(true)
@@ -576,10 +601,16 @@ class ChatActivity : AppCompatActivity() {
                         Log.d("TAG11", "update last message on back image")
                     }
             }
-            if(msgList[msgList.size-1].type.toString()=="contact"){
+            else if(msgList[msgList.size-1].type.toString()=="contact"){
                 db.collection(FirebaseAuth.getInstance().currentUser?.email.toString()).document(reciverEmail).update("lastMsg","Contact Number","count", Count)
                     .addOnSuccessListener {
                         Log.d("TAG11", "update last message on back contact")
+                    }
+            }
+            else if(msgList[msgList.size-1].type.toString()=="PDF"){
+                db.collection(FirebaseAuth.getInstance().currentUser?.email.toString()).document(reciverEmail).update("lastMsg","PDF","count", Count)
+                    .addOnSuccessListener {
+                        Log.d("TAG11", "update last message on back PDF")
                     }
             }
             else{
@@ -652,7 +683,11 @@ class ChatActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
+
         if ( resultCode == Activity.RESULT_OK) {
+
+
             Log.d("IMAGE URI","true")
             if(requestCode == CAMERA_REQ ){
                 Log.d("IMAGE URI","true1")
@@ -662,6 +697,71 @@ class ChatActivity : AppCompatActivity() {
                         bottomSheet.dismiss()
                     sendCaptureImage()
             }
+            if(requestCode == PDF_REQ ){
+                sendPdfINDatabase(data)
+
+
+            }
+        }
+    }
+
+    private fun sendPdfINDatabase(data: Intent?) {
+        Log.d("PDF","true")
+        val dialog = ProgressDialog(this)
+        dialog.setMessage("Uploading")
+        dialog.show()
+        val pdfuri = data!!.data
+        val timestamp = "" + System.currentTimeMillis()
+        val storageReference = FirebaseStorage.getInstance().reference
+//        Toast.makeText(this@ChatActivity, pdfuri.toString(),Toast.LENGTH_SHORT).show()
+        val okPdf=getFileName(pdfuri!!)
+        val filepath = storageReference.child("PDF").child(okPdf.toString())
+//        Toast.makeText(this@ChatActivity,okPdf.toString() , Toast.LENGTH_SHORT).show()
+        filepath.putFile(pdfuri!!).addOnSuccessListener {
+            Log.d("PDF","Store Sucessfully")
+
+            val reference1: StorageReference =
+                FirebaseStorage.getInstance().getReference().child("PDF").child(okPdf.toString())
+            reference1.downloadUrl.addOnSuccessListener { uri ->
+//
+                currentMsg = uri.toString()
+                Log.d("Okmsg", currentMsg)
+
+                userMsgAdd("PDF","PDF")
+                type="PDF"
+
+                val id = db.collection("Chat_Test").document().id
+
+                val reciverid = intent.getStringExtra("UID").toString()
+                val senderid = FirebaseAuth.getInstance().currentUser?.email.toString()
+
+                val calendar: Calendar = Calendar.getInstance()
+                val format = SimpleDateFormat(" d MMM yyyy HH:mm:ss ")
+                val time: String = format.format(calendar.time)
+
+                val msg = Message(id,currentMsg, senderid, reciverid, time,type)
+
+                db.collection("Chat_Test").document(id).set(msg).addOnCompleteListener {
+                    Log.d("result", "ok save PDF$type")
+                    dialog.dismiss()
+//            msgList.add(msg)
+//            msgAdapter.notifyItemInserted(msgList.size - 1)
+                }.addOnFailureListener {
+                    dialog.dismiss()
+                    Toast.makeText(applicationContext, "Failed..Sending PDF", Toast.LENGTH_SHORT).show()
+                }
+                notificationCheckCondition()
+                push("PDF")
+
+            }.addOnFailureListener {
+                dialog.dismiss()
+                Toast.makeText(applicationContext, "Failed send PDF..", Toast.LENGTH_SHORT).show()
+            }
+            dialog.dismiss()
+        }.addOnFailureListener {
+            Log.d("PDF","Store Failed")
+//            Toast.makeText(this@ChatActivity, "pdf Store Failed ", Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
         }
     }
 
@@ -706,7 +806,5 @@ class ChatActivity : AppCompatActivity() {
         )
         photo=Uri.parse(path)
     }
-
-
 
 }
