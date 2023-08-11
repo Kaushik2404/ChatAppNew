@@ -51,6 +51,7 @@ class SignupActivity : AppCompatActivity() {
         binding=ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
         uplodeimage()
+
         binding.profileImage.setOnClickListener{
             getImageId()
         }
@@ -68,9 +69,6 @@ class SignupActivity : AppCompatActivity() {
                             reference1.downloadUrl.addOnSuccessListener { uri ->
                                 okUri=uri.toString()
                                 Log.d("uri",okUri)
-                            }.addOnFailureListener {
-                                Toast.makeText(this, "error", Toast.LENGTH_SHORT).show()
-                            }
 
                                 val userId=FirebaseAuth.getInstance().currentUser?.uid.toString()
                                 val user=User(okUri,userId,binding.name.text.toString(),binding.email.text.toString(),binding.number.text.toString(),binding.password.text.toString())
@@ -86,7 +84,12 @@ class SignupActivity : AppCompatActivity() {
                                     .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e)
                                         Toast.makeText(applicationContext, "failed save the data", Toast.LENGTH_SHORT).show()
                                     }
-//                             val userId=db.collection("User").document().id
+
+                            }.addOnFailureListener {
+                                Toast.makeText(this, "error", Toast.LENGTH_SHORT).show()
+                            }
+
+//                            val userId=db.collection("User").document().id
 
                         }
                         else{

@@ -1,15 +1,21 @@
 package com.example.chatapp.adapter
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.example.chatapp.OnIteamClickUser
 import com.example.chatapp.R
 import com.example.chatapp.modal.User
@@ -18,12 +24,10 @@ import kotlinx.coroutines.processNextEventInCurrentThread
 
 class UserAdapter(private val context: Context, private var userList:ArrayList<User>, val onIteamClickUser: OnIteamClickUser):RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
-
     fun filterList(filterList: ArrayList<User>) {
         userList = filterList
         notifyDataSetChanged()
     }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val iteamView=LayoutInflater.from(parent.context).inflate(R.layout.list_user,parent,false)
         return ViewHolder(iteamView)
@@ -31,12 +35,41 @@ class UserAdapter(private val context: Context, private var userList:ArrayList<U
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.name.text=userList[position].name.toString()
 
+        holder.progrss.visibility=View.VISIBLE
+
         if(userList[position].profileImg!=null){
             val image=userList[position].profileImg?.toUri()
-            Glide.with(context).load(image)
+
+            Glide.with(context).load(userList[position].profileImg)
+                .listener(object : RequestListener<Drawable> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        isFirstResource: Boolean,
+                    ): Boolean {
+                        holder.progrss.visibility=View.GONE
+                        return false
+                    }
+
+                    override fun onResourceReady(
+                        resource: Drawable?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean,
+                    ): Boolean {
+                        holder.progrss.visibility=View.GONE
+                        return false
+                    }
+
+                })
                 .into(holder.profile)
         }else{
+
+            holder.progrss.visibility=View.GONE
             holder.profile.setImageResource(R.drawable.profile)
+
         }
 
 
@@ -99,6 +132,7 @@ class UserAdapter(private val context: Context, private var userList:ArrayList<U
 //        var msg: TextView =iteamView.findViewById<TextView>(R.id.UserMessage)
         val layout:LinearLayout=iteamView.findViewById(R.id.userView)
         val profile:CircleImageView=iteamView.findViewById(R.id.profileImage)
+        val progrss:ProgressBar=iteamView.findViewById(R.id.progrss)
 
 
 
