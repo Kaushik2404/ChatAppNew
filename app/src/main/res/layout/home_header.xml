@@ -1,18 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="match_parent"
-android:layout_height="50dp"
-android:background="#4DB7EE"
-android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#4DB7EE"
+    android:orientation="horizontal"
     android:elevation="5dp">
 
-<ImageView
-    android:id="@+id/back"
-    android:layout_width="40dp"
-    android:layout_height="40dp"
-    android:layout_centerVertical="true"
-    android:layout_marginLeft="15dp"
-    android:src="@drawable/profile" />
+    <RelativeLayout
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="15dp"
+        android:layout_centerVertical="true"
+        >
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:id="@+id/back"
+            app:civ_border_color="#2196F3"
+            app:civ_border_width="1dp"
+            />
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/pgbarMainProfile"
+            android:padding="10dp"
+            android:layout_centerInParent="true"
+            android:visibility="visible"
+            />
+
+    </RelativeLayout>
+
+<!--<ImageView-->
+<!--    android:id="@+id/back"-->
+<!--    android:layout_width="40dp"-->
+<!--    android:layout_height="40dp"-->
+<!--    android:layout_centerVertical="true"-->
+<!--    android:layout_marginLeft="15dp"-->
+<!--    android:src="@drawable/profile" />-->
 
 
 <TextView

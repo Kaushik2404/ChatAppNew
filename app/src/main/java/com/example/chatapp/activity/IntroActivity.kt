@@ -23,12 +23,13 @@ class IntroActivity : AppCompatActivity() {
 
 
     companion object {
-        private const val INTERNET_PERMISSION = 100
-        private const val POST_NOTI = 101
 
-        private const val CALL = 102
-      //  private const val CAMERA  = 103
-        private const val LOCATION  = 14
+//        private const val INTERNET_PERMISSION = 100
+//        private const val POST_NOTI = 101
+//
+//        private const val CALL = 102
+//      //  private const val CAMERA  = 103
+//        private const val LOCATION  = 14
 
         private const val PERMISSION_GRANTED=0
         private const val PERMISSION_DENIED=-1
