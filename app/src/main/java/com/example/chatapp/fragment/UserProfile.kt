@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.example.chatapp.R
+import com.example.chatapp.activity.IntroActivity
 import com.example.chatapp.activity.LoginActivity
 import com.example.chatapp.activity.UpdateProfileActivity
 import com.example.chatapp.modal.User
@@ -41,6 +42,7 @@ class UserProfile : Fragment() {
     lateinit var PASS:String
     lateinit var profilePic:CircleImageView
     lateinit var progresss:ProgressBar
+    lateinit var BtnDelete:Button
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,6 +58,7 @@ class UserProfile : Fragment() {
         BtnEdit=view.findViewById(R.id.BtnProfileChange)
         BtnLogout=view.findViewById(R.id.BtnLogOut)
         progresss=view.findViewById(R.id.progrssprofile)
+        BtnDelete=view.findViewById(R.id.BtnDelete)
 
         progresss.visibility=View.VISIBLE
 
@@ -83,6 +86,17 @@ class UserProfile : Fragment() {
             intent.putExtra("PASS",PASS)
             activity?.startActivity(intent)
 
+        }
+
+        BtnDelete.setOnClickListener {
+            FirebaseFirestore.getInstance().collection("User")
+                .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                .delete().addOnSuccessListener {
+                    val intent=Intent(context,IntroActivity::class.java)
+                    activity?.startActivity(intent)
+                    activity?.finish()
+
+                }
         }
     }
 
