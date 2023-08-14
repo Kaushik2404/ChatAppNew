@@ -12,22 +12,23 @@ import android.widget.TextView
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.example.chatapp.OnIteamClickUser
 import com.example.chatapp.R
 import com.example.chatapp.modal.User
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.coroutines.processNextEventInCurrentThread
+import javax.sql.DataSource
 
 class UserAdapter(private val context: Context, private var userList:ArrayList<User>, val onIteamClickUser: OnIteamClickUser):RecyclerView.Adapter<UserAdapter.ViewHolder>() {
+
 
     fun filterList(filterList: ArrayList<User>) {
         userList = filterList
         notifyDataSetChanged()
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val iteamView=LayoutInflater.from(parent.context).inflate(R.layout.list_user,parent,false)
         return ViewHolder(iteamView)
@@ -45,7 +46,7 @@ class UserAdapter(private val context: Context, private var userList:ArrayList<U
                     override fun onLoadFailed(
                         e: GlideException?,
                         model: Any?,
-                        target: Target<Drawable>?,
+                        target:com.bumptech.glide.request.target.Target<Drawable>?,
                         isFirstResource: Boolean,
                     ): Boolean {
                         holder.progrss.visibility=View.GONE
@@ -55,8 +56,8 @@ class UserAdapter(private val context: Context, private var userList:ArrayList<U
                     override fun onResourceReady(
                         resource: Drawable?,
                         model: Any?,
-                        target: Target<Drawable>?,
-                        dataSource: DataSource?,
+                        target: com.bumptech.glide.request.target.Target<Drawable>?,
+                        dataSource: com.bumptech.glide.load.DataSource?,
                         isFirstResource: Boolean,
                     ): Boolean {
                         holder.progrss.visibility=View.GONE
@@ -132,7 +133,7 @@ class UserAdapter(private val context: Context, private var userList:ArrayList<U
 //        var msg: TextView =iteamView.findViewById<TextView>(R.id.UserMessage)
         val layout:LinearLayout=iteamView.findViewById(R.id.userView)
         val profile:CircleImageView=iteamView.findViewById(R.id.profileImage)
-        val progrss:ProgressBar=iteamView.findViewById(R.id.progrss)
+        val progrss: ProgressBar =iteamView.findViewById(R.id.progrss)
 
 
 

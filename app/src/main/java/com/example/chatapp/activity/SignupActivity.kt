@@ -27,8 +27,10 @@ import com.example.chatapp.R
 import com.example.chatapp.databinding.ActivitySignupBinding
 import com.example.chatapp.modal.Message
 import com.example.chatapp.modal.User
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.text.SimpleDateFormat
@@ -42,6 +44,7 @@ class SignupActivity : AppCompatActivity() {
     private lateinit var ImageUri:String
     private lateinit var ImageUriok:Uri
     lateinit var okUri:String
+    lateinit var token:String
 
      val auth:FirebaseAuth=FirebaseAuth.getInstance()
      var db=FirebaseFirestore.getInstance()
@@ -51,6 +54,17 @@ class SignupActivity : AppCompatActivity() {
         binding=ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
         uplodeimage()
+
+
+
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+//                textview.text = "Fetching FCM registration token failed"
+                return@OnCompleteListener
+            }
+            // fetching the token
+             token = task.result
+        })
 
         binding.profileImage.setOnClickListener{
             getImageId()
@@ -71,11 +85,20 @@ class SignupActivity : AppCompatActivity() {
                                 Log.d("uri",okUri)
 
                                 val userId=FirebaseAuth.getInstance().currentUser?.uid.toString()
-                                val user=User(okUri,userId,binding.name.text.toString(),binding.email.text.toString(),binding.number.text.toString(),binding.password.text.toString())
+                                val user=User(okUri,
+                                    userId,
+                                    binding.name.text.toString(),
+                                    binding.email.text.toString(),
+                                    binding.number.text.toString(),
+                                    binding.password.text.toString(),
+                                    "",
+                                "",
+                                0,token)
 
                                 db.collection("User").document(userId)
                                     .set(user)
                                     .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!")
+
                                         Toast.makeText(applicationContext, "Sign in Successfully", Toast.LENGTH_SHORT).show()
                                         val intent=Intent(applicationContext,ChatHomeActivity::class.java)
                                         startActivity(intent)
@@ -213,4 +236,6 @@ class SignupActivity : AppCompatActivity() {
         return true
 
     }
+
+
 }

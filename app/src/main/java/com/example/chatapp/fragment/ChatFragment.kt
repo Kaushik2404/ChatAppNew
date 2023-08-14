@@ -127,7 +127,17 @@ class ChatFragment : Fragment() {
                 (dialog.findViewById<View>(R.id.tv_no) as TextView).setOnClickListener { dialog.dismiss() }
                 textView.setOnClickListener {
 
-                    db.collection(FirebaseAuth.getInstance().currentUser?.email.toString()).document(userList[pos].email.toString())
+//                    db.collection(FirebaseAuth.getInstance().currentUser?.email.toString()).document(userList[pos].email.toString())
+//                        .delete()
+//                        .addOnSuccessListener {
+//                            Log.d("TAG11", "DocumentSnapshot successfully deleted!")
+//                            adapter.notifyItemRemoved(pos)
+//                        }
+//                        .addOnFailureListener { e -> Log.w("TAG11", "Error deleting document", e) }
+                    db.collection("User")
+                        .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                        .collection("FollowList")
+                        .document(userList[pos].id.toString())
                         .delete()
                         .addOnSuccessListener {
                             Log.d("TAG11", "DocumentSnapshot successfully deleted!")
@@ -210,8 +220,76 @@ class ChatFragment : Fragment() {
 //        return userList
 //    }
 
+//    //first
+//    private fun listenNewMessage() {
+//        db.collection(FirebaseAuth.getInstance().currentUser?.email.toString()).addSnapshotListener { value, error ->
+//            value?.let {
+//                userList.clear()
+//                if (!it.isEmpty) {
+//                    for (document in it.documents) {
+//                        if(document.get("email")==FirebaseAuth.getInstance().currentUser?.email.toString()){
+//                            userId=document.get("id").toString()
+//                        }
+//                        if(FirebaseAuth.getInstance().currentUser?.email!=document.get("email")){
+//                            val user = document.toObject(User::class.java)
+//                            userList.add(user!!)
+//                            Log.d("TAG111", "${document.id} => ${document.data}")
+//                        }
+//                    }
+//                    userList.sortByDescending { it.lastMsgTime }
+//
+//                    if(userList.isNotEmpty()){
+//                        txview.visibility=View.GONE
+//                        recyclerView.visibility=View.VISIBLE
+//                        setAdapter()
+//                    }
+//                    else{
+//                        txview.visibility=View.VISIBLE
+//                        recyclerView.visibility=View.GONE
+//                    }
+//
+//                }else{
+//                    if(userList.isNotEmpty()){
+//                        txview.visibility=View.GONE
+//                        recyclerView.visibility=View.VISIBLE
+//                        setAdapter()
+//                    }
+//                    else{
+//                        txview.visibility=View.VISIBLE
+//                        recyclerView.visibility=View.GONE
+//                    }
+//
+//                }
+//            }
+//        }
+//
+////        db.collection("User").addSnapshotListener { value, error ->
+////            value?.let {
+////                if (!it.isEmpty) {
+////                    userList.clear()
+////                    for (document in it.documents) {
+////                        if(document.get("email")==FirebaseAuth.getInstance().currentUser?.email.toString()){
+////                            userId=document.get("id").toString()
+////                        }
+////                        if(FirebaseAuth.getInstance().currentUser?.email!=document.get("email")){
+////                            val user = document.toObject(User::class.java)
+////                            userList.add(user!!)
+////                            Log.d("TAG111", "${document.id} => ${document.data}")
+////                        }
+////                    }
+////                    userList.sortByDescending { it.lastMsgTime }
+////                    setAdapter()
+////                }
+////            }
+////        }
+//    }
+
+    //secound
     private fun listenNewMessage() {
-        db.collection(FirebaseAuth.getInstance().currentUser?.email.toString()).addSnapshotListener { value, error ->
+        db.collection("User")
+            .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
+            .collection("FollowList")
+            .addSnapshotListener { value, error ->
             value?.let {
                 userList.clear()
                 if (!it.isEmpty) {

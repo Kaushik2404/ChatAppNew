@@ -3,18 +3,38 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.UserProfile"
     android:orientation="vertical">
-
-    <ImageView
+    <RelativeLayout
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_marginTop="20dp"
         android:layout_gravity="center_horizontal"
-        android:id="@+id/profilePicfrg"
-        android:padding="10dp"
-        android:src="@drawable/profile"
-        />
+        >
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:id="@+id/profilePicfrg"
+            android:padding="10dp"
+            app:civ_border_color="#000000"
+            app:civ_border_width="1dp"
+            />
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progrssprofile"
+            android:layout_centerInParent="true"
+            android:visibility="visible"
+            />
+
+
+    </RelativeLayout>
+
+
+
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

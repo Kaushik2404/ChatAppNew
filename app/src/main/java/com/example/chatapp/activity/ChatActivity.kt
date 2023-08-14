@@ -336,7 +336,31 @@ class ChatActivity : AppCompatActivity() {
         val calendar: Calendar = Calendar.getInstance()
         val format = SimpleDateFormat(" d MMM yyyy HH:mm:ss ")
         val time: String = format.format(calendar.time)
-        db.collection(FirebaseAuth.getInstance().currentUser?.email.toString()).document(reciverEmail)
+//        db.collection(FirebaseAuth.getInstance().currentUser?.email.toString()).document(reciverEmail)
+//            .update("lastMsg", currentMsg, "lastMsgTime", time)
+//            .addOnSuccessListener {
+//                Log.d("TAG11", currentMsg)
+//                Log.d("TAG11", "User id $userID")
+//                db.collection(reciverEmail).document(FirebaseAuth.getInstance().currentUser?.email.toString()).update(
+//                    "lastMsg",
+//                    currentMsg,
+//                    "lastMsgTime",
+//                    time,
+//                    "count",
+//                    Count
+//                )
+//                    .addOnSuccessListener {
+//                        Log.d(
+//                            "TAG1111",
+//                            "update last message" + binding.edtMsg.text.toString()
+//                        )
+//                        Log.d("TAG11", "update last message")
+//
+//                    }
+//            }
+        db.collection("User").document(FirebaseAuth.getInstance().currentUser?.uid.toString())
+            .collection("FollowList")
+            .document(ID)
             .update("lastMsg", currentMsg, "lastMsgTime", time)
             .addOnSuccessListener {
                 Log.d("TAG11", currentMsg)
@@ -579,7 +603,10 @@ class ChatActivity : AppCompatActivity() {
         super.onStart()
         val ID = intent.getStringExtra("ID").toString()
 
-        db.collection(FirebaseAuth.getInstance().currentUser?.email.toString()).document(reciverEmail).update("count", Count)
+        db.collection("User")
+            .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
+            .collection("FollowList")
+            .document(ID).update("count", Count)
             .addOnSuccessListener {
                 Log.d("TAG11", "update last message on start")
             }
@@ -589,39 +616,70 @@ class ChatActivity : AppCompatActivity() {
         Count = 0
         val ID = intent.getStringExtra("ID").toString()
 
+        val calendar: Calendar = Calendar.getInstance()
+        val format = SimpleDateFormat(" d MMM yyyy HH:mm:ss ")
+        val time: String = format.format(calendar.time)
+
+        db.collection("User")
+            .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
+            .collection("FollowList")
+            .document(ID)
+            .update("lastMsgTime",time)
+            .addOnSuccessListener {
+                Log.d("TAG11", "update last message on back empty")
+            }
+
         if(msgList.isEmpty()){
-            db.collection(FirebaseAuth.getInstance().currentUser?.email.toString()).document(reciverEmail).update("lastMsg","","count", Count)
+            db.collection("User")
+                .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                .collection("FollowList")
+                .document(ID)
+                .update("lastMsg","","count", Count)
                 .addOnSuccessListener {
                     Log.d("TAG11", "update last message on back empty")
                 }
         }else{
             if(msgList[msgList.size-1].type.toString()=="image"){
-                db.collection(FirebaseAuth.getInstance().currentUser?.email.toString()).document(reciverEmail).update("lastMsg","image","count", Count)
+                db.collection("User")
+                    .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                    .collection("FollowList")
+                    .document(ID)
+                    .update("lastMsg","image","count", Count)
                     .addOnSuccessListener {
                         Log.d("TAG11", "update last message on back image")
                     }
             }
             else if(msgList[msgList.size-1].type.toString()=="contact"){
-                db.collection(FirebaseAuth.getInstance().currentUser?.email.toString()).document(reciverEmail).update("lastMsg","Contact Number","count", Count)
+                db.collection("User")
+                    .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                    .collection("FollowList")
+                    .document(ID)
+                    .update("lastMsg","Contact Number","count", Count)
                     .addOnSuccessListener {
                         Log.d("TAG11", "update last message on back contact")
                     }
             }
             else if(msgList[msgList.size-1].type.toString()=="PDF"){
-                db.collection(FirebaseAuth.getInstance().currentUser?.email.toString()).document(reciverEmail).update("lastMsg","PDF","count", Count)
+                db.collection("User")
+                    .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                    .collection("FollowList")
+                    .document(ID)
+                    .update("lastMsg","PDF","count", Count)
                     .addOnSuccessListener {
                         Log.d("TAG11", "update last message on back PDF")
                     }
             }
             else{
-                db.collection(FirebaseAuth.getInstance().currentUser?.email.toString()).document(reciverEmail).update("lastMsg",msgList[msgList.size-1].msg.toString(),"count", Count)
+                db.collection("User")
+                    .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                    .collection("FollowList")
+                    .document(ID)
+                    .update("lastMsg",msgList[msgList.size-1].msg.toString(),"count", Count)
                     .addOnSuccessListener {
                         Log.d("TAG11", "update last message on back")
                     }
             }
-
         }
-
 
     }
     private fun notificationCheckCondition() {

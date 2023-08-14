@@ -88,9 +88,23 @@ class FollowActivity : AppCompatActivity() {
                                     userList[pos].token
                                 )
 
+//                                FirebaseFirestore.getInstance()
+//                                    .collection(FirebaseAuth.getInstance().currentUser?.email.toString())
+//                                    .document(userList[pos].email.toString())
+//                                    .set(okuser)
+//                                    .addOnSuccessListener {
+//                                        Log.d("TAG11", "User Follow")
+//                                        notificationCheckCondition()
+//                                        push("Follow request")
+//                                    }
+//                                    .addOnFailureListener {
+//                                        Log.d("TAG11", "User not Follow")
+//                                    }
                                 FirebaseFirestore.getInstance()
-                                    .collection(FirebaseAuth.getInstance().currentUser?.email.toString())
-                                    .document(userList[pos].email.toString())
+                                    .collection("User")
+                                    .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                                    .collection("FollowList")
+                                    .document(userList[pos].id.toString())
                                     .set(okuser)
                                     .addOnSuccessListener {
                                         Log.d("TAG11", "User Follow")
@@ -100,6 +114,7 @@ class FollowActivity : AppCompatActivity() {
                                     .addOnFailureListener {
                                         Log.d("TAG11", "User not Follow")
                                     }
+
                             }
 
                         }
@@ -109,9 +124,103 @@ class FollowActivity : AppCompatActivity() {
                 }
             }
     }
+//    private fun followList() {
+//        FirebaseFirestore.getInstance()
+//            .collection(FirebaseAuth.getInstance().currentUser?.email.toString())
+//            .addSnapshotListener { value, error ->
+//                value?.let {
+//                    if (!it.isEmpty) {
+//                        Log.d("listUser",userList2.size.toString())
+//                        userList2.clear()
+//                        for (document in it.documents) {
+//                            if (document.get("email") == FirebaseAuth.getInstance().currentUser?.email.toString()) {
+//                                val userId = document.get("id").toString()
+//                            }
+//                            if (FirebaseAuth.getInstance().currentUser?.email != document.get("email")) {
+//                                val user = document.toObject(User::class.java)
+//                                userList2.add(user!!)
+//                                Log.d("TAG111", "${document.id} => ${document.data}")
+//                            }
+//                        }
+//                        Log.d("TAG111333", "${userList2.map { it.email }}")
+//                        FirebaseFirestore.getInstance().collection("User")
+//                            .whereNotIn("email", userList2.map { it.email})
+//                            .addSnapshotListener { value, error ->
+//                                value?.let {
+//                                    if (!it.isEmpty) {
+//                                        userList.clear()
+//                                        for (document in it.documents) {
+//                                            if (document.get("email") == FirebaseAuth.getInstance().currentUser?.email.toString()) {
+//                                                val userId = document.get("id").toString()
+//                                            }
+//                                            if (FirebaseAuth.getInstance().currentUser?.email != document.get(
+//                                                    "email"
+//                                                )
+//                                            ) {
+//                                                val user = document.toObject(User::class.java)
+//                                                userList.add(user!!)
+//                                                Log.d(
+//                                                    "TAG111",
+//                                                    "${document.id} => ${document.data}"
+//                                                )
+//                                            }
+//                                        }
+//                                        userList.sortByDescending { it.lastMsgTime }
+//
+//                                        binding.recViewFollow.layoutManager = LinearLayoutManager(applicationContext)
+//                                        binding.recViewFollow.setHasFixedSize(true)
+//
+//                                        val adapter = UserFollowAdapter(this, userList, object : OnClickFollow {
+//                                            override fun onClickUserFollow(pos: Int) {
+//                                                name = userList[pos].name.toString()
+//                                                getToken(pos)
+//
+//                                                val okuser = User(
+//                                                    userList[pos].profileImg,
+//                                                    userList[pos].id,
+//                                                    userList[pos].name,
+//                                                    userList[pos].email,
+//                                                    userList[pos].number,
+//                                                    userList[pos].password,
+//                                                    userList[pos].lastMsg,
+//                                                    userList[pos].lastMsgTime,
+//                                                    userList[pos].count,
+//                                                    userList[pos].token
+//                                                )
+//
+//                                                FirebaseFirestore.getInstance()
+//                                                    .collection(FirebaseAuth.getInstance().currentUser?.email.toString())
+//                                                    .document(userList[pos].email.toString())
+//                                                    .set(okuser)
+//                                                    .addOnSuccessListener {
+//                                                        Log.d("TAG11", "User Follow")
+//                                                        notificationCheckCondition()
+//                                                        push("Follow request")
+//                                                    }
+//                                                    .addOnFailureListener {
+//                                                        Log.d("TAG11", "User not Follow")
+//                                                    }
+//                                            }
+//
+//                                        }
+//                                        )
+//                                        binding.recViewFollow.adapter = adapter
+//                                    }
+//                                }
+//                            }
+//                    }else{
+//                        listenNewMessage()
+//                    }
+//
+//                }
+//            }
+//
+//    }
     private fun followList() {
         FirebaseFirestore.getInstance()
-            .collection(FirebaseAuth.getInstance().currentUser?.email.toString())
+            .collection("User")
+            .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
+            .collection("FollowList")
             .addSnapshotListener { value, error ->
                 value?.let {
                     if (!it.isEmpty) {
@@ -174,8 +283,10 @@ class FollowActivity : AppCompatActivity() {
                                                 )
 
                                                 FirebaseFirestore.getInstance()
-                                                    .collection(FirebaseAuth.getInstance().currentUser?.email.toString())
-                                                    .document(userList[pos].email.toString())
+                                                    .collection("User")
+                                                    .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                                                    .collection("FollowList")
+                                                    .document(userList[pos].id.toString())
                                                     .set(okuser)
                                                     .addOnSuccessListener {
                                                         Log.d("TAG11", "User Follow")
