@@ -111,6 +111,7 @@ class ChatActivity : AppCompatActivity() {
         listenNewMessage()
         setProfileImage()
 
+
     }
 
     private fun setProfileImage() {
@@ -403,16 +404,14 @@ class ChatActivity : AppCompatActivity() {
 //                    }
 //            }
         db.collection("User").document(FirebaseAuth.getInstance().currentUser?.uid.toString())
-            .collection("FollowList")
-            .document(ID)
             .update("lastMsg", currentMsg, "lastMsgTime", time)
             .addOnSuccessListener {
                 Log.d("TAG11", currentMsg)
                 Log.d("TAG11", "User id $userID")
                 db.collection("User")
-                    .document(ID)
-                    .collection("FollowList")
                     .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                    .collection("FollowList")
+                    .document(ID)
                     .update(
                     "lastMsg",
                     currentMsg,
