@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -30,6 +31,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.example.chatapp.R
 import com.example.chatapp.adapter.FileDialog
 import com.example.chatapp.adapter.MesssageAdapter
@@ -76,7 +82,7 @@ class ChatActivity : AppCompatActivity() {
     lateinit var type:String
     lateinit var launcher: ActivityResultLauncher<String>
    lateinit var data:ArrayList<Contact>
-
+   lateinit var profileImage:String
 
     private var Count = 0
     private  val TAG = "Chat"
@@ -96,14 +102,56 @@ class ChatActivity : AppCompatActivity() {
         ID = intent.getStringExtra("ID").toString()
         userID = intent.getStringExtra("USERID").toString()
         reciverEmail = intent.getStringExtra("UID").toString()
+        profileImage = intent.getStringExtra("profileImage").toString()
 
         currentUserName()
         getToken()
         uplodeimage()
         onclick()
         listenNewMessage()
+        setProfileImage()
+<<<<<<<<< Temporary merge branch 1
+
+=========
+>>>>>>>>> Temporary merge branch 2
 
     }
+
+    private fun setProfileImage() {
+
+        if(profileImage!=null){
+        Glide.with(this).load(profileImage)
+            .listener(object : RequestListener<Drawable> {
+                override fun onLoadFailed(
+                    e: GlideException?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    isFirstResource: Boolean,
+                ): Boolean {
+                    binding.chatBar.progrsschat.visibility=View.GONE
+                    return false
+                }
+
+                override fun onResourceReady(
+                    resource: Drawable?,
+                    model: Any?,
+                    target: Target<Drawable>?,
+                    dataSource: DataSource?,
+                    isFirstResource: Boolean,
+                ): Boolean {
+                    binding.chatBar.progrsschat.visibility=View.GONE
+                    return false
+                }
+
+            })
+            .into(binding.chatBar.profilePicChat)
+    }else{
+            binding.chatBar.progrsschat.visibility=View.GONE
+        binding.chatBar.profilePicChat.setImageResource(R.drawable.profile)
+
+    }
+    }
+
     private fun sendCaptureImage() {
 
 
@@ -358,18 +406,21 @@ class ChatActivity : AppCompatActivity() {
 //
 //                    }
 //            }
-        db.collection("User")
-            .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
-            .collection("FollowList")
-            .document(ID)
+        db.collection("User").document(FirebaseAuth.getInstance().currentUser?.uid.toString())
             .update("lastMsg", currentMsg, "lastMsgTime", time)
             .addOnSuccessListener {
                 Log.d("TAG11", currentMsg)
                 Log.d("TAG11", "User id $userID")
                 db.collection("User")
+<<<<<<<<< Temporary merge branch 1
+                    .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                    .collection("FollowList")
+                    .document(ID)
+=========
                     .document(ID)
                     .collection("FollowList")
                     .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
+>>>>>>>>> Temporary merge branch 2
                     .update(
                     "lastMsg",
                     currentMsg,
@@ -495,6 +546,7 @@ class ChatActivity : AppCompatActivity() {
                         if (FirebaseAuth.getInstance().currentUser?.email == document.get("email")) {
                             val user = document.toObject(User::class.java)
                              name = user?.name.toString()
+
                         }
                     }
                 }
