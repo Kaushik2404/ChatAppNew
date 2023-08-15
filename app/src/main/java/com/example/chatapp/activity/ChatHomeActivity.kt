@@ -212,40 +212,11 @@ class ChatHomeActivity : AppCompatActivity() {
                             // drawer Profile Image
                             binding.drawerHeder.progrssprofile.visibility=View.VISIBLE
                             if(user?.profileImg!=null){
-                                Glide.with(this).load(user?.profileImg)
-                                    .listener(object : RequestListener<Drawable> {
-                                        override fun onLoadFailed(
-                                            e: GlideException?,
-                                            model: Any?,
-                                            target: Target<Drawable>?,
-                                            isFirstResource: Boolean,
-                                        ): Boolean {
-                                            binding.drawerHeder.progrssprofile.visibility=View.GONE
-                                            return false
-                                        }
 
-                                        override fun onResourceReady(
-                                            resource: Drawable?,
-                                            model: Any?,
-                                            target: Target<Drawable>?,
-                                            dataSource: DataSource?,
-                                            isFirstResource: Boolean,
-                                        ): Boolean {
-                                            binding.drawerHeder.progrssprofile.visibility=View.GONE
-                                            return false
-                                        }
-
-                                    })
-                                    .into(binding.drawerHeder.profile)
-                            }else{
-                                binding.drawerHeder.progrssprofile.visibility=View.GONE
-                                binding.drawerHeder.profile.setImageResource(R.drawable.profile)
-
-                            }
                         // Main Chat home Profile Image
                             binding.toolbar.pgbarMainProfile.visibility=View.VISIBLE
                             if(user?.profileImg!=null){
-                                Glide.with(this).load(user?.profileImg)
+                                Glide.with(this).load(user.profileImg)
                                     .listener(object : RequestListener<Drawable> {
                                         override fun onLoadFailed(
                                             e: GlideException?,
@@ -270,11 +241,41 @@ class ChatHomeActivity : AppCompatActivity() {
 
                                     })
                                     .into(binding.toolbar.back)
+
+                                Glide.with(this).load(user.profileImg)
+                                    .listener(object : RequestListener<Drawable> {
+                                        override fun onLoadFailed(
+                                            e: GlideException?,
+                                            model: Any?,
+                                            target: Target<Drawable>?,
+                                            isFirstResource: Boolean,
+                                        ): Boolean {
+                                            binding.drawerHeder.progrssprofile.visibility=View.GONE
+                                            return false
+                                        }
+
+                                        override fun onResourceReady(
+                                            resource: Drawable?,
+                                            model: Any?,
+                                            target: Target<Drawable>?,
+                                            dataSource: DataSource?,
+                                            isFirstResource: Boolean,
+                                        ): Boolean {
+                                            binding.drawerHeder.progrssprofile.visibility=View.GONE
+                                            return false
+                                        }
+
+                                    })
+                                    .into(binding.drawerHeder.profile)
+                            }
                             }else{
                                 binding.toolbar.pgbarMainProfile.visibility=View.GONE
                                 binding.toolbar.back.setImageResource(R.drawable.profile)
+                                binding.drawerHeder.progrssprofile.visibility=View.GONE
+                                binding.drawerHeder.profile.setImageResource(R.drawable.profile)
 
                             }
+
 
 
 

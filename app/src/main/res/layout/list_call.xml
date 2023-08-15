@@ -12,13 +12,31 @@
         android:background="@drawable/back_user_list"
         >
 
-        <ImageView
+        <RelativeLayout
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:gravity="center"
+            >
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progrsscall"
+            android:layout_centerInParent="true"
+            android:visibility="visible"
+            android:padding="15dp"
+            android:indeterminateDrawable="@drawable/custom_progress_bar"
+            />
+
+        <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:padding="10dp"
             android:src="@drawable/profile"
-            android:id="@+id/profileImage"
+            android:id="@+id/profileImagecall"
+
             />
+
+        </RelativeLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
