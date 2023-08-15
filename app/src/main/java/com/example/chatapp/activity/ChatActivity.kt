@@ -406,10 +406,7 @@ class ChatActivity : AppCompatActivity() {
 //
 //                    }
 //            }
-        db.collection("User")
-            .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
-            .collection("FollowList")
-            .document(ID)
+        db.collection("User").document(FirebaseAuth.getInstance().currentUser?.uid.toString())
             .update("lastMsg", currentMsg, "lastMsgTime", time)
             .addOnSuccessListener {
                 Log.d("TAG11", currentMsg)
