@@ -23,6 +23,7 @@
                 android:layout_centerInParent="true"
                 android:visibility="visible"
                 android:padding="15dp"
+                android:indeterminateDrawable="@drawable/custom_progress_bar"
                 />
 
             <de.hdodenhof.circleimageview.CircleImageView

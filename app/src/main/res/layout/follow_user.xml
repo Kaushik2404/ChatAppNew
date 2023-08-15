@@ -14,16 +14,33 @@
         android:layout_height="60dp"
         android:orientation="horizontal"
         >
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/profile"
-            android:padding="5dp"
-            android:layout_marginVertical="5dp"
-            android:layout_marginLeft="10dp"
-            android:id="@+id/UserPicFollow"
+        <RelativeLayout
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:gravity="center"
+            >
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progrssfollow"
+            android:layout_centerInParent="true"
+            android:visibility="visible"
+            android:padding="15dp"
+            android:indeterminateDrawable="@drawable/custom_progress_bar"
             />
 
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:padding="10dp"
+            android:src="@drawable/profile"
+            android:id="@+id/profileImagefollow"
+
+            />
+
+
+        </RelativeLayout>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

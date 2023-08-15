@@ -41,7 +41,7 @@ class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
     lateinit var launcher: ActivityResultLauncher<String>
 
-    private lateinit var ImageUri:String
+     var ImageUri:String=""
     private lateinit var ImageUriok:Uri
     lateinit var okUri:String
     lateinit var token:String
@@ -73,56 +73,62 @@ class SignupActivity : AppCompatActivity() {
         binding.signup.setOnClickListener {
             if(checkError()){
 
+                if(ImageUri!=""){
+                    auth.createUserWithEmailAndPassword(binding.email.text.toString(),binding.password.text.toString())
+                        .addOnCompleteListener { task->
+                            if(task.isSuccessful){
 
-                auth.createUserWithEmailAndPassword(binding.email.text.toString(),binding.password.text.toString())
-                    .addOnCompleteListener { task->
-                        if(task.isSuccessful){
+                                val reference1: StorageReference =
+                                    FirebaseStorage.getInstance().getReference().child("Profile").child(ImageUri)
+                                reference1.downloadUrl.addOnSuccessListener { uri ->
+                                    okUri=uri.toString()
+                                    Log.d("uri",okUri)
 
-                            val reference1: StorageReference =
-                                FirebaseStorage.getInstance().getReference().child("Profile").child(ImageUri)
-                            reference1.downloadUrl.addOnSuccessListener { uri ->
-                                okUri=uri.toString()
-                                Log.d("uri",okUri)
+                                    val userId=FirebaseAuth.getInstance().currentUser?.uid.toString()
+                                    val user=User(okUri,
+                                        userId,
+                                        binding.name.text.toString(),
+                                        binding.email.text.toString(),
+                                        binding.number.text.toString(),
+                                        binding.password.text.toString(),
+                                        "",
+                                        "",
+                                        0,token)
 
-                                val userId=FirebaseAuth.getInstance().currentUser?.uid.toString()
-                                val user=User(okUri,
-                                    userId,
-                                    binding.name.text.toString(),
-                                    binding.email.text.toString(),
-                                    binding.number.text.toString(),
-                                    binding.password.text.toString(),
-                                    "",
-                                "",
-                                0,token)
+                                    db.collection("User").document(userId)
+                                        .set(user)
+                                        .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!")
 
-                                db.collection("User").document(userId)
-                                    .set(user)
-                                    .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!")
+                                            Toast.makeText(applicationContext, "Sign in Successfully", Toast.LENGTH_SHORT).show()
+                                            val intent=Intent(applicationContext,ChatHomeActivity::class.java)
+                                            startActivity(intent)
+                                            finish()
+                                        }
+                                        .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e)
+                                            Toast.makeText(applicationContext, "failed save the data", Toast.LENGTH_SHORT).show()
+                                        }
 
-                                        Toast.makeText(applicationContext, "Sign in Successfully", Toast.LENGTH_SHORT).show()
-                                        val intent=Intent(applicationContext,ChatHomeActivity::class.java)
-                                        startActivity(intent)
-                                        finish()
-                                    }
-                                    .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e)
-                                        Toast.makeText(applicationContext, "failed save the data", Toast.LENGTH_SHORT).show()
-                                    }
-
-                            }.addOnFailureListener {
-                                Toast.makeText(this, "error", Toast.LENGTH_SHORT).show()
-                            }
+                                }.addOnFailureListener {
+                                    Toast.makeText(this, "Profile pic add", Toast.LENGTH_SHORT).show()
+                                }
 
 //                            val userId=db.collection("User").document().id
 
+                            }
+                            else{
+                                binding.name.setText("")
+                                binding.email.setText("")
+                                binding.number.setText("")
+                                binding.password.setText("")
+                                Toast.makeText(applicationContext, "Sign in Failed", Toast.LENGTH_SHORT).show()
+                            }
                         }
-                        else{
-                            binding.name.setText("")
-                            binding.email.setText("")
-                            binding.number.setText("")
-                            binding.password.setText("")
-                            Toast.makeText(applicationContext, "Sign in Failed", Toast.LENGTH_SHORT).show()
-                        }
-                    }
+                }else{
+                    Toast.makeText(this, "profile Pic add", Toast.LENGTH_SHORT).show()
+                }
+
+
+
 
             }
         }

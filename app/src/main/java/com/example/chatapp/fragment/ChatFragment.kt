@@ -114,6 +114,7 @@ class ChatFragment : Fragment() {
                 intent.putExtra("NAME",userList[pos].name)
                 intent.putExtra("ID",userList[pos].id)
                 intent.putExtra("USERID",userId)
+                intent.putExtra("profileImage",userList[pos].profileImg)
                 startActivity(intent)
             }
 
