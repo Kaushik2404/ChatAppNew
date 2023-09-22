@@ -29,7 +29,7 @@
 
 
         <activity
-            android:name=".activity.FollowActivity"
+            android:name=".ui.activity.FollowActivity"
             android:exported="false" />
 
         <meta-data
@@ -44,22 +44,22 @@
             android:resource="@color/transparentBlack" />
 
         <activity
-            android:name=".activity.UpdateProfileActivity"
+            android:name=".ui.activity.UpdateProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.ChatActivity"
+            android:name=".ui.activity.ChatActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.ChatHomeActivity"
+            android:name=".ui.activity.ChatHomeActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.SignupActivity"
+            android:name=".ui.activity.SignupActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.LoginActivity"
+            android:name=".ui.activity.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".activity.IntroActivity"
+            android:name=".ui.activity.IntroActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

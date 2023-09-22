@@ -1,5 +1,5 @@
 package com.example.chatapp.data
-import com.example.chatapp.modell.NotificationModel
+import com.example.chatapp.data.modal.NotificationModel
 import retrofit2.Response
 import okhttp3.ResponseBody
 import retrofit2.http.Body

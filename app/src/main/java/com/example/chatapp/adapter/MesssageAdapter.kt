@@ -22,11 +22,11 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.chatapp.R
-import com.example.chatapp.modal.Message
-import com.example.chatapp.onClickMsg
+import com.example.chatapp.data.modal.Message
+import com.example.chatapp.interfacefile.onClickMsg
 import com.google.firebase.auth.FirebaseAuth
 
-class MesssageAdapter(val context: android.content.Context,val msgList: ArrayList<Message>,val onClickMsg: onClickMsg):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MesssageAdapter(val context: android.content.Context, val msgList: ArrayList<Message>, val onClickMsg: onClickMsg):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
    val ITEM_RECIVE=1
     val ITEM_SENT=2
 
@@ -85,6 +85,7 @@ class MesssageAdapter(val context: android.content.Context,val msgList: ArrayLis
 //    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+
 
         if(msgList[position].view.toString()=="ON"){
             if(msgList[position].type.toString()=="image"){

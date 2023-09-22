@@ -1,4 +1,4 @@
-package com.example.chatapp.fragment
+package com.example.chatapp.ui.fragment
 
 import android.Manifest
 import android.app.Activity
@@ -20,9 +20,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chatapp.adapter.CallAdapter
 import com.example.chatapp.R
-import com.example.chatapp.modal.User
-import com.example.chatapp.onIteamCall
-import com.google.android.material.tabs.TabLayout.TabGravity
+import com.example.chatapp.data.modal.User
+import com.example.chatapp.interfacefile.onIteamCall
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Locale

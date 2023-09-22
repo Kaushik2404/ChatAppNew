@@ -1,4 +1,4 @@
-package com.example.chatapp.activity
+package com.example.chatapp.ui.activity
 
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -43,17 +43,17 @@ class IntroActivity : AppCompatActivity() {
         binding=ActivityIntroBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.login.setOnClickListener {
-            val intent=Intent(applicationContext,LoginActivity::class.java)
+            val intent=Intent(applicationContext, LoginActivity::class.java)
             startActivity(intent)
             finish()
         }
         if(auth.currentUser!=null){
-            val intent=Intent(applicationContext,ChatHomeActivity::class.java)
+            val intent=Intent(applicationContext, ChatHomeActivity::class.java)
             startActivity(intent)
             finish()
         }
         binding.signup.setOnClickListener {
-            val intent=Intent(applicationContext,SignupActivity::class.java)
+            val intent=Intent(applicationContext, SignupActivity::class.java)
             startActivity(intent)
             finish()
         }

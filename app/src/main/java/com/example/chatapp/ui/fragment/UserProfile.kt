@@ -1,5 +1,7 @@
-package com.example.chatapp.fragment
+package com.example.chatapp.ui.fragment
 
+import android.app.AlertDialog
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
@@ -8,18 +10,23 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.example.chatapp.R
-import com.example.chatapp.activity.IntroActivity
-import com.example.chatapp.activity.LoginActivity
-import com.example.chatapp.activity.UpdateProfileActivity
-import com.example.chatapp.modal.User
+import com.example.chatapp.ui.activity.IntroActivity
+import com.example.chatapp.ui.activity.LoginActivity
+import com.example.chatapp.ui.activity.UpdateProfileActivity
+import com.example.chatapp.data.modal.User
+import com.google.firebase.auth.EmailAuthCredential
+import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import de.hdodenhof.circleimageview.CircleImageView
@@ -73,12 +80,12 @@ class UserProfile : Fragment() {
 
         BtnLogout.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
-            val intent=Intent(context,LoginActivity::class.java)
+            val intent=Intent(context, LoginActivity::class.java)
             activity?.startActivity(intent)
             activity?.finish()
         }
         BtnEdit.setOnClickListener {
-            val intent=Intent(context,UpdateProfileActivity::class.java)
+            val intent=Intent(context, UpdateProfileActivity::class.java)
             intent.putExtra("ID",Id)
             intent.putExtra("NAME",name)
             intent.putExtra("EMAIL",email)
@@ -89,14 +96,8 @@ class UserProfile : Fragment() {
         }
 
         BtnDelete.setOnClickListener {
-            FirebaseFirestore.getInstance().collection("User")
-                .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
-                .delete().addOnSuccessListener {
-                    val intent=Intent(context,IntroActivity::class.java)
-                    activity?.startActivity(intent)
-                    activity?.finish()
 
-                }
+            showDeleteDilog()
         }
     }
 
@@ -166,5 +167,72 @@ class UserProfile : Fragment() {
                 }
 
             }
+    }
+    private fun showDeleteDilog(){
+        val email:EditText
+        val pass:EditText
+        val delete:Button
+
+        val alert=AlertDialog.Builder(context)
+        val view=layoutInflater.inflate(R.layout.delete_dialog,null)
+
+        email=view.findViewById(R.id.deleteEmail)
+        pass=view.findViewById(R.id.deletePassword)
+        delete=view.findViewById(R.id.btndelete)
+
+        alert.setView(view)
+        alert.setCancelable(false)
+        val dialog =alert.create()
+        dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+        dialog.show()
+
+        delete.setOnClickListener {
+            val mProgressDialog = ProgressDialog(context)
+            mProgressDialog.setMessage("Please Wait....")
+            mProgressDialog.show()
+            dialog.dismiss()
+
+
+            if(email.text.toString().isNotEmpty() && pass.text.toString().isNotEmpty()){
+                FirebaseFirestore.getInstance().collection("User")
+                    .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
+                    .delete().addOnSuccessListener {
+//                        FirebaseAuth.getInstance().currentUser?.delete()
+//                            ?.addOnCompleteListener {
+//                                if(it.isSuccessful){
+//                                    FirebaseAuth.getInstance().signOut()
+//                                    Toast.makeText(context, "Successfully Deleted User", Toast.LENGTH_SHORT).show()
+//                                    val intent=Intent(context, IntroActivity::class.java)
+//                                    activity?.startActivity(intent)
+//                                    activity?.finish()
+//                                } else{
+//                                    Toast.makeText(context, "email or passsword not Correct", Toast.LENGTH_SHORT).show()
+//                                }
+//                            }
+                        val credential=EmailAuthProvider.getCredential(email.text.toString(),pass.text.toString())
+                        FirebaseAuth.getInstance().currentUser?.reauthenticate(credential)
+                            ?.addOnCompleteListener {
+                                FirebaseAuth.getInstance().currentUser?.delete()
+                                    ?.addOnSuccessListener {
+                                        mProgressDialog.dismiss()
+                                            FirebaseAuth.getInstance().signOut()
+                                            Toast.makeText(context, "Successfully Deleted User", Toast.LENGTH_SHORT).show()
+                                            val intent=Intent(context, IntroActivity::class.java)
+                                            activity?.startActivity(intent)
+                                            activity?.finish()
+
+                                    }
+                                    ?.addOnFailureListener {
+                                        Toast.makeText(context, "email or passsword not Correct", Toast.LENGTH_SHORT).show()
+                                    }
+                            }
+                    }
+            }else{
+                Toast.makeText(context, "Filed not blank", Toast.LENGTH_SHORT).show()
+            }
+
+
+        }
+
     }
 }

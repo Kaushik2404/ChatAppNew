@@ -1,4 +1,4 @@
-package com.example.chatapp
+package com.example.chatapp.interfacefile
 
 interface onClickMsg {
     fun onLongClickMsg(pos:Int)

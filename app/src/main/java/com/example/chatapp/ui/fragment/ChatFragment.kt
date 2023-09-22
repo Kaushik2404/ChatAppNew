@@ -1,7 +1,6 @@
-package com.example.chatapp.fragment
+package com.example.chatapp.ui.fragment
 
 import android.app.Dialog
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.ColorDrawable
@@ -16,12 +15,12 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.chatapp.OnIteamClickUser
+import com.example.chatapp.interfacefile.OnIteamClickUser
 import com.example.chatapp.R
 import com.example.chatapp.adapter.UserAdapter
-import com.example.chatapp.activity.ChatActivity
-import com.example.chatapp.modal.Message
-import com.example.chatapp.modal.User
+import com.example.chatapp.ui.activity.ChatActivity
+import com.example.chatapp.data.modal.Message
+import com.example.chatapp.data.modal.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Locale
@@ -108,7 +107,7 @@ class ChatFragment : Fragment() {
     private fun setAdapter(){
         adapter = UserAdapter(context, userList,object: OnIteamClickUser {
             override fun onClickUser(pos: Int) {
-                val intent= Intent(context,ChatActivity::class.java)
+                val intent= Intent(context, ChatActivity::class.java)
                 intent.putExtra("POS",pos)
                 intent.putExtra("UID",userList[pos].email)
                 intent.putExtra("NAME",userList[pos].name)

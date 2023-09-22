@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.SignupActivity"
+    tools:context=".ui.activity.SignupActivity"
     android:orientation="vertical"
     android:background="@drawable/chat_back"
     >

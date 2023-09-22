@@ -1,4 +1,4 @@
-package com.example.chatapp.modal
+package com.example.chatapp.data.modal
 
 data class Contact(
     val id:String,

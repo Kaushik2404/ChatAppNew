@@ -1,4 +1,4 @@
-package com.example.chatapp.modell
+package com.example.chatapp.data.modal
 
 
 

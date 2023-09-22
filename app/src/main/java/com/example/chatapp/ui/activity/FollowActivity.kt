@@ -1,16 +1,16 @@
-package com.example.chatapp.activity
+package com.example.chatapp.ui.activity
 
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.chatapp.OnClickFollow
+import com.example.chatapp.interfacefile.OnClickFollow
 import com.example.chatapp.adapter.UserFollowAdapter
 import com.example.chatapp.databinding.ActivityFollowBinding
-import com.example.chatapp.modal.User
-import com.example.chatapp.modell.Data
-import com.example.chatapp.modell.NotificationModel
+import com.example.chatapp.data.modal.User
+import com.example.chatapp.data.modal.Data
+import com.example.chatapp.data.modal.NotificationModel
 import com.example.chatapp.ui.NotificationViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -264,7 +264,8 @@ class FollowActivity : AppCompatActivity() {
                                         binding.recViewFollow.layoutManager = LinearLayoutManager(applicationContext)
                                         binding.recViewFollow.setHasFixedSize(true)
 
-                                        val adapter = UserFollowAdapter(this, userList, object : OnClickFollow {
+                                        val adapter = UserFollowAdapter(this, userList, object :
+                                            OnClickFollow {
                                             override fun onClickUserFollow(pos: Int) {
                                                 name = userList[pos].name.toString()
                                                 getToken(pos)

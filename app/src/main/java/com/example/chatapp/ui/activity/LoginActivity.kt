@@ -1,4 +1,4 @@
-package com.example.chatapp.activity
+package com.example.chatapp.ui.activity
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -26,7 +26,7 @@ class LoginActivity : AppCompatActivity() {
 
 
         binding.signup.setOnClickListener {
-            val intent= Intent(applicationContext,SignupActivity::class.java)
+            val intent= Intent(applicationContext, SignupActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -46,7 +46,7 @@ class LoginActivity : AppCompatActivity() {
                       .addOnCompleteListener { task->
                             if(task.isSuccessful){
 
-                                val intent=Intent(applicationContext,ChatHomeActivity::class.java)
+                                val intent=Intent(applicationContext, ChatHomeActivity::class.java)
                                 startActivity(intent)
                                 finish()
 

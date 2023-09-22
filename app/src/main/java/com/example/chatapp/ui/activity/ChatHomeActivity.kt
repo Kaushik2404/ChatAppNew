@@ -1,4 +1,4 @@
-package com.example.chatapp.activity
+package com.example.chatapp.ui.activity
 
 import android.content.Intent
 import android.graphics.drawable.Drawable
@@ -17,7 +17,7 @@ import com.bumptech.glide.request.target.Target
 import com.example.chatapp.R
 import com.example.chatapp.adapter.ViewPagerAdapter
 import com.example.chatapp.databinding.ActivityChatHomeBinding
-import com.example.chatapp.modal.User
+import com.example.chatapp.data.modal.User
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -49,10 +49,6 @@ class ChatHomeActivity : AppCompatActivity() {
                 Log.d("TAGMSG", msg)
 //                Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
             }
-
-
-
-
 
         drawerSet()
         clickEvent()
@@ -194,12 +190,13 @@ class ChatHomeActivity : AppCompatActivity() {
         }
 
         binding.toolbar.btnPageFollow.setOnClickListener {
-            intent= Intent(applicationContext,FollowActivity::class.java)
+            intent= Intent(applicationContext, FollowActivity::class.java)
             startActivity(intent)
         }
 
     }
     private fun setDataProfile() {
+
         db.collection("User").addSnapshotListener { value, error ->
             value?.let {
                 if (!it.isEmpty) {
@@ -215,8 +212,14 @@ class ChatHomeActivity : AppCompatActivity() {
 
                         // Main Chat home Profile Image
                             binding.toolbar.pgbarMainProfile.visibility=View.VISIBLE
-                            if(user?.profileImg!=null){
-                                Glide.with(this).load(user.profileImg)
+                            if(user.profileImg !=null){
+
+//                                Glide.with(applicationContext)
+//                                    .load(user.profileImg)
+//                                    .into(binding.toolbar.back)
+
+
+                                Glide.with(applicationContext).load(user.profileImg)
                                     .listener(object : RequestListener<Drawable> {
                                         override fun onLoadFailed(
                                             e: GlideException?,
@@ -242,7 +245,7 @@ class ChatHomeActivity : AppCompatActivity() {
                                     })
                                     .into(binding.toolbar.back)
 
-                                Glide.with(this).load(user.profileImg)
+                                Glide.with(applicationContext).load(user.profileImg)
                                     .listener(object : RequestListener<Drawable> {
                                         override fun onLoadFailed(
                                             e: GlideException?,

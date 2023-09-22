@@ -1,4 +1,4 @@
-package com.example.chatapp.activity
+package com.example.chatapp.ui.activity
 
 import android.Manifest
 import android.app.Activity
@@ -41,12 +41,12 @@ import com.example.chatapp.adapter.FileDialog
 import com.example.chatapp.adapter.MesssageAdapter
 import com.example.chatapp.databinding.ActivityChatBinding
 import com.example.chatapp.interfacefile.OnClickDilogFile
-import com.example.chatapp.modal.Contact
-import com.example.chatapp.modal.Message
-import com.example.chatapp.modal.User
-import com.example.chatapp.modell.Data
-import com.example.chatapp.modell.NotificationModel
-import com.example.chatapp.onClickMsg
+import com.example.chatapp.data.modal.Contact
+import com.example.chatapp.data.modal.Message
+import com.example.chatapp.data.modal.User
+import com.example.chatapp.data.modal.Data
+import com.example.chatapp.data.modal.NotificationModel
+import com.example.chatapp.interfacefile.onClickMsg
 import com.example.chatapp.ui.NotificationViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -443,10 +443,12 @@ class ChatActivity : AppCompatActivity() {
         val calendar: Calendar = Calendar.getInstance()
         val format = SimpleDateFormat(" d MMM yyyy HH:mm:ss ")
         val time: String = format.format(calendar.time)
+
+        val currentTimestamp = System.currentTimeMillis()
 //        DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.FULL).format(time)
 //        val id = db.collection("Chat_Test").document().id
 
-        val msg = Message(id, binding.edtMsg.text.toString(), senderid, reciverid, time,type)
+        val msg = Message(id, binding.edtMsg.text.toString(), senderid, reciverid, currentTimestamp.toString(),type)
         db.collection("Chat_Test").document(id).set(msg).addOnCompleteListener {
 //            msgList.add(msg)
 //            msgAdapter.notifyItemInserted(msgList.size - 1)
@@ -559,7 +561,7 @@ class ChatActivity : AppCompatActivity() {
                             val msg = document.toObject(Message::class.java)
                             msg?.let { msg ->
 
-                                if ((msg?.sendId == senderid && msg?.reciverID == reciverid) || (msg?.reciverID == senderid && msg?.sendId == reciverid)) {
+                                if ((msg.sendId == senderid && msg.reciverID == reciverid) || (msg.reciverID == senderid && msg.sendId == reciverid)) {
                                     if (msgList.any { it.msgID == msg.msgID }) {
 
                                     } else {
@@ -570,15 +572,15 @@ class ChatActivity : AppCompatActivity() {
                                             msgAdapter.notifyItemInserted(msgList.size - 1)
                                         } else {
 
-
                                         }
                                     }
                                 }
                             }
                         }
-
+//
                     }
                     msgList.sortBy { it.time }
+                    Log.d("msglist",msgList.toString())
                     setDataRec()
                 }
             }
@@ -629,7 +631,8 @@ class ChatActivity : AppCompatActivity() {
         binding.recyclerview.layoutManager = LinearLayoutManager(this)
         binding.recyclerview.setHasFixedSize(true)
         binding.recyclerview.adapter = msgAdapter
-        binding.recyclerview.post(Runnable { binding.recyclerview.scrollToPosition(msgList.size - 1) })
+//        binding.recyclerview.post(Runnable { binding.recyclerview.scrollToPosition(msgList.size - 1) })
+        binding.recyclerview.scrollToPosition(msgList.size-1)
     }
 
     private fun updateMsgView(msgId:String,pos: Int) {

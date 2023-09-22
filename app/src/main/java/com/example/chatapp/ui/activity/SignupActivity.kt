@@ -1,4 +1,4 @@
-package com.example.chatapp.activity
+package com.example.chatapp.ui.activity
 
 import android.app.ProgressDialog
 import android.content.ContentValues.TAG
@@ -25,8 +25,8 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.chatapp.R
 import com.example.chatapp.databinding.ActivitySignupBinding
-import com.example.chatapp.modal.Message
-import com.example.chatapp.modal.User
+import com.example.chatapp.data.modal.Message
+import com.example.chatapp.data.modal.User
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -85,7 +85,7 @@ class SignupActivity : AppCompatActivity() {
                                     Log.d("uri",okUri)
 
                                     val userId=FirebaseAuth.getInstance().currentUser?.uid.toString()
-                                    val user=User(okUri,
+                                    val user= User(okUri,
                                         userId,
                                         binding.name.text.toString(),
                                         binding.email.text.toString(),
@@ -100,7 +100,7 @@ class SignupActivity : AppCompatActivity() {
                                         .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!")
 
                                             Toast.makeText(applicationContext, "Sign in Successfully", Toast.LENGTH_SHORT).show()
-                                            val intent=Intent(applicationContext,ChatHomeActivity::class.java)
+                                            val intent=Intent(applicationContext, ChatHomeActivity::class.java)
                                             startActivity(intent)
                                             finish()
                                         }
@@ -151,7 +151,7 @@ class SignupActivity : AppCompatActivity() {
         )
 
         binding.login.setOnClickListener {
-            val intent=Intent(applicationContext,LoginActivity::class.java)
+            val intent=Intent(applicationContext, LoginActivity::class.java)
             startActivity(intent)
             finish()
 
