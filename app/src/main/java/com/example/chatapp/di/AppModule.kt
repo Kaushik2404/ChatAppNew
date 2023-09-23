@@ -14,7 +14,6 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-
     @Provides
     @Singleton
     fun provideRetrofit(): Retrofit =
@@ -23,11 +22,9 @@ object AppModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-
     @Provides
     @Singleton
     fun provideApi(retrofit: Retrofit): ApiInterface =
         retrofit.create(ApiInterface::class.java)
-
 
 }

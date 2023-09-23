@@ -83,15 +83,11 @@ class ChatFragment : Fragment() {
         return view
     }
     private fun filter(text: String) {
-        // creating a new array list to filter our data.
         val filteredlist = ArrayList<User>()
 
-        // running a for loop to compare elements.
         for (item in userList) {
-            // checking if the entered string matched with any item of our recycler view.
             if (item.name?.toLowerCase()?.contains(text.lowercase(Locale.getDefault())) == true) {
-                // if the item is matched we are
-                // adding it to our filtered list.
+
                 filteredlist.add(item)
             }
         }
@@ -116,9 +112,7 @@ class ChatFragment : Fragment() {
                 intent.putExtra("profileImage",userList[pos].profileImg)
                 startActivity(intent)
             }
-
             override fun onLongClick(pos: Int) {
-
                 val dialog = Dialog(context)
                 dialog.requestWindowFeature(1)
                 dialog.window!!.setBackgroundDrawable(ColorDrawable(0))
@@ -126,14 +120,6 @@ class ChatFragment : Fragment() {
                 val textView = dialog.findViewById<TextView>(R.id.tv_yes)
                 (dialog.findViewById<View>(R.id.tv_no) as TextView).setOnClickListener { dialog.dismiss() }
                 textView.setOnClickListener {
-
-//                    db.collection(FirebaseAuth.getInstance().currentUser?.email.toString()).document(userList[pos].email.toString())
-//                        .delete()
-//                        .addOnSuccessListener {
-//                            Log.d("TAG11", "DocumentSnapshot successfully deleted!")
-//                            adapter.notifyItemRemoved(pos)
-//                        }
-//                        .addOnFailureListener { e -> Log.w("TAG11", "Error deleting document", e) }
                     db.collection("User")
                         .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
                         .collection("FollowList")
@@ -145,42 +131,8 @@ class ChatFragment : Fragment() {
                         }
                         .addOnFailureListener { e -> Log.w("TAG11", "Error deleting document", e) }
                     dialog.dismiss()
-
                 }
                 dialog.show()
-
-//                val builder = AlertDialog.Builder(context)
-//                //set title for alert dialog
-//                builder.setTitle("Delete Chat")
-//                //set message for alert dialog
-//                builder.setMessage("Ary you Confirm Delete this Chat..")
-////                builder.setIcon(android.R.drawable.ic_dialog_alert)
-//
-//                //performing positive action
-//                builder.setPositiveButton("Yes"){dialogInterface, which ->
-//                    db.collection("User").document(userList[pos].id.toString())
-//                        .delete()
-//                        .addOnSuccessListener {
-//                            Log.d(TAG, "DocumentSnapshot successfully deleted!")
-//
-//                        }
-//                        .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
-//                }
-//                //performing cancel action
-////                builder.setNeutralButton("Cancel"){dialogInterface , which ->
-//////                    Toast.makeText(applicationContext,"clicked cancel\n operation cancel",Toast.LENGTH_LONG).show()
-////                }
-//                //performing negative action
-//                builder.setNegativeButton("No"){dialogInterface, which ->
-//                    adapter.notifyDataSetChanged()
-//                }
-//                builder.setCancelable(true)
-//                // Create the AlertDialog
-//                val alertDialog: AlertDialog = builder.create()
-//                // Set other dialog properties
-//                alertDialog.setCancelable(false)
-//                alertDialog.show()
-
 
             }
         })
@@ -188,101 +140,6 @@ class ChatFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = adapter
     }
-//    private fun getListOfPlaces(): ArrayList<User> {
-//        val userList = arrayListOf<User>()
-//        db.collection("User")
-//            .get()
-//            .addOnSuccessListener {
-//                if (!it.isEmpty) {
-//                    userList.clear()
-//                    for (document in it.documents) {
-//                        if(document.get("email")==FirebaseAuth.getInstance().currentUser?.email.toString()){
-//
-//                            userId=document.get("id").toString()
-//                        }
-//                        if(FirebaseAuth.getInstance().currentUser?.email!=document.get("email")){
-//                            val user = document.toObject(User::class.java)
-//                            userList.add(user!!)
-//
-//                            Log.d("TAG111", "${document.id} => ${document.data}")
-//                        }
-//                    }
-//                    userList.sortByDescending { it.lastMsgTime }
-//                    setAdapter()
-//                }
-//
-//            }
-//
-//            .addOnFailureListener { exception ->
-//                Log.w(ContentValues.TAG, "Error getting documents: ", exception)
-//            }
-//
-//        return userList
-//    }
-
-//    //first
-//    private fun listenNewMessage() {
-//        db.collection(FirebaseAuth.getInstance().currentUser?.email.toString()).addSnapshotListener { value, error ->
-//            value?.let {
-//                userList.clear()
-//                if (!it.isEmpty) {
-//                    for (document in it.documents) {
-//                        if(document.get("email")==FirebaseAuth.getInstance().currentUser?.email.toString()){
-//                            userId=document.get("id").toString()
-//                        }
-//                        if(FirebaseAuth.getInstance().currentUser?.email!=document.get("email")){
-//                            val user = document.toObject(User::class.java)
-//                            userList.add(user!!)
-//                            Log.d("TAG111", "${document.id} => ${document.data}")
-//                        }
-//                    }
-//                    userList.sortByDescending { it.lastMsgTime }
-//
-//                    if(userList.isNotEmpty()){
-//                        txview.visibility=View.GONE
-//                        recyclerView.visibility=View.VISIBLE
-//                        setAdapter()
-//                    }
-//                    else{
-//                        txview.visibility=View.VISIBLE
-//                        recyclerView.visibility=View.GONE
-//                    }
-//
-//                }else{
-//                    if(userList.isNotEmpty()){
-//                        txview.visibility=View.GONE
-//                        recyclerView.visibility=View.VISIBLE
-//                        setAdapter()
-//                    }
-//                    else{
-//                        txview.visibility=View.VISIBLE
-//                        recyclerView.visibility=View.GONE
-//                    }
-//
-//                }
-//            }
-//        }
-//
-////        db.collection("User").addSnapshotListener { value, error ->
-////            value?.let {
-////                if (!it.isEmpty) {
-////                    userList.clear()
-////                    for (document in it.documents) {
-////                        if(document.get("email")==FirebaseAuth.getInstance().currentUser?.email.toString()){
-////                            userId=document.get("id").toString()
-////                        }
-////                        if(FirebaseAuth.getInstance().currentUser?.email!=document.get("email")){
-////                            val user = document.toObject(User::class.java)
-////                            userList.add(user!!)
-////                            Log.d("TAG111", "${document.id} => ${document.data}")
-////                        }
-////                    }
-////                    userList.sortByDescending { it.lastMsgTime }
-////                    setAdapter()
-////                }
-////            }
-////        }
-//    }
 
     //secound
     private fun listenNewMessage() {
@@ -325,30 +182,9 @@ class ChatFragment : Fragment() {
                         txview.visibility=View.VISIBLE
                         recyclerView.visibility=View.GONE
                     }
-
                 }
             }
         }
-
-//        db.collection("User").addSnapshotListener { value, error ->
-//            value?.let {
-//                if (!it.isEmpty) {
-//                    userList.clear()
-//                    for (document in it.documents) {
-//                        if(document.get("email")==FirebaseAuth.getInstance().currentUser?.email.toString()){
-//                            userId=document.get("id").toString()
-//                        }
-//                        if(FirebaseAuth.getInstance().currentUser?.email!=document.get("email")){
-//                            val user = document.toObject(User::class.java)
-//                            userList.add(user!!)
-//                            Log.d("TAG111", "${document.id} => ${document.data}")
-//                        }
-//                    }
-//                    userList.sortByDescending { it.lastMsgTime }
-//                    setAdapter()
-//                }
-//            }
-//        }
     }
 
 }

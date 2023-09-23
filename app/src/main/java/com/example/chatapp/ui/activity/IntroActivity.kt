@@ -24,13 +24,6 @@ class IntroActivity : AppCompatActivity() {
 
     companion object {
 
-//        private const val INTERNET_PERMISSION = 100
-//        private const val POST_NOTI = 101
-//
-//        private const val CALL = 102
-//      //  private const val CAMERA  = 103
-//        private const val LOCATION  = 14
-
         private const val PERMISSION_GRANTED=0
         private const val PERMISSION_DENIED=-1
 
@@ -58,26 +51,11 @@ class IntroActivity : AppCompatActivity() {
             finish()
         }
 
-//            checkPermission(
-//                Manifest.permission.CALL_PHONE,CALL
-//            )
-//        checkPermission(
-//            Manifest.permission.CAMERA,CAMERA
-//        )
-//        checkPermission(
-//            Manifest.permission.ACCESS_FINE_LOCATION,
-//            LOCATION)
-//        checkPermission(
-//            Manifest.permission.POST_NOTIFICATIONS,
-//            INTERNET_PERMISSION)
             if(checkper()){
-//                Toast.makeText(this, "Permission Alredy Granted", Toast.LENGTH_SHORT).show()
-
                 Log.d("TAG","---------all permisssion Granted")
             }else{
                 ActivityCompat.requestPermissions(this, arrayOf(ACCESS_FINE_LOCATION,CAMERA,CALL_PHONE,READ_SMS,READ_CONTACTS,POST_NOTIFICATIONS),200)
             }
-
     }
 
     private  fun checkper():Boolean{
@@ -87,29 +65,24 @@ class IntroActivity : AppCompatActivity() {
       var resultCall :Int = ActivityCompat.checkSelfPermission(this,CALL_PHONE)
       var resultSms :Int = ActivityCompat.checkSelfPermission(this,READ_SMS)
       var resultContact :Int = ActivityCompat.checkSelfPermission(this,READ_CONTACTS)
-//      var resultNotification :Int = ActivityCompat.checkSelfPermission(this, NOTIFICATION_SERVICE)
 
         return resultLocation==PackageManager.PERMISSION_GRANTED &&
                 resultCamera==PackageManager.PERMISSION_GRANTED &&
                 resultCall==PackageManager.PERMISSION_GRANTED &&
                 resultSms==PackageManager.PERMISSION_GRANTED &&
                 resultContact==PackageManager.PERMISSION_GRANTED
-//                resultNotification==PackageManager.PERMISSION_GRANTED
-
-
-
 
     }
 
-    private fun checkPermission(permission: String, requestCode: Int) {
-        if (ContextCompat.checkSelfPermission(applicationContext, permission) == PackageManager.PERMISSION_DENIED) {
-
-            // Requesting the permission
-            ActivityCompat.requestPermissions(this@IntroActivity, arrayOf(permission), requestCode)
-        } else {
-//            Toast.makeText(applicationContext, "Permission already granted", Toast.LENGTH_SHORT).show()
-        }
-    }
+//    private fun checkPermission(permission: String, requestCode: Int) {
+//        if (ContextCompat.checkSelfPermission(applicationContext, permission) == PackageManager.PERMISSION_DENIED) {
+//
+//            // Requesting the permission
+//            ActivityCompat.requestPermissions(this@IntroActivity, arrayOf(permission), requestCode)
+//        } else {
+////            Toast.makeText(applicationContext, "Permission already granted", Toast.LENGTH_SHORT).show()
+//        }
+//    }
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -132,7 +105,6 @@ class IntroActivity : AppCompatActivity() {
                  var checkcall :Boolean=call==PackageManager.PERMISSION_GRANTED
                  var checksms :Boolean=sms==PackageManager.PERMISSION_GRANTED
                  var checkcontact :Boolean=contact==PackageManager.PERMISSION_GRANTED
-//                 var checknotification:Boolean=notification==PackageManager.PERMISSION_GRANTED
 
                 if(checkloc && checkcam && checkcall && checksms && checkcontact ){
                     Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
@@ -144,41 +116,4 @@ class IntroActivity : AppCompatActivity() {
             }
         }
     }
-//    override fun onRequestPermissionsResult(
-//        requestCode: Int,
-//        permissions: Array<String>,
-//        grantResults: IntArray,
-//    ) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//
-//        if (requestCode == POST_NOTI) {
-//            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                Toast.makeText(this@IntroActivity, "Notification Permission Granted", Toast.LENGTH_SHORT).show()
-//            } else {
-////                Toast.makeText(this@IntroActivity, "Notification Permission Denied", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//        else if (requestCode == CALL) {
-//            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                Toast.makeText(this@IntroActivity, "CALL Permission Granted", Toast.LENGTH_SHORT).show()
-//            } else {
-////                Toast.makeText(this@IntroActivity, "CALL Permission Denied", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//        else if (requestCode == CAMERA) {
-//            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                Toast.makeText(this@IntroActivity, "CAMERA Permission Granted", Toast.LENGTH_SHORT).show()
-//            } else {
-////                Toast.makeText(this@IntroActivity, "CAMERA Permission Denied", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//        else if (requestCode == LOCATION) {
-//            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//                Toast.makeText(this@IntroActivity, "LOCATION Permission Granted", Toast.LENGTH_SHORT).show()
-//            } else {
-////                Toast.makeText(this@IntroActivity, "CAMERA Permission Denied", Toast.LENGTH_SHORT).show()
-//            }
-//        }
-//    }
-
 }

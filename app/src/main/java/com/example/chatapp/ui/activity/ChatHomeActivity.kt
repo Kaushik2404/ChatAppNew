@@ -47,7 +47,6 @@ class ChatHomeActivity : AppCompatActivity() {
                     msg = "Subscribe failed"
                 }
                 Log.d("TAGMSG", msg)
-//                Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
             }
 
         drawerSet()
@@ -56,36 +55,6 @@ class ChatHomeActivity : AppCompatActivity() {
         setViewPager()
 
     }
-
-    private fun addtoken(id: String) {
-        Log.d("TAGID",id)
-        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-            if (!task.isSuccessful) {
-//                textview.text = "Fetching FCM registration token failed"
-                return@OnCompleteListener
-            }
-
-            // fetching the token
-            val token = task.result
-
-//            textview.text = "Token saved successfully!"
-
-            db.collection("User").document(id).update("token",token.toString())
-                .addOnSuccessListener {
-                    Log.d("TAGID", "update Token$token")
-                }
-
-//            Toast.makeText(
-//                baseContext,
-//                "Firebase Generated Successfully and saved to realtime database",
-//                Toast.LENGTH_SHORT
-//            ).show()
-
-        })
-
-
-    }
-
     private fun setViewPager() {
         val adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
         binding.viewpager.adapter = adapter
@@ -214,11 +183,6 @@ class ChatHomeActivity : AppCompatActivity() {
                             binding.toolbar.pgbarMainProfile.visibility=View.VISIBLE
                             if(user.profileImg !=null){
 
-//                                Glide.with(applicationContext)
-//                                    .load(user.profileImg)
-//                                    .into(binding.toolbar.back)
-
-
                                 Glide.with(applicationContext).load(user.profileImg)
                                     .listener(object : RequestListener<Drawable> {
                                         override fun onLoadFailed(
@@ -279,10 +243,6 @@ class ChatHomeActivity : AppCompatActivity() {
 
                             }
 
-
-
-
-
                         }
                     }
 
@@ -291,22 +251,6 @@ class ChatHomeActivity : AppCompatActivity() {
             }
         }
 
-//        db.collection("User")
-//            .get()
-//            .addOnSuccessListener {
-//                if (!it.isEmpty) {
-//                    for (document in it.documents) {
-//                        if(FirebaseAuth.getInstance().currentUser?.email==document.get("email")){
-//                            val user = document.toObject(User::class.java)
-//
-//                            break
-//                        }
-//
-//                    }
-//
-//                }
-//
-//            }
     }
 
 }

@@ -68,21 +68,13 @@ class CallFragment : Fragment() {
 
         })
 
-
-
         return view
     }
 
     private fun filter(text: String) {
-        // creating a new array list to filter our data.
         val filteredlist = ArrayList<User>()
-
-        // running a for loop to compare elements.
         for (item in userList) {
-            // checking if the entered string matched with any item of our recycler view.
             if (item.name?.toLowerCase()?.contains(text.lowercase(Locale.getDefault())) == true) {
-                // if the item is matched we are
-                // adding it to our filtered list.
                 filteredlist.add(item)
             }
         }
@@ -107,10 +99,8 @@ class CallFragment : Fragment() {
                 }
 
                 if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_DENIED) {
-
                     // Requesting the permission
                     ActivityCompat.requestPermissions(context as Activity, arrayOf(Manifest.permission.CALL_PHONE), 101)
-
                 } else {
 //                    Toast.makeText(context, "Permission already granted", Toast.LENGTH_SHORT).show()
                     val phone_intent = Intent(Intent.ACTION_CALL)
@@ -147,68 +137,30 @@ class CallFragment : Fragment() {
     }
 
 
-//    private fun getListOfPlaces(): ArrayList<User> {
-//        val userList = arrayListOf<User>()
-//        db.collection("User")
-//            .get()
-//            .addOnSuccessListener {
-//                if (!it.isEmpty) {
-//                    for (document in it.documents) {
-//                        if(FirebaseAuth.getInstance().currentUser?.email!=document.get("email")){
-//                            val user = document.toObject(User::class.java)
-//                            userList.add(user!!)
-//                            Log.d("TAG111", "${document.id} => ${document.data}")
-//                        }
-//
-//                    }
-//                    setAdapter()
-//                }
-//
-//            }
-//            .addOnFailureListener { exception ->
-//                Log.w(ContentValues.TAG, "Error getting documents: ", exception)
-//            }
-//
-//        return userList
-//    }
 
-
-
-//    private fun checkpermission() {
-//        if(ActivityCompat.checkSelfPermission(context,
-//                Manifest.permission.CALL_PHONE)!= PackageManager.PERMISSION_GRANTED){
-//            ActivityCompat.requestPermissions(context as Activity, arrayOf(Manifest.permission.CALL_PHONE),101)
+//    private fun checkPermission() {
+//        if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_DENIED) {
+//
+//            // Requesting the permission
+//            ActivityCompat.requestPermissions(context as Activity, arrayOf(Manifest.permission.CALL_PHONE), 101)
+//        } else {
+////            Toast.makeText(context, "Permission already granted", Toast.LENGTH_SHORT).show()
+//            val phone_intent = Intent(Intent.ACTION_CALL)
+//            phone_intent.data = Uri.parse("tel:$number")
+//            startActivity(phone_intent)
+//            Log.d("Permission","Permissiono_Granted$number")
 //        }
 //    }
 
-    private fun checkPermission() {
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_DENIED) {
-
-            // Requesting the permission
-            ActivityCompat.requestPermissions(context as Activity, arrayOf(Manifest.permission.CALL_PHONE), 101)
-        } else {
-//            Toast.makeText(context, "Permission already granted", Toast.LENGTH_SHORT).show()
-            val phone_intent = Intent(Intent.ACTION_CALL)
-            phone_intent.data = Uri.parse("tel:$number")
-            startActivity(phone_intent)
-            Log.d("Permission","Permissiono_Granted$number")
-        }
-    }
-
-    // This function is called when the user accepts or decline the permission.
-    // Request Code is used to check which permission called this function.
-    // This request code is provided when the user is prompt for permission.
     override fun onRequestPermissionsResult(requestCode: Int,
                                             permissions: Array<String>,
                                             grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 101) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
                 val phone_intent = Intent(Intent.ACTION_CALL)
                 phone_intent.data = Uri.parse("tel:$number")
                 startActivity(phone_intent)
-//                Toast.makeText(context, "CALL Permission Granted", Toast.LENGTH_SHORT).show()
             } else {
                 Toast.makeText(context, "CALL Permission Denied", Toast.LENGTH_SHORT).show()
             }

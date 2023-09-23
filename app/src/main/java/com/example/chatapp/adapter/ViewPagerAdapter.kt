@@ -8,7 +8,8 @@ import com.example.chatapp.ui.fragment.CallFragment
 import com.example.chatapp.ui.fragment.ChatFragment
 import com.example.chatapp.ui.fragment.UserProfile
 
-class ViewPagerAdapter(fragmentManager: FragmentManager,lifecycle: Lifecycle):FragmentStateAdapter(fragmentManager, lifecycle) {
+class
+ViewPagerAdapter(fragmentManager: FragmentManager,lifecycle: Lifecycle):FragmentStateAdapter(fragmentManager, lifecycle) {
     override fun getItemCount(): Int {
         return 3
     }

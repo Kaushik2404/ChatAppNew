@@ -68,10 +68,7 @@ class UserProfile : Fragment() {
         BtnDelete=view.findViewById(R.id.BtnDelete)
 
         progresss.visibility=View.VISIBLE
-
-
         clickEvent()
-
 
         return  view
     }
@@ -197,18 +194,6 @@ class UserProfile : Fragment() {
                 FirebaseFirestore.getInstance().collection("User")
                     .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
                     .delete().addOnSuccessListener {
-//                        FirebaseAuth.getInstance().currentUser?.delete()
-//                            ?.addOnCompleteListener {
-//                                if(it.isSuccessful){
-//                                    FirebaseAuth.getInstance().signOut()
-//                                    Toast.makeText(context, "Successfully Deleted User", Toast.LENGTH_SHORT).show()
-//                                    val intent=Intent(context, IntroActivity::class.java)
-//                                    activity?.startActivity(intent)
-//                                    activity?.finish()
-//                                } else{
-//                                    Toast.makeText(context, "email or passsword not Correct", Toast.LENGTH_SHORT).show()
-//                                }
-//                            }
                         val credential=EmailAuthProvider.getCredential(email.text.toString(),pass.text.toString())
                         FirebaseAuth.getInstance().currentUser?.reauthenticate(credential)
                             ?.addOnCompleteListener {
@@ -220,7 +205,6 @@ class UserProfile : Fragment() {
                                             val intent=Intent(context, IntroActivity::class.java)
                                             activity?.startActivity(intent)
                                             activity?.finish()
-
                                     }
                                     ?.addOnFailureListener {
                                         Toast.makeText(context, "email or passsword not Correct", Toast.LENGTH_SHORT).show()
@@ -230,9 +214,6 @@ class UserProfile : Fragment() {
             }else{
                 Toast.makeText(context, "Filed not blank", Toast.LENGTH_SHORT).show()
             }
-
-
         }
-
     }
 }

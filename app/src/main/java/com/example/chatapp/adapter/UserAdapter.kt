@@ -71,8 +71,6 @@ class UserAdapter(private val context: Context, private var userList:ArrayList<U
 
         }
 
-
-
         if(userList[position].lastMsg.toString()!=null){
             holder.msg.text=userList[position].lastMsg.toString()
         }

@@ -35,12 +35,10 @@ class FileDialog(val onclickFile: OnClickDilogFile) : BottomSheetDialogFragment(
         audio=view.findViewById(R.id.audio)
         contact=view.findViewById(R.id.contact)
 
-//       initvar(view)
         onclick()
         return view
 
     }
-
     private fun onclick() {
         galary.setOnClickListener {
             onclickFile.onClickGalary()
@@ -57,18 +55,4 @@ class FileDialog(val onclickFile: OnClickDilogFile) : BottomSheetDialogFragment(
 
     }
 
-    private fun getImageId() {
-
-    }
-
-    private fun initvar(view: View?) {
-
-//         file=view.findViewById(R.id.file)
-//         camera=view.findViewById(R.id.camera)
-//         galary=view.findViewById(R.id.galary)
-//         location=view.findViewById(R.id.location)
-//         audio=view.findViewById(R.id.audio)
-//         contact=view.findViewById(R.id.contact)
-
-    }
 }

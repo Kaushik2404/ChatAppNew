@@ -54,25 +54,18 @@ class SignupActivity : AppCompatActivity() {
         binding=ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
         uplodeimage()
-
-
-
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
-//                textview.text = "Fetching FCM registration token failed"
                 return@OnCompleteListener
             }
             // fetching the token
              token = task.result
         })
-
         binding.profileImage.setOnClickListener{
             getImageId()
         }
-
         binding.signup.setOnClickListener {
             if(checkError()){
-
                 if(ImageUri!=""){
                     auth.createUserWithEmailAndPassword(binding.email.text.toString(),binding.password.text.toString())
                         .addOnCompleteListener { task->
@@ -126,10 +119,6 @@ class SignupActivity : AppCompatActivity() {
                 }else{
                     Toast.makeText(this, "profile Pic add", Toast.LENGTH_SHORT).show()
                 }
-
-
-
-
             }
         }
 

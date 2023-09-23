@@ -11,15 +11,4 @@ data class User(
                 var lastMsgTime:String?="",
                 var count:Int?=0,
                 var token:String?=null
-               ){
-
-//    fun getName(): String? {
-//        return name
-//    }
-//
-//    fun setName(courseName: String) {
-//        this.name = courseName
-//    }
-
-}
-
+               )

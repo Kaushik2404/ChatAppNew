@@ -45,49 +45,32 @@ class LoginActivity : AppCompatActivity() {
                   auth.signInWithEmailAndPassword(binding.email.text.toString(),binding.password.text.toString())
                       .addOnCompleteListener { task->
                             if(task.isSuccessful){
-
                                 val intent=Intent(applicationContext, ChatHomeActivity::class.java)
                                 startActivity(intent)
                                 finish()
-
                              }
                     else{
                         Toast.makeText(applicationContext, "Failed Login ", Toast.LENGTH_SHORT).show()
                     }
                 }
              }
-
         }
-
-
     }
 
     private fun addtoken(id: String) {
         Log.d("TAGID",id)
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
-//                textview.text = "Fetching FCM registration token failed"
                 return@OnCompleteListener
             }
 
             // fetching the token
             val token = task.result
-
-//            textview.text = "Token saved successfully!"
-
             db.collection("User").document(id).update("token",token.toString())
                 .addOnSuccessListener {
                     Log.d("TAGID", "update Token$token")
                 }
-
-//            Toast.makeText(
-//                baseContext,
-//                "Firebase Generated Successfully and saved to realtime database",
-//                Toast.LENGTH_SHORT
-//            ).show()
-
         })
-
 
     }
     private fun checkerror(): Boolean {
@@ -105,6 +88,5 @@ class LoginActivity : AppCompatActivity() {
             return false
         }
         return true
-
     }
 }

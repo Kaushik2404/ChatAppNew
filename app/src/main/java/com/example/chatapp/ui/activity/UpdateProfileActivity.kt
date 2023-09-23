@@ -28,7 +28,6 @@ class UpdateProfileActivity : AppCompatActivity() {
         onSetData()
         clickEvent()
 
-
     }
 
     private fun onSetData() {
