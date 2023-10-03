@@ -64,9 +64,14 @@ class SignupActivity : AppCompatActivity() {
         binding.profileImage.setOnClickListener{
             getImageId()
         }
+
+
         binding.signup.setOnClickListener {
             if(checkError()){
                 if(ImageUri!=""){
+                    val dialog = ProgressDialog(this)
+                    dialog.setMessage("Login...")
+                    dialog.show()
                     auth.createUserWithEmailAndPassword(binding.email.text.toString(),binding.password.text.toString())
                         .addOnCompleteListener { task->
                             if(task.isSuccessful){
@@ -93,6 +98,7 @@ class SignupActivity : AppCompatActivity() {
                                         .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!")
 
                                             Toast.makeText(applicationContext, "Sign in Successfully", Toast.LENGTH_SHORT).show()
+                                            dialog.dismiss()
                                             val intent=Intent(applicationContext, ChatHomeActivity::class.java)
                                             startActivity(intent)
                                             finish()

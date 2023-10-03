@@ -616,7 +616,6 @@ class ChatActivity : AppCompatActivity() {
 //        binding.recyclerview.post(Runnable { binding.recyclerview.scrollToPosition(msgList.size - 1) })
         binding.recyclerview.scrollToPosition(msgList.size-1)
     }
-
     private fun updateMsgView(msgId:String,pos: Int) {
         FirebaseFirestore.getInstance().collection("Chat_Test").document(msgId).update("view","OF")
             .addOnSuccessListener {
@@ -633,7 +632,6 @@ class ChatActivity : AppCompatActivity() {
                 msgAdapter.notifyItemRemoved(pos)
             }
     }
-
     override fun onStart() {
         super.onStart()
         val ID = intent.getStringExtra("ID").toString()
@@ -751,7 +749,6 @@ class ChatActivity : AppCompatActivity() {
                     )
                 )
     }
-
     fun getFileName(uri: Uri): String? {
         var result: String? = null
         if (uri.scheme == "content") {
@@ -773,7 +770,6 @@ class ChatActivity : AppCompatActivity() {
         }
         return result
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
