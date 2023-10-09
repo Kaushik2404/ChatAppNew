@@ -178,7 +178,7 @@ class UserProfile : Fragment() {
         delete=view.findViewById(R.id.btndelete)
 
         alert.setView(view)
-        alert.setCancelable(false)
+        alert.setCancelable(true)
         val dialog =alert.create()
         dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
         dialog.show()
