@@ -15,7 +15,6 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import android.provider.MediaStore
 import android.provider.OpenableColumns
-import android.text.format.DateUtils
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
@@ -39,7 +38,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.chatapp.R
 import com.example.chatapp.adapter.FileDialog
-import com.example.chatapp.adapter.MesssageAdapter
+import com.example.chatapp.adapter.MessageAdapter
 import com.example.chatapp.databinding.ActivityChatBinding
 import com.example.chatapp.interfacefile.OnClickDilogFile
 import com.example.chatapp.modal.Contact
@@ -57,7 +56,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 
 
@@ -73,7 +71,7 @@ class ChatActivity : AppCompatActivity() {
     private val PERMISSIONS_REQUEST_READ_CONTACTS = 100
 
     lateinit var bottomSheet:FileDialog
-    private lateinit var msgAdapter: MesssageAdapter
+    private lateinit var msgAdapter: MessageAdapter
     private lateinit var ImageUri:String
     private lateinit var photo:Uri
     lateinit var name:String
@@ -597,7 +595,7 @@ class ChatActivity : AppCompatActivity() {
         }
     }
     private fun setDataRec() {
-        msgAdapter = MesssageAdapter(this, msgList, object : onClickMsg {
+        msgAdapter = MessageAdapter(this, msgList, object : onClickMsg {
 
             override fun onLongClickMsg(pos: Int) {
 
@@ -628,14 +626,25 @@ class ChatActivity : AppCompatActivity() {
 //                binding.PdfView.visibility=View.VISIBLE
 //                binding.chatView.visibility=View.GONE
 //                binding.contactView.visibility=View.GONE
-                val pdfPath = msgList[pos].msg?.toUri()
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.setDataAndType(pdfPath, "application/pdf")
-                try {
-                    startActivity(intent)
-                } catch (e: ActivityNotFoundException) {
-                    Log.d("PDFVIEW","ok VIEW PDF ")
+
+                if(msgList[pos].type=="PDF"){
+                    val pdfPath = msgList[pos].msg?.toUri()
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.setDataAndType(pdfPath, "application/pdf")
+                    try {
+                        startActivity(intent)
+                    } catch (e: ActivityNotFoundException) {
+                        Log.d("PDFVIEW","ok VIEW PDF ")
+                    }
                 }
+                else if(msgList[pos].type=="image"){
+                    val imageUri: String? = msgList[pos].msg
+                    val intent = Intent(this@ChatActivity, FullScreenImageActivity::class.java).apply {
+                        putExtra("imageUri", imageUri)
+                    }
+                   startActivity(intent)
+                }
+
             }
         })
         binding.recyclerview.layoutManager = LinearLayoutManager(this)
