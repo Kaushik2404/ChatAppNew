@@ -219,6 +219,7 @@
         app:layout_constraintStart_toStartOf="parent"
         android:padding="10dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginRight="50dp"
         >
         <ImageView
             android:layout_width="40dp"
@@ -233,7 +234,7 @@
                 android:layout_height="wrap_content"
                 android:text="Kaushik"
                 android:textColor="@color/black"
-                android:textSize="18dp"
+                android:textSize="16dp"
                 android:layout_gravity="center_vertical"
                 android:id="@+id/getpdfName"
                 android:paddingLeft="10dp"
@@ -242,7 +243,7 @@
     </LinearLayout>
     <!--    sendPDF-->
     <LinearLayout
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -251,6 +252,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:padding="10dp"
         android:layout_marginRight="10dp"
+        android:layout_marginLeft="50dp"
+
         >
         <ImageView
             android:layout_width="40dp"
@@ -264,7 +267,7 @@
                 android:layout_height="wrap_content"
                 android:text="Kaushik"
                 android:textColor="@color/black"
-                android:textSize="18dp"
+                android:textSize="16dp"
                 android:id="@+id/sendpdfName"
                 android:layout_gravity="center_vertical"
                 android:paddingLeft="10dp"

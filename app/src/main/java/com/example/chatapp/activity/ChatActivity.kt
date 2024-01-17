@@ -15,6 +15,7 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import android.provider.MediaStore
 import android.provider.OpenableColumns
+import android.text.format.DateUtils
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
@@ -44,8 +45,8 @@ import com.example.chatapp.interfacefile.OnClickDilogFile
 import com.example.chatapp.modal.Contact
 import com.example.chatapp.modal.Message
 import com.example.chatapp.modal.User
-import com.example.chatapp.modell.Data
-import com.example.chatapp.modell.NotificationModel
+import com.example.chatapp.modal.Data
+import com.example.chatapp.modal.NotificationModel
 import com.example.chatapp.onClickMsg
 import com.example.chatapp.ui.NotificationViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -56,6 +57,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 
 @AndroidEntryPoint
@@ -88,7 +91,9 @@ class ChatActivity : AppCompatActivity() {
     private  val TAG = "Chat"
     private val notificationViewModel: NotificationViewModel by viewModels()
 
-
+    private val todayCalendar = Calendar.getInstance()
+    private val messageCalendar = Calendar.getInstance()
+    private val dateFormat = SimpleDateFormat("dd MMM, yyyy", Locale.getDefault())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -110,9 +115,7 @@ class ChatActivity : AppCompatActivity() {
         onclick()
         listenNewMessage()
         setProfileImage()
-
     }
-
     private fun setProfileImage() {
 
         if(profileImage!=null){
@@ -175,11 +178,13 @@ class ChatActivity : AppCompatActivity() {
                 val reciverid = intent.getStringExtra("UID").toString()
                 val senderid = FirebaseAuth.getInstance().currentUser?.email.toString()
 
-                val calendar: Calendar = Calendar.getInstance()
-                val format = SimpleDateFormat(" d MMM yyyy HH:mm:ss ")
-                val time: String = format.format(calendar.time)
+//                val calendar: Calendar = Calendar.getInstance()
+//                val format = SimpleDateFormat(" d MMM yyyy HH:mm:ss ")
+//                val time: String = format.format(calendar.time)
 
-                val msg = Message(id,currentMsg, senderid, reciverid, time,type)
+                val time=System.currentTimeMillis()
+
+                val msg = Message(id,currentMsg, senderid, reciverid, time.toString(),type)
 
                 db.collection("Chat_Test").document(id).set(msg).addOnCompleteListener {
                     Log.d("result", "ok save photo$type")
@@ -354,10 +359,12 @@ class ChatActivity : AppCompatActivity() {
 
             val reciverid = intent.getStringExtra("UID").toString()
             val senderid = FirebaseAuth.getInstance().currentUser?.email.toString()
-            val calendar: Calendar = Calendar.getInstance()
-            val format = SimpleDateFormat(" d MMM yyyy HH:mm:ss")
-            val time: String = format.format(calendar.time)
-            val msg = Message(id,currentMsg, senderid, reciverid, time,type)
+//            val calendar: Calendar = Calendar.getInstance()
+//            val format = SimpleDateFormat(" d MMM yyyy HH:mm:ss")
+//            val time: String = format.format(calendar.time)
+
+            val time=System.currentTimeMillis()
+            val msg = Message(id,currentMsg, senderid, reciverid, time.toString(),type)
             db.collection("Chat_Test").document(id).set(msg).addOnCompleteListener {
                 Toast.makeText(applicationContext, "Sending Contact", Toast.LENGTH_SHORT).show()
                 binding.contactView.visibility= View.GONE
@@ -440,13 +447,15 @@ class ChatActivity : AppCompatActivity() {
         val reciverid = intent.getStringExtra("UID").toString()
         val senderid = FirebaseAuth.getInstance().currentUser?.email.toString()
 
-        val calendar: Calendar = Calendar.getInstance()
-        val format = SimpleDateFormat(" d MMM yyyy HH:mm:ss ")
-        val time: String = format.format(calendar.time)
+//        val calendar: Calendar = Calendar.getInstance()
+//        val format = SimpleDateFormat(" d MMM yyyy HH:mm:ss ")
+//        val time: String = format.format(calendar.time)
+
+        val time=System.currentTimeMillis()
 //        DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.FULL).format(time)
 //        val id = db.collection("Chat_Test").document().id
 
-        val msg = Message(id, binding.edtMsg.text.toString(), senderid, reciverid, time,type)
+        val msg = Message(id, binding.edtMsg.text.toString(), senderid, reciverid, time.toString(),type)
         db.collection("Chat_Test").document(id).set(msg).addOnCompleteListener {
 //            msgList.add(msg)
 //            msgAdapter.notifyItemInserted(msgList.size - 1)
@@ -487,11 +496,14 @@ class ChatActivity : AppCompatActivity() {
                         val reciverid = intent.getStringExtra("UID").toString()
                         val senderid = FirebaseAuth.getInstance().currentUser?.email.toString()
 
-                        val calendar: Calendar = Calendar.getInstance()
-                        val format = SimpleDateFormat(" d MMM yyyy HH:mm:ss ")
-                        val time: String = format.format(calendar.time)
+//                        val calendar: Calendar = Calendar.getInstance()
+//                        val format = SimpleDateFormat(" d MMM yyyy HH:mm:ss ")
+//                        val time: String = format.format(calendar.time)
 
-                        val msg = Message(id,currentMsg, senderid, reciverid, time,type)
+                        val time=System.currentTimeMillis()
+
+
+                        val msg = Message(id,currentMsg, senderid, reciverid, time.toString(),type)
 
                         db.collection("Chat_Test").document(id).set(msg).addOnCompleteListener {
                             Log.d("result", "ok save photo$type")
@@ -629,7 +641,9 @@ class ChatActivity : AppCompatActivity() {
         binding.recyclerview.layoutManager = LinearLayoutManager(this)
         binding.recyclerview.setHasFixedSize(true)
         binding.recyclerview.adapter = msgAdapter
-        binding.recyclerview.post(Runnable { binding.recyclerview.scrollToPosition(msgList.size - 1) })
+
+//        binding.recyclerview.post(Runnable { binding.recyclerview.scrollToPosition(msgList.size - 1) })
+        binding.recyclerview.scrollToPosition(msgList.size-1)
     }
 
     private fun updateMsgView(msgId:String,pos: Int) {
@@ -843,11 +857,12 @@ class ChatActivity : AppCompatActivity() {
                 val reciverid = intent.getStringExtra("UID").toString()
                 val senderid = FirebaseAuth.getInstance().currentUser?.email.toString()
 
-                val calendar: Calendar = Calendar.getInstance()
-                val format = SimpleDateFormat(" d MMM yyyy HH:mm:ss ")
-                val time: String = format.format(calendar.time)
+//                val calendar: Calendar = Calendar.getInstance()
+//                val format = SimpleDateFormat(" d MMM yyyy HH:mm:ss ")
+//                val time: String = format.format(calendar.time)
 
-                val msg = Message(id,currentMsg, senderid, reciverid, time,type)
+                val time=System.currentTimeMillis()
+                val msg = Message(id,currentMsg, senderid, reciverid, time.toString(),type)
 
                 db.collection("Chat_Test").document(id).set(msg).addOnCompleteListener {
                     Log.d("result", "ok save PDF$type")
@@ -914,5 +929,6 @@ class ChatActivity : AppCompatActivity() {
         )
         photo=Uri.parse(path)
     }
+
 
 }

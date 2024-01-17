@@ -77,7 +77,6 @@ dependencies {
 
     //round Image View
     implementation 'de.hdodenhof:circleimageview:3.1.0'
-
     //pdf view
 
 //    implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'

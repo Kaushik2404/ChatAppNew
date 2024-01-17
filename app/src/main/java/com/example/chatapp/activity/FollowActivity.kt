@@ -9,8 +9,8 @@ import com.example.chatapp.OnClickFollow
 import com.example.chatapp.adapter.UserFollowAdapter
 import com.example.chatapp.databinding.ActivityFollowBinding
 import com.example.chatapp.modal.User
-import com.example.chatapp.modell.Data
-import com.example.chatapp.modell.NotificationModel
+import com.example.chatapp.modal.Data
+import com.example.chatapp.modal.NotificationModel
 import com.example.chatapp.ui.NotificationViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
