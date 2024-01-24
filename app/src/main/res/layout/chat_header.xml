@@ -37,7 +37,7 @@ android:orientation="horizontal">
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@drawable/profile"
-        android:id="@+id/profilePicChat"
+        android:id="@+id/profile_pic_chat"
         />
 
     </RelativeLayout>
@@ -53,7 +53,7 @@ android:orientation="horizontal">
         android:text="Kasuhik"
         android:textColor="#FFFFFF"
         android:textSize="20dp"
-        android:id="@+id/chatUserName"
+        android:id="@+id/chat_user_name"
         android:layout_weight="1"
     />
     <ImageView

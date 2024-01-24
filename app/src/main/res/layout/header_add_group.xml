@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="60dp"
     android:background="#4DB7EE"
@@ -20,34 +20,16 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:textStyle="bold"
-        android:text="Photo"
+        android:text="@string/add_group"
         android:textAlignment="center"
         android:layout_centerVertical="true"
         android:gravity="center"
         android:textColor="#FFFFFF"
         android:textSize="25dp"
-        android:id="@+id/chat_user_name"
         android:layout_weight="1"
         />
 
-    <LinearLayout
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:orientation="vertical"
-        android:layout_gravity="center_vertical"
-        android:gravity="center"
-        android:id="@+id/download"
-        android:layout_marginRight="20dp"
-        >
-        <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:src="@drawable/arrow"
-            />
 
 
 
-    </LinearLayout>
-
-
-</LinearLayout>
+</RelativeLayout>

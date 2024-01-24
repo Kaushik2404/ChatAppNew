@@ -1,4 +1,4 @@
-package com.example.chatapp.ui.activity.chat
+package com.example.chatapp.ui.activity
 
 import android.Manifest
 import android.app.Activity
@@ -30,7 +30,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource

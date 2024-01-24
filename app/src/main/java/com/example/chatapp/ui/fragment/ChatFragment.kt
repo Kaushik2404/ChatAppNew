@@ -17,8 +17,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chatapp.interfacefile.OnIteamClickUser
 import com.example.chatapp.R
+import com.example.chatapp.adapter.GroupAdapter
 import com.example.chatapp.adapter.UserAdapter
-import com.example.chatapp.ui.activity.chat.ChatActivity
+import com.example.chatapp.data.modal.GroupData
+import com.example.chatapp.ui.activity.ChatActivity
 import com.example.chatapp.data.modal.Message
 import com.example.chatapp.data.modal.User
 import com.google.firebase.auth.FirebaseAuth
@@ -28,17 +30,17 @@ import java.util.Locale
 
 class ChatFragment : Fragment() {
     private var userList = ArrayList<User>()
+    private var groupList = ArrayList<GroupData>()
     private var msgList = ArrayList<Message>()
     private val db = FirebaseFirestore.getInstance()
     private lateinit var recyclerView:RecyclerView
+    private lateinit var recyclerViewGroup:RecyclerView
     private lateinit var txview:TextView
     private lateinit var context:Context
     private lateinit var adapter: UserAdapter
+    private lateinit var adapterGroup: GroupAdapter
     private var result=false
     var userId:String?=null
-
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -47,17 +49,19 @@ class ChatFragment : Fragment() {
         val view=inflater.inflate(R.layout.fragment_chat, container, false)
         context=view.context
         userList = arrayListOf()
+        groupList = arrayListOf()
         recyclerView=view.findViewById(R.id.recyclerview)
+        recyclerViewGroup=view.findViewById(R.id.recyclerview_group)
 
 //        userList = getListOfPlaces()
 //        setAdapter()
         try {
             listenNewMessage()
+            listenNewGroup()
         }catch (e:Exception){
             e.printStackTrace()
             Log.d("Loding","Load error")
         }
-
 
         Log.d("TAG11111",userList.size.toString())
 
@@ -186,5 +190,30 @@ class ChatFragment : Fragment() {
             }
         }
     }
+    private fun listenNewGroup() {
 
+        db.collection("User")
+            .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
+            .collection("Group List")
+            .addSnapshotListener { value, _ ->
+                value?.let {
+                    groupList.clear()
+                    if (!it.isEmpty) {
+                        for (document in it.documents) {
+                                val group = document.toObject(GroupData::class.java)
+                                groupList.add(group!!)
+                                Log.d("TAG111", "${document.id} => ${document.data}")
+                            }
+                        }
+                    setAdapterGroup()
+                    }
+                }
+    }
+    private fun setAdapterGroup() {
+        adapterGroup = GroupAdapter(context, groupList)
+        recyclerViewGroup.layoutManager = LinearLayoutManager(context)
+        recyclerViewGroup.setHasFixedSize(true)
+        recyclerViewGroup.adapter = adapterGroup
+    }
 }
+

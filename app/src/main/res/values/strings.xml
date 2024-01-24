@@ -4,4 +4,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="add_group">Add Group</string>
     <string name="follow_user">Follow User</string>
+    <string name="group_name">Group Name</string>
+    <string name="enter_your_group_name">Enter Your Group Name</string>
+    <string name="failed_group_creation">Failed Group Creation</string>
 </resources>

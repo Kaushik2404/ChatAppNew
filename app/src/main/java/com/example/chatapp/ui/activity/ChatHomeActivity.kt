@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.PopupWindow
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
@@ -21,6 +23,7 @@ import com.example.chatapp.adapter.ViewPagerAdapter
 import com.example.chatapp.databinding.ActivityChatHomeBinding
 import com.example.chatapp.data.modal.User
 import com.example.chatapp.databinding.FilterPopupBinding
+import com.example.chatapp.databinding.GroupAddDialogBinding
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -189,7 +192,9 @@ class ChatHomeActivity : AppCompatActivity() {
            }
 
             addGroupOpt.setOnClickListener {
-
+                intent= Intent(applicationContext, AddGroupActivity::class.java)
+                startActivity(intent)
+                popupWindow.dismiss()
             }
 
 
@@ -286,3 +291,5 @@ class ChatHomeActivity : AppCompatActivity() {
     }
 
 }
+
+

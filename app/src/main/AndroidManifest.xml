@@ -29,7 +29,7 @@
             android:name=".ui.activity.FullScreenImageActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.MainActivity"
+            android:name=".ui.activity.AddGroupActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activity.FollowActivity"
@@ -46,7 +46,7 @@
             android:name=".ui.activity.UpdateProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.activity.chat.ChatActivity"
+            android:name=".ui.activity.ChatActivity"
             android:exported="false" />
         <activity
             android:name=".ui.activity.ChatHomeActivity"

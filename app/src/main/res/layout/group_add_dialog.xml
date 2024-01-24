@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/group_name"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        />
+    <EditText
+        android:id="@+id/group_name_edt"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="@string/enter_your_group_name"
+        android:textSize="18sp"
+        android:inputType="text"
+        android:paddingLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="20dp"
+        android:background="@drawable/edtback"
+        android:elevation="5dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        >
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/btnback"
+            android:text="Add"
+            android:textSize="@dimen/_20sdp"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:elevation="5dp"
+            android:textAllCaps="false"
+            android:layout_marginBottom="10dp"
+            android:id="@+id/add_btn"
+            />
+
+    </LinearLayout>
+</LinearLayout>
