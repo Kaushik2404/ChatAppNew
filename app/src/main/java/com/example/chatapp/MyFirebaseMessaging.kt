@@ -32,9 +32,7 @@ class MyFirebaseMessaging:FirebaseMessagingService(){
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         Log.d("RefreshToken",token)
-
     }
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)

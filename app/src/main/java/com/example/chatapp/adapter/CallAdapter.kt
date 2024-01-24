@@ -18,7 +18,8 @@ import com.example.chatapp.data.modal.User
 import com.example.chatapp.interfacefile.onIteamCall
 import de.hdodenhof.circleimageview.CircleImageView
 
-class CallAdapter(private val context: Context, private var userList:ArrayList<User>, private val onIteamCall: onIteamCall):RecyclerView.Adapter<CallAdapter.ViewHolder>() {
+class CallAdapter(private val context: Context, private var userList:ArrayList<User>, private val onIteamCall: onIteamCall):
+    RecyclerView.Adapter<CallAdapter.ViewHolder>() {
 
 
     fun filterList(filterList: ArrayList<User>) {

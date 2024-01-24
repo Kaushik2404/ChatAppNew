@@ -1,4 +1,4 @@
-package com.example.chatapp.ui.activity
+package com.example.chatapp.ui.activity.chat
 
 import android.Manifest
 import android.app.Activity
@@ -30,6 +30,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
@@ -69,25 +70,25 @@ class ChatActivity : AppCompatActivity() {
 
     private val PERMISSIONS_REQUEST_READ_CONTACTS = 100
 
-    lateinit var bottomSheet:FileDialog
+    lateinit var bottomSheet: FileDialog
     private lateinit var msgAdapter: MesssageAdapter
-    private lateinit var ImageUri:String
-    private lateinit var photo:Uri
-    lateinit var name:String
-    lateinit var ID:String
-    lateinit var userID:String
-    lateinit var Token:String
-    lateinit var reciverEmail:String
-    lateinit var currentMsg:String
-    lateinit var type:String
+    private lateinit var ImageUri: String
+    private lateinit var photo: Uri
+    lateinit var name: String
+    lateinit var ID: String
+    lateinit var userID: String
+    lateinit var Token: String
+    lateinit var reciverEmail: String
+    lateinit var currentMsg: String
+    lateinit var type: String
     lateinit var launcher: ActivityResultLauncher<String>
-   lateinit var data:ArrayList<Contact>
-   lateinit var profileImage:String
+    lateinit var data: ArrayList<Contact>
+    lateinit var profileImage: String
 
     private var Count = 0
-    private  val TAG = "Chat"
+    private val TAG = "Chat"
     private val notificationViewModel: NotificationViewModel by viewModels()
-
+//    private val viewModel: ChatViewModel by viewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -96,8 +97,11 @@ class ChatActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         msgList = arrayListOf()
-        data= arrayListOf()
+        data = arrayListOf()
 
+//        val reciverid = intent.getStringExtra("UID").toString()
+//        val senderid = FirebaseAuth.getInstance().currentUser?.email.toString()
+//        viewModel.getMsgList(reciverid, senderid)
         binding.chatBar.chatUserName.text = intent.getStringExtra("NAME")
         ID = intent.getStringExtra("ID").toString()
         userID = intent.getStringExtra("USERID").toString()
@@ -115,43 +119,43 @@ class ChatActivity : AppCompatActivity() {
 
     private fun setProfileImage() {
 
-        if(profileImage!=null){
-        Glide.with(this).load(profileImage)
-            .listener(object : RequestListener<Drawable> {
-                override fun onLoadFailed(
-                    e: GlideException?,
-                    model: Any?,
-                    target: Target<Drawable>?,
-                    isFirstResource: Boolean,
-                ): Boolean {
-                    binding.chatBar.progrsschat.visibility=View.GONE
-                    return false
-                }
+        if (profileImage != null) {
+            Glide.with(this).load(profileImage)
+                .listener(object : RequestListener<Drawable> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        isFirstResource: Boolean,
+                    ): Boolean {
+                        binding.chatBar.progrsschat.visibility = View.GONE
+                        return false
+                    }
 
-                override fun onResourceReady(
-                    resource: Drawable?,
-                    model: Any?,
-                    target: Target<Drawable>?,
-                    dataSource: DataSource?,
-                    isFirstResource: Boolean,
-                ): Boolean {
-                    binding.chatBar.progrsschat.visibility=View.GONE
-                    return false
-                }
+                    override fun onResourceReady(
+                        resource: Drawable?,
+                        model: Any?,
+                        target: Target<Drawable>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean,
+                    ): Boolean {
+                        binding.chatBar.progrsschat.visibility = View.GONE
+                        return false
+                    }
 
-            })
-            .into(binding.chatBar.profilePicChat)
-    }else{
-            binding.chatBar.progrsschat.visibility=View.GONE
-        binding.chatBar.profilePicChat.setImageResource(R.drawable.profile)
+                })
+                .into(binding.chatBar.profilePicChat)
+        } else {
+            binding.chatBar.progrsschat.visibility = View.GONE
+            binding.chatBar.profilePicChat.setImageResource(R.drawable.profile)
 
-    }
+        }
     }
 
     private fun sendCaptureImage() {
 
 
-        val photoName=getFileName(photo).toString()
+        val photoName = getFileName(photo).toString()
         val mProgressDialog = ProgressDialog(this)
         mProgressDialog.setMessage("Sending Image")
         mProgressDialog.show()
@@ -167,8 +171,8 @@ class ChatActivity : AppCompatActivity() {
                 currentMsg = uri.toString()
                 Log.d("Okmsg", currentMsg)
 
-                userMsgAdd("image","image")
-                type="image"
+                userMsgAdd("image", "image")
+                type = "image"
 
                 val id = db.collection("Chat_Test").document().id
 
@@ -180,7 +184,8 @@ class ChatActivity : AppCompatActivity() {
 //                val time: String = format.format(calendar.time)
 
                 val currentTimestamp = System.currentTimeMillis()
-                val msg = Message(id,currentMsg, senderid, reciverid, currentTimestamp.toString(),type)
+                val msg =
+                    Message(id, currentMsg, senderid, reciverid, currentTimestamp.toString(), type)
 
                 db.collection("Chat_Test").document(id).set(msg).addOnCompleteListener {
                     Log.d("result", "ok save photo$type")
@@ -189,7 +194,8 @@ class ChatActivity : AppCompatActivity() {
 //            msgAdapter.notifyItemInserted(msgList.size - 1)
                 }.addOnFailureListener {
                     mProgressDialog.dismiss()
-                    Toast.makeText(applicationContext, "Failed..Sending Image", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "Failed..Sending Image", Toast.LENGTH_SHORT)
+                        .show()
                 }
                 notificationCheckCondition()
                 push("photo")
@@ -204,29 +210,43 @@ class ChatActivity : AppCompatActivity() {
         }
 
     }
+
     private fun onclick() {
         binding.btnattachFile.setOnClickListener {
 
-             bottomSheet = FileDialog(object :OnClickDilogFile {
+            bottomSheet = FileDialog(object : OnClickDilogFile {
                 override fun onClickGalary() {
                     getImageId()
                 }
+
                 override fun onClickCamera() {
-                    if (ContextCompat.checkSelfPermission(this@ChatActivity, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+                    if (ContextCompat.checkSelfPermission(
+                            this@ChatActivity,
+                            Manifest.permission.CAMERA
+                        ) == PackageManager.PERMISSION_DENIED
+                    ) {
 
                         // Requesting permission
-                     ActivityCompat.requestPermissions(this@ChatActivity, arrayOf(Manifest.permission.CAMERA), 101)
+                        ActivityCompat.requestPermissions(
+                            this@ChatActivity,
+                            arrayOf(Manifest.permission.CAMERA),
+                            101
+                        )
 
-                 } else {
-                         Toast.makeText(applicationContext, "Permission already granted", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(
+                            applicationContext,
+                            "Permission already granted",
+                            Toast.LENGTH_SHORT
+                        ).show()
                         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                         startActivityForResult(cameraIntent, CAMERA_REQ)
-                        Log.d("Permission","Permissiono_Granted CAMERA")
-                        }
+                        Log.d("Permission", "Permissiono_Granted CAMERA")
+                    }
                 }
 
                 override fun onClickFile() {
-                   uplodePdf()
+                    uplodePdf()
 
                 }
 
@@ -240,8 +260,8 @@ class ChatActivity : AppCompatActivity() {
 
                 override fun onClickContact() {
 
-                    binding.chatView.visibility=View.GONE
-                    binding.contactView.visibility=View.VISIBLE
+                    binding.chatView.visibility = View.GONE
+                    binding.contactView.visibility = View.VISIBLE
                     setContactView()
                 }
 
@@ -270,10 +290,10 @@ class ChatActivity : AppCompatActivity() {
             binding.recyclerview.post(Runnable { binding.recyclerview.scrollToPosition(msgList.size - 1) })
         }
         binding.sendMsg.setOnClickListener {
-            var msgOk=binding.edtMsg.text.toString()
+            var msgOk = binding.edtMsg.text.toString()
             if (binding.edtMsg.text.toString().trim() != "") {
 
-                userMsgAdd("msg",binding.edtMsg.text.toString())
+                userMsgAdd("msg", binding.edtMsg.text.toString())
                 notificationCheckCondition()
                 push(msgOk)
                 chatDataInsert()
@@ -287,14 +307,14 @@ class ChatActivity : AppCompatActivity() {
         val pdfIntent = Intent()
         pdfIntent.action = Intent.ACTION_GET_CONTENT
         pdfIntent.type = "application/pdf"
-        startActivityForResult(pdfIntent,PDF_REQ )
+        startActivityForResult(pdfIntent, PDF_REQ)
     }
 
     private fun setContactView() {
         bottomSheet.dismiss()
         binding.contactBar.back.setOnClickListener {
-            binding.contactView.visibility=View.GONE
-            binding.chatView.visibility=View.VISIBLE
+            binding.contactView.visibility = View.GONE
+            binding.chatView.visibility = View.VISIBLE
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(android.Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
@@ -332,7 +352,8 @@ class ChatActivity : AppCompatActivity() {
         )
         val to = intArrayOf(android.R.id.text1, android.R.id.text2)
         // creation of adapter using SimpleCursorAdapter class
-        val adapter = SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, cursor, data, to)
+        val adapter =
+            SimpleCursorAdapter(this, android.R.layout.simple_list_item_2, cursor, data, to)
 //        // Calling setAdaptor() method to set created adapter
         binding.contactListView.setAdapter(adapter)
         binding.contactListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE)
@@ -340,16 +361,18 @@ class ChatActivity : AppCompatActivity() {
         binding.contactListView.setOnItemClickListener { parent, view, position, id ->
 
 
-            val okNumber = cursor!!.getString(cursor!!.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-            val okName = cursor!!.getString(cursor!!.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
+            val okNumber =
+                cursor!!.getString(cursor!!.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+            val okName =
+                cursor!!.getString(cursor!!.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME))
 
 
-            currentMsg = okName+"/"+okNumber
+            currentMsg = okName + "/" + okNumber
             Log.d("Okmsg", currentMsg)
 
 
-            userMsgAdd("contact","Contact number")
-            type="contact"
+            userMsgAdd("contact", "Contact number")
+            type = "contact"
 
             val id = db.collection("Chat_Test").document().id
 
@@ -360,21 +383,24 @@ class ChatActivity : AppCompatActivity() {
 //            val time: String = format.format(calendar.time)
 
             val currentTimestamp = System.currentTimeMillis()
-            val msg = Message(id,currentMsg, senderid, reciverid, currentTimestamp.toString(),type)
+            val msg =
+                Message(id, currentMsg, senderid, reciverid, currentTimestamp.toString(), type)
             db.collection("Chat_Test").document(id).set(msg).addOnCompleteListener {
                 Toast.makeText(applicationContext, "Sending Contact", Toast.LENGTH_SHORT).show()
-                binding.contactView.visibility= View.GONE
-                binding.chatView.visibility= View.VISIBLE
+                binding.contactView.visibility = View.GONE
+                binding.chatView.visibility = View.VISIBLE
 
                 notificationCheckCondition()
                 push("Contact...")
             }.addOnFailureListener {
-                Toast.makeText(applicationContext, "Failed..Sending Contact", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "Failed..Sending Contact", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
     }
-    private fun userMsgAdd(typ:String,currentMsg:String) {
-        type=typ
+
+    private fun userMsgAdd(typ: String, currentMsg: String) {
+        type = typ
 //        val currentMsg = binding.edtMsg.text.toString()
         Count += 1
 //                val calendar: Calendar = Calendar.getInstance()
@@ -396,13 +422,13 @@ class ChatActivity : AppCompatActivity() {
                     .collection("FollowList")
                     .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
                     .update(
-                    "lastMsg",
-                    currentMsg,
-                    "lastMsgTime",
-                    time,
-                    "count",
-                    Count
-                )
+                        "lastMsg",
+                        currentMsg,
+                        "lastMsgTime",
+                        time,
+                        "count",
+                        Count
+                    )
                     .addOnSuccessListener {
                         Log.d(
                             "TAG1111",
@@ -413,6 +439,7 @@ class ChatActivity : AppCompatActivity() {
                     }
             }
     }
+
     private fun chatDataInsert() {
 
         val id = db.collection("Chat_Test").document().id
@@ -428,23 +455,32 @@ class ChatActivity : AppCompatActivity() {
 //        DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.FULL).format(time)
 //        val id = db.collection("Chat_Test").document().id
 
-        val msg = Message(id, binding.edtMsg.text.toString(), senderid, reciverid, currentTimestamp.toString(),type)
+        val msg = Message(
+            id,
+            binding.edtMsg.text.toString(),
+            senderid,
+            reciverid,
+            currentTimestamp.toString(),
+            type
+        )
         db.collection("Chat_Test").document(id).set(msg).addOnCompleteListener {
 //            msgList.add(msg)
 //            msgAdapter.notifyItemInserted(msgList.size - 1)
         }
         binding.edtMsg.text.clear()
     }
+
     private fun getImageId() {
 
         launcher.launch("image/*")
         bottomSheet.dismiss()
     }
+
     private fun uplodeimage() {
         launcher = registerForActivityResult<String, Uri>(
             ActivityResultContracts.GetContent()
         ) { result ->
-            if(result!=null){
+            if (result != null) {
                 ImageUri = getFileName(result!!).toString()
                 val mProgressDialog = ProgressDialog(this)
                 mProgressDialog.setMessage("Sending Image")
@@ -461,8 +497,8 @@ class ChatActivity : AppCompatActivity() {
                         currentMsg = uri.toString()
                         Log.d("Okmsg", currentMsg)
 
-                        userMsgAdd("image","image")
-                        type="image"
+                        userMsgAdd("image", "image")
+                        type = "image"
 
                         val id = db.collection("Chat_Test").document().id
 
@@ -475,7 +511,14 @@ class ChatActivity : AppCompatActivity() {
 
                         val currentTimestamp = System.currentTimeMillis()
 
-                        val msg = Message(id,currentMsg, senderid, reciverid, currentTimestamp.toString(),type)
+                        val msg = Message(
+                            id,
+                            currentMsg,
+                            senderid,
+                            reciverid,
+                            currentTimestamp.toString(),
+                            type
+                        )
 
                         db.collection("Chat_Test").document(id).set(msg).addOnCompleteListener {
                             Log.d("result", "ok save photo$type")
@@ -484,7 +527,11 @@ class ChatActivity : AppCompatActivity() {
 //            msgAdapter.notifyItemInserted(msgList.size - 1)
                         }.addOnFailureListener {
                             mProgressDialog.dismiss()
-                            Toast.makeText(applicationContext, "Failed..Sending Image", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                applicationContext,
+                                "Failed..Sending Image",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
 
                         notificationCheckCondition()
@@ -492,7 +539,11 @@ class ChatActivity : AppCompatActivity() {
 
                     }.addOnFailureListener {
                         mProgressDialog.dismiss()
-                        Toast.makeText(applicationContext, "Failed send Image..", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            applicationContext,
+                            "Failed send Image..",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }.addOnFailureListener {
                     mProgressDialog.dismiss()
@@ -505,15 +556,17 @@ class ChatActivity : AppCompatActivity() {
 
         }
     }
+
     private fun getToken() {
         db.collection("User").get().addOnSuccessListener {
-            for(data in it.documents){
-                if(data.get("id").toString()== ID){
-                    Token=data.get("token").toString()
+            for (data in it.documents) {
+                if (data.get("id").toString() == ID) {
+                    Token = data.get("token").toString()
                 }
             }
         }
     }
+
     private fun currentUserName() {
 
         db.collection("User").addSnapshotListener { value, error ->
@@ -522,7 +575,7 @@ class ChatActivity : AppCompatActivity() {
                     for (document in it.documents) {
                         if (FirebaseAuth.getInstance().currentUser?.email == document.get("email")) {
                             val user = document.toObject(User::class.java)
-                             name = user?.name.toString()
+                            name = user?.name.toString()
 
                         }
                     }
@@ -531,7 +584,25 @@ class ChatActivity : AppCompatActivity() {
         }
 
     }
+
     private fun listenNewMessage() {
+//        viewModel.msgList.observe(this, Observer {
+//            if (msgList.any { it.msgID == it.msgID }) {
+//
+//            } else {
+//               msgList = it
+//                if (this::msgAdapter.isInitialized) {
+//                    msgAdapter.notifyItemInserted(msgList.size - 1)
+//                }
+//            }
+//
+//        })
+//
+//        msgList.sortBy { it.time }
+//        Log.d("msglist",msgList.toString())
+//        setDataRec()
+
+
         db.collection("Chat_Test").addSnapshotListener { value, error ->
             val reciverid = intent.getStringExtra("UID").toString()
             val senderid = FirebaseAuth.getInstance().currentUser?.email.toString()
@@ -568,33 +639,34 @@ class ChatActivity : AppCompatActivity() {
             }
         }
     }
+
     private fun setDataRec() {
         msgAdapter = MesssageAdapter(this, msgList, object : onClickMsg {
 
             override fun onLongClickMsg(pos: Int) {
 
 
-                val builder= AlertDialog.Builder(this@ChatActivity)
+                val builder = AlertDialog.Builder(this@ChatActivity)
                 builder.setCancelable(true)
                 builder.setIcon(R.drawable.baseline_delete_24)
                 builder.setTitle("Delete Data !")
                 builder.setMessage("Are you Confirm Delete this Data....")
-                builder.setPositiveButton("yes"){dialog, which->
+                builder.setPositiveButton("yes") { dialog, which ->
 
-                    deleteMsgView(msgList[pos].msgID.toString(),pos)
+                    deleteMsgView(msgList[pos].msgID.toString(), pos)
 
 //                    msgList.removeAt(pos)
 //                    msgAdapter.notifyItemRemoved(pos)
                 }
-                builder.setNegativeButton("NO"){dialog,which->
+                builder.setNegativeButton("NO") { dialog, which ->
                     dialog.dismiss()
                 }
-                val dialog=builder.create()
+                val dialog = builder.create()
                 dialog.show()
 //                msgList.removeAt(pos)
 //                msgAdapter.notifyItemRemoved(pos)
 //                performOptionsMenuClick(pos)
-                }
+            }
 
             override fun onClickMsg(pos: Int) {
 //                binding.PdfView.visibility=View.VISIBLE
@@ -606,7 +678,7 @@ class ChatActivity : AppCompatActivity() {
                 try {
                     startActivity(intent)
                 } catch (e: ActivityNotFoundException) {
-                    Log.d("PDFVIEW","ok VIEW PDF ")
+                    Log.d("PDFVIEW", "ok VIEW PDF ")
                 }
             }
         })
@@ -614,17 +686,19 @@ class ChatActivity : AppCompatActivity() {
         binding.recyclerview.setHasFixedSize(true)
         binding.recyclerview.adapter = msgAdapter
 //        binding.recyclerview.post(Runnable { binding.recyclerview.scrollToPosition(msgList.size - 1) })
-        binding.recyclerview.scrollToPosition(msgList.size-1)
+        binding.recyclerview.scrollToPosition(msgList.size - 1)
     }
-    private fun updateMsgView(msgId:String,pos: Int) {
-        FirebaseFirestore.getInstance().collection("Chat_Test").document(msgId).update("view","OF")
+
+    private fun updateMsgView(msgId: String, pos: Int) {
+        FirebaseFirestore.getInstance().collection("Chat_Test").document(msgId).update("view", "OF")
             .addOnSuccessListener {
                 Log.d("TAGID", "update view$msgId,of")
                 msgList.removeAt(pos)
                 msgAdapter.notifyItemRemoved(pos)
             }
     }
-    private fun deleteMsgView(msgId:String,pos: Int) {
+
+    private fun deleteMsgView(msgId: String, pos: Int) {
         FirebaseFirestore.getInstance().collection("Chat_Test").document(msgId).delete()
             .addOnSuccessListener {
                 Log.d("TAGID", "Delete view$msgId,of")
@@ -632,6 +706,7 @@ class ChatActivity : AppCompatActivity() {
                 msgAdapter.notifyItemRemoved(pos)
             }
     }
+
     override fun onStart() {
         super.onStart()
         val ID = intent.getStringExtra("ID").toString()
@@ -644,6 +719,7 @@ class ChatActivity : AppCompatActivity() {
                 Log.d("TAG11", "update last message on start")
             }
     }
+
     override fun onBackPressed() {
         super.onBackPressed()
         Count = 0
@@ -657,57 +733,54 @@ class ChatActivity : AppCompatActivity() {
             .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
             .collection("FollowList")
             .document(ID)
-            .update("lastMsgTime",time)
+            .update("lastMsgTime", time)
             .addOnSuccessListener {
                 Log.d("TAG11", "update last message on back empty")
             }
 
-        if(msgList.isEmpty()){
+        if (msgList.isEmpty()) {
             db.collection("User")
                 .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
                 .collection("FollowList")
                 .document(ID)
-                .update("lastMsg","","count", Count)
+                .update("lastMsg", "", "count", Count)
                 .addOnSuccessListener {
                     Log.d("TAG11", "update last message on back empty")
                 }
-        }else{
-            if(msgList[msgList.size-1].type.toString()=="image"){
+        } else {
+            if (msgList[msgList.size - 1].type.toString() == "image") {
                 db.collection("User")
                     .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
                     .collection("FollowList")
                     .document(ID)
-                    .update("lastMsg","image","count", Count)
+                    .update("lastMsg", "image", "count", Count)
                     .addOnSuccessListener {
                         Log.d("TAG11", "update last message on back image")
                     }
-            }
-            else if(msgList[msgList.size-1].type.toString()=="contact"){
+            } else if (msgList[msgList.size - 1].type.toString() == "contact") {
                 db.collection("User")
                     .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
                     .collection("FollowList")
                     .document(ID)
-                    .update("lastMsg","Contact Number","count", Count)
+                    .update("lastMsg", "Contact Number", "count", Count)
                     .addOnSuccessListener {
                         Log.d("TAG11", "update last message on back contact")
                     }
-            }
-            else if(msgList[msgList.size-1].type.toString()=="PDF"){
+            } else if (msgList[msgList.size - 1].type.toString() == "PDF") {
                 db.collection("User")
                     .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
                     .collection("FollowList")
                     .document(ID)
-                    .update("lastMsg","PDF","count", Count)
+                    .update("lastMsg", "PDF", "count", Count)
                     .addOnSuccessListener {
                         Log.d("TAG11", "update last message on back PDF")
                     }
-            }
-            else{
+            } else {
                 db.collection("User")
                     .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
                     .collection("FollowList")
                     .document(ID)
-                    .update("lastMsg",msgList[msgList.size-1].msg.toString(),"count", Count)
+                    .update("lastMsg", msgList[msgList.size - 1].msg.toString(), "count", Count)
                     .addOnSuccessListener {
                         Log.d("TAG11", "update last message on back")
                     }
@@ -715,40 +788,45 @@ class ChatActivity : AppCompatActivity() {
         }
 
     }
+
     private fun notificationCheckCondition() {
-        notificationViewModel.connectionError.observe(this){
-            when(it){
-                "sending"-> {
+        notificationViewModel.connectionError.observe(this) {
+            when (it) {
+                "sending" -> {
 //                    Toast.makeText(this, "sending notification", Toast.LENGTH_SHORT).show()
-                    Log.d("TAG11","Sending Notification")
+                    Log.d("TAG11", "Sending Notification")
                 }
-                "sent"-> {
+
+                "sent" -> {
 //                    Toast.makeText(this, "notification sent", Toast.LENGTH_SHORT).show()
-                    Log.d("TAG11","Send Notification")
+                    Log.d("TAG11", "Send Notification")
                 }
-                "error while sending"-> {
+
+                "error while sending" -> {
 //                    Toast.makeText(this, "error while sending", Toast.LENGTH_SHORT).show()
-                    Log.d("TAG11","error while sending")
+                    Log.d("TAG11", "error while sending")
                 }
             }
         }
 
-        notificationViewModel.response.observe(this){
+        notificationViewModel.response.observe(this) {
             if (it.isNotEmpty())
                 Log.d(TAG, "Notification in Kotlin: $it ")
         }
     }
-    fun push(msg:String) {
-        Log.d("OK",ID)
-        Log.d("OK",Token)
+
+    fun push(msg: String) {
+        Log.d("OK", ID)
+        Log.d("OK", Token)
         notificationViewModel
-                .sendNotification(
-                    NotificationModel(
-                        Token,
-                        Data(name,msg)
-                    )
+            .sendNotification(
+                NotificationModel(
+                    Token,
+                    Data(name, msg)
                 )
+            )
     }
+
     fun getFileName(uri: Uri): String? {
         var result: String? = null
         if (uri.scheme == "content") {
@@ -770,23 +848,24 @@ class ChatActivity : AppCompatActivity() {
         }
         return result
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
 
-        if ( resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
 
 
-            Log.d("IMAGE URI","true")
-            if(requestCode == CAMERA_REQ ){
-                Log.d("IMAGE URI","true1")
-                    val bitphoto = data?.extras?.get("data") as Bitmap
-                    getImageUri(this@ChatActivity,bitphoto)
-                    Log.d("IMAGE URI",photo.toString())
-                        bottomSheet.dismiss()
-                    sendCaptureImage()
+            Log.d("IMAGE URI", "true")
+            if (requestCode == CAMERA_REQ) {
+                Log.d("IMAGE URI", "true1")
+                val bitphoto = data?.extras?.get("data") as Bitmap
+                getImageUri(this@ChatActivity, bitphoto)
+                Log.d("IMAGE URI", photo.toString())
+                bottomSheet.dismiss()
+                sendCaptureImage()
             }
-            if(requestCode == PDF_REQ ){
+            if (requestCode == PDF_REQ) {
                 sendPdfINDatabase(data)
 
 
@@ -795,19 +874,22 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun sendPdfINDatabase(data: Intent?) {
-        Log.d("PDF","true")
+        Log.d("PDF", "true")
         val dialog = ProgressDialog(this)
         dialog.setMessage("Uploading")
         dialog.show()
+//        val dialog = ProgressDialog(this)
+//        dialog.setMessage("Uploading")
+//        dialog.show()
         val pdfuri = data!!.data
         val timestamp = "" + System.currentTimeMillis()
         val storageReference = FirebaseStorage.getInstance().reference
 //        Toast.makeText(this@ChatActivity, pdfuri.toString(),Toast.LENGTH_SHORT).show()
-        val okPdf=getFileName(pdfuri!!)
+        val okPdf = getFileName(pdfuri!!)
         val filepath = storageReference.child("PDF").child(okPdf.toString())
 //        Toast.makeText(this@ChatActivity,okPdf.toString() , Toast.LENGTH_SHORT).show()
         filepath.putFile(pdfuri!!).addOnSuccessListener {
-            Log.d("PDF","Store Sucessfully")
+            Log.d("PDF", "Store Sucessfully")
 
             val reference1: StorageReference =
                 FirebaseStorage.getInstance().getReference().child("PDF").child(okPdf.toString())
@@ -816,8 +898,8 @@ class ChatActivity : AppCompatActivity() {
                 currentMsg = uri.toString()
                 Log.d("Okmsg", currentMsg)
 
-                userMsgAdd("PDF","PDF")
-                type="PDF"
+                userMsgAdd("PDF", "PDF")
+                type = "PDF"
 
                 val id = db.collection("Chat_Test").document().id
 
@@ -830,7 +912,8 @@ class ChatActivity : AppCompatActivity() {
 
                 val currentTimestamp = System.currentTimeMillis()
 
-                val msg = Message(id,currentMsg, senderid, reciverid, currentTimestamp.toString(),type)
+                val msg =
+                    Message(id, currentMsg, senderid, reciverid, currentTimestamp.toString(), type)
 
                 db.collection("Chat_Test").document(id).set(msg).addOnCompleteListener {
                     Log.d("result", "ok save PDF$type")
@@ -839,7 +922,8 @@ class ChatActivity : AppCompatActivity() {
 //            msgAdapter.notifyItemInserted(msgList.size - 1)
                 }.addOnFailureListener {
                     dialog.dismiss()
-                    Toast.makeText(applicationContext, "Failed..Sending PDF", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "Failed..Sending PDF", Toast.LENGTH_SHORT)
+                        .show()
                 }
                 notificationCheckCondition()
                 push("PDF")
@@ -850,7 +934,7 @@ class ChatActivity : AppCompatActivity() {
             }
             dialog.dismiss()
         }.addOnFailureListener {
-            Log.d("PDF","Store Failed")
+            Log.d("PDF", "Store Failed")
 //            Toast.makeText(this@ChatActivity, "pdf Store Failed ", Toast.LENGTH_SHORT).show()
             dialog.dismiss()
         }
@@ -867,7 +951,8 @@ class ChatActivity : AppCompatActivity() {
                 val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
                 startActivityForResult(cameraIntent, CAMERA_REQ)
             } else {
-                Toast.makeText(this@ChatActivity, "CAMERA Permission Denied", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@ChatActivity, "CAMERA Permission Denied", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
@@ -886,16 +971,17 @@ class ChatActivity : AppCompatActivity() {
         }
 
     }
+
     private fun getImageUri(context: Activity, inImage: Bitmap) {
         val bytes = ByteArrayOutputStream()
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
         val path = MediaStore.Images.Media.insertImage(
             context.getContentResolver(),
             inImage,
-            "Capture_"+Calendar.getInstance().getTime().toString(),
+            "Capture_" + Calendar.getInstance().getTime().toString(),
             null
         )
-        photo=Uri.parse(path)
+        photo = Uri.parse(path)
     }
 
 }

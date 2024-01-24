@@ -11,14 +11,13 @@ import com.example.chatapp.ui.fragment.UserProfile
 class
 ViewPagerAdapter(fragmentManager: FragmentManager,lifecycle: Lifecycle):FragmentStateAdapter(fragmentManager, lifecycle) {
     override fun getItemCount(): Int {
-        return 3
+        return 4
     }
 
     override fun createFragment(position: Int): Fragment {
        return  when(position){
            0->{
                ChatFragment()
-
            }
            1->{
                CallFragment()
@@ -26,6 +25,7 @@ ViewPagerAdapter(fragmentManager: FragmentManager,lifecycle: Lifecycle):Fragment
            2->{
                UserProfile()
            }
+
            else->{
                Fragment()
            }

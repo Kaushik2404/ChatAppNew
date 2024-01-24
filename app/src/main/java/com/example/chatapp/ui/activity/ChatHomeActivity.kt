@@ -5,6 +5,8 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
+import android.widget.PopupWindow
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -18,6 +20,7 @@ import com.example.chatapp.R
 import com.example.chatapp.adapter.ViewPagerAdapter
 import com.example.chatapp.databinding.ActivityChatHomeBinding
 import com.example.chatapp.data.modal.User
+import com.example.chatapp.databinding.FilterPopupBinding
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -58,9 +61,7 @@ class ChatHomeActivity : AppCompatActivity() {
     private fun setViewPager() {
         val adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
         binding.viewpager.adapter = adapter
-
         binding.viewpager.isUserInputEnabled=false
-
         binding.viewpager.registerOnPageChangeCallback(object : OnPageChangeCallback() {
 
             override fun onPageScrolled(
@@ -92,6 +93,7 @@ class ChatHomeActivity : AppCompatActivity() {
                     binding.chatPage.setBackgroundResource(0)
                     binding.toolbar.title.text="Profile"
                 }
+
             }
             override fun onPageScrollStateChanged(state: Int) {
                 super.onPageScrollStateChanged(state)
@@ -122,7 +124,6 @@ class ChatHomeActivity : AppCompatActivity() {
                 binding.myDrawerLayout.openDrawer(GravityCompat.START)
             }
         }
-
 
         binding.logout.setOnClickListener {
             FirebaseAuth.getInstance().signOut()
@@ -159,10 +160,41 @@ class ChatHomeActivity : AppCompatActivity() {
         }
 
         binding.toolbar.btnPageFollow.setOnClickListener {
-            intent= Intent(applicationContext, FollowActivity::class.java)
-            startActivity(intent)
+            showCustomPopupMenu(binding.toolbar.btnPageFollow)
+
         }
 
+    }
+    private fun showCustomPopupMenu(anchorView: View) {
+        val filterDialog = FilterPopupBinding.inflate(layoutInflater)
+
+        val popupWindow = PopupWindow(
+            filterDialog.root,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+
+        popupWindow.isOutsideTouchable = true
+        popupWindow.isFocusable = false
+        popupWindow.elevation = 10f
+        popupWindow.setOnDismissListener {}
+        popupWindow.showAsDropDown(anchorView)
+
+        filterDialog.apply {
+
+           followUserOpt.setOnClickListener {
+               intent= Intent(applicationContext, FollowActivity::class.java)
+               startActivity(intent)
+               popupWindow.dismiss()
+           }
+
+            addGroupOpt.setOnClickListener {
+
+            }
+
+
+
+        }
     }
     private fun setDataProfile() {
 

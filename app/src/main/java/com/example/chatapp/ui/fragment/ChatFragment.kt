@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.chatapp.interfacefile.OnIteamClickUser
 import com.example.chatapp.R
 import com.example.chatapp.adapter.UserAdapter
-import com.example.chatapp.ui.activity.ChatActivity
+import com.example.chatapp.ui.activity.chat.ChatActivity
 import com.example.chatapp.data.modal.Message
 import com.example.chatapp.data.modal.User
 import com.google.firebase.auth.FirebaseAuth
