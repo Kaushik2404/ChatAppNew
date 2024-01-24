@@ -1,5 +1,6 @@
 package com.example.chatapp.adapter
 
+import android.annotation.SuppressLint
 import android.database.Cursor
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -26,17 +27,12 @@ import com.example.chatapp.data.modal.Message
 import com.example.chatapp.interfacefile.onClickMsg
 import com.google.firebase.auth.FirebaseAuth
 
-class MesssageAdapter(val context: android.content.Context, val msgList: ArrayList<Message>, val onClickMsg: onClickMsg):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-   val ITEM_RECIVE=1
-    val ITEM_SENT=2
-
-    val img_sent=3
-    val img_get=4
+class MessageAdapter(val context: android.content.Context, private val msgList: ArrayList<Message>, private val onClickMsg: onClickMsg):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
         val view= LayoutInflater.from(context).inflate(R.layout.test,parent,false)
-          return GetViewHolder(view)
+        return GetViewHolder(view)
 //      if(viewType==1){
 //          val view= LayoutInflater.from(context).inflate(R.layout.message_get,parent,false)
 //          return GetViewHolder(view)
@@ -59,52 +55,18 @@ class MesssageAdapter(val context: android.content.Context, val msgList: ArrayLi
         return msgList.size
     }
 
-//    override fun getItemViewType(position: Int): Int {
-//
-//        val currentMessage=msgList[position]
-//
-//
-////        if(currentMessage.type=="image"){
-////
-////            if(FirebaseAuth.getInstance().currentUser?.email.toString()==currentMessage.sendId){
-////                return img_sent
-////            }
-////            else{
-////                return img_get
-////            }
-////        }
-////        else{
-////            if(FirebaseAuth.getInstance().currentUser?.email.toString()==currentMessage.sendId){
-////                return ITEM_SENT
-////            }
-////            else{
-////                return ITEM_RECIVE
-////            }
-////        }
-//
-//    }
-
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-
 
         if(msgList[position].view.toString()=="ON"){
             if(msgList[position].type.toString()=="image"){
                 if(FirebaseAuth.getInstance().currentUser?.email.toString()==msgList[position].sendId){
                     if(holder.javaClass==GetViewHolder::class.java){
                         val viewHolder=holder as GetViewHolder
-                        viewHolder.sentContactView.visibility=View.GONE
-                        viewHolder.getContactView.visibility=View.GONE
-                        viewHolder.sendimg.visibility=View.VISIBLE
-                        viewHolder.flsendImg.visibility=View.VISIBLE
-                        viewHolder.flgetImg.visibility=View.GONE
-                        viewHolder.getimg.visibility=View.GONE
-                        viewHolder.getMsg.visibility=View.GONE
-                        viewHolder.sendMsg.visibility=View.GONE
-
-                        viewHolder.sentPdfView.visibility=View.GONE
-                        viewHolder.getPdfView.visibility=View.GONE
-//                       Glide.with(context).load(msgList[position].msg).into(viewHolder.sendimg)
-                        holder.sendprogress.visibility=View.VISIBLE
+                        visiblityOff(viewHolder)
+                        viewHolder.sendImg.visibility=View.VISIBLE
+                        viewHolder.flSendImg.visibility=View.VISIBLE
+                        viewHolder.sendProgress.visibility=View.VISIBLE
                         Glide.with(context).load(msgList[position].msg)
                             .listener(object :RequestListener<Drawable>{
                                 override fun onLoadFailed(
@@ -113,7 +75,7 @@ class MesssageAdapter(val context: android.content.Context, val msgList: ArrayLi
                                     target: Target<Drawable>?,
                                     isFirstResource: Boolean,
                                 ): Boolean {
-                                    holder.sendprogress.visibility=View.GONE
+                                    holder.sendProgress.visibility=View.GONE
                                     return false
                                 }
 
@@ -124,29 +86,24 @@ class MesssageAdapter(val context: android.content.Context, val msgList: ArrayLi
                                     dataSource: DataSource?,
                                     isFirstResource: Boolean,
                                 ): Boolean {
-                                    holder.sendprogress.visibility=View.GONE
+                                    holder.sendProgress.visibility=View.GONE
                                     return false
                                 }
 
                             })
-                            .into(viewHolder.sendimg)
+                            .into(viewHolder.sendImg)
+
+                        viewHolder.msgLayout.setOnClickListener {
+                            onClickMsg.onClickMsg(position)
+                        }
                     }
                 }else{
                     if(holder.javaClass==GetViewHolder::class.java){
                         val viewHolder=holder as GetViewHolder
-                        viewHolder.sentContactView.visibility=View.GONE
-                        viewHolder.getContactView.visibility=View.GONE
-                        viewHolder.flsendImg.visibility=View.GONE
-                        viewHolder.flgetImg.visibility=View.VISIBLE
-                        viewHolder.getimg.visibility=View.VISIBLE
-                        viewHolder.sendimg.visibility=View.GONE
-                        viewHolder.sendMsg.visibility=View.GONE
-                        viewHolder.getMsg.visibility=View.GONE
-
-                        viewHolder.sentPdfView.visibility=View.GONE
-                        viewHolder.getPdfView.visibility=View.GONE
-//                        Glide.with(context).load(msgList[position].msg).into(viewHolder.getimg)
-                        holder.recprogress.visibility=View.VISIBLE
+                        visiblityOff(viewHolder)
+                        viewHolder.flGetImg.visibility=View.VISIBLE
+                        viewHolder.getImg.visibility=View.VISIBLE
+                        holder.recProgress.visibility=View.VISIBLE
                         Glide.with(context).load(msgList[position].msg)
                             .listener(object :RequestListener<Drawable>{
                                 override fun onLoadFailed(
@@ -155,7 +112,7 @@ class MesssageAdapter(val context: android.content.Context, val msgList: ArrayLi
                                     target: Target<Drawable>?,
                                     isFirstResource: Boolean,
                                 ): Boolean {
-                                    holder.recprogress.visibility=View.GONE
+                                    holder.recProgress.visibility=View.GONE
                                     return false
                                 }
 
@@ -166,12 +123,16 @@ class MesssageAdapter(val context: android.content.Context, val msgList: ArrayLi
                                     dataSource: DataSource?,
                                     isFirstResource: Boolean,
                                 ): Boolean {
-                                    holder.recprogress.visibility=View.GONE
+                                    holder.recProgress.visibility=View.GONE
                                     return false
                                 }
 
                             })
-                            .into(viewHolder.getimg)
+                            .into(viewHolder.getImg)
+
+                        viewHolder.msgLayout.setOnClickListener {
+                            onClickMsg.onClickMsg(position)
+                        }
 
                     }
                 }
@@ -180,18 +141,8 @@ class MesssageAdapter(val context: android.content.Context, val msgList: ArrayLi
                 if(FirebaseAuth.getInstance().currentUser?.email.toString()==msgList[position].sendId){
                     if(holder.javaClass==GetViewHolder::class.java){
                         val viewHolder=holder as GetViewHolder
-
+                        visiblityOff(viewHolder)
                         viewHolder.sentContactView.visibility=View.VISIBLE
-                        viewHolder.getContactView.visibility=View.GONE
-                        viewHolder.sendimg.visibility=View.GONE
-                        viewHolder.flsendImg.visibility=View.GONE
-                        viewHolder.flgetImg.visibility=View.GONE
-                        viewHolder.getimg.visibility=View.GONE
-                        viewHolder.getMsg.visibility=View.GONE
-                        viewHolder.sendMsg.visibility=View.GONE
-                        viewHolder.sentPdfView.visibility=View.GONE
-                        viewHolder.getPdfView.visibility=View.GONE
-
                         val ContactMsg=msgList[position].msg.toString()
                         val list=ContactMsg.split("/")
                         Log.d("TAGcontact",list[1].toString())
@@ -213,68 +164,37 @@ class MesssageAdapter(val context: android.content.Context, val msgList: ArrayLi
                 else{
                     if(holder.javaClass==GetViewHolder::class.java){
                         val viewHolder=holder as GetViewHolder
-                        viewHolder.sentContactView.visibility=View.GONE
+                        visiblityOff(viewHolder)
                         viewHolder.getContactView.visibility=View.VISIBLE
-                        viewHolder.flsendImg.visibility=View.GONE
-                        viewHolder.flgetImg.visibility=View.GONE
-                        viewHolder.getimg.visibility=View.GONE
-                        viewHolder.sendimg.visibility=View.GONE
-                        viewHolder.sendMsg.visibility=View.GONE
-                        viewHolder.getMsg.visibility=View.GONE
-
-                        viewHolder.sentPdfView.visibility=View.GONE
-                        viewHolder.getPdfView.visibility=View.GONE
-
                         val ContactMsg=msgList[position].msg.toString()
                         val list=ContactMsg.split("+")
                         Log.d("TAGcontact",list[1].toString())
                         Log.d("TAGcontact",list[0].toString())
                         viewHolder.mgName.text=list[0].toString()
-                        viewHolder.mgNumber.text="+"+list[1]
+                        viewHolder.mgNumber.text= "+ ${list[1]}"
                     }
                 }
             }
             else if(msgList[position].type.toString()=="PDF"){
                 if(FirebaseAuth.getInstance().currentUser?.email.toString()==msgList[position].sendId){
-                    if(holder.javaClass==GetViewHolder::class.java){
-                        val viewHolder=holder as GetViewHolder
+                    if(holder.javaClass==GetViewHolder::class.java) {
+                        val viewHolder = holder as GetViewHolder
+                        visiblityOff(viewHolder)
+                        viewHolder.sentPdfView.visibility = View.VISIBLE
+                        val pdfUri = msgList[position].msg?.toUri()
+                        val pdfName = getFileName(pdfUri!!)
 
-                        viewHolder.sentPdfView.visibility=View.VISIBLE
-                        viewHolder.getPdfView.visibility=View.GONE
-                        viewHolder.sentContactView.visibility=View.GONE
-                        viewHolder.getContactView.visibility=View.GONE
-                        viewHolder.sendimg.visibility=View.GONE
-                        viewHolder.flsendImg.visibility=View.GONE
-                        viewHolder.flgetImg.visibility=View.GONE
-                        viewHolder.getimg.visibility=View.GONE
-                        viewHolder.getMsg.visibility=View.GONE
-                        viewHolder.sendMsg.visibility=View.GONE
-
-                        val pdfUri =msgList[position].msg?.toUri()
-                        val pdfName=getFileName(pdfUri!!)
-
-                        viewHolder.sendPdfName.text=pdfName.toString()
+                        viewHolder.sendPdfName.text = pdfName.toString()
                         viewHolder.msgLayout.setOnClickListener {
                             onClickMsg.onClickMsg(position)
                         }
-
-
                     }
                 }
                 else{
                     if(holder.javaClass==GetViewHolder::class.java){
                         val viewHolder=holder as GetViewHolder
-                        viewHolder.sentPdfView.visibility=View.GONE
+                        visiblityOff(viewHolder)
                         viewHolder.getPdfView.visibility=View.VISIBLE
-                        viewHolder.sentContactView.visibility=View.GONE
-                        viewHolder.getContactView.visibility=View.GONE
-                        viewHolder.flsendImg.visibility=View.GONE
-                        viewHolder.flgetImg.visibility=View.GONE
-                        viewHolder.getimg.visibility=View.GONE
-                        viewHolder.sendimg.visibility=View.GONE
-                        viewHolder.sendMsg.visibility=View.GONE
-                        viewHolder.getMsg.visibility=View.GONE
-
                         val pdfUri =msgList[position].msg?.toUri()
                         val pdfName=getFileName(pdfUri!!)
                         viewHolder.getPdfName.text=pdfName.toString()
@@ -290,33 +210,15 @@ class MesssageAdapter(val context: android.content.Context, val msgList: ArrayLi
 
                     if(holder.javaClass==GetViewHolder::class.java){
                         val viewHolder=holder as GetViewHolder
-                        viewHolder.sentContactView.visibility=View.GONE
-                        viewHolder.getContactView.visibility=View.GONE
-                        viewHolder.flsendImg.visibility=View.GONE
-                        viewHolder.flgetImg.visibility=View.GONE
+                        visiblityOff(viewHolder)
                         viewHolder.sendMsg.visibility=View.VISIBLE
-                        viewHolder.getMsg.visibility=View.GONE
-                        viewHolder.sendimg.visibility=View.GONE
-                        viewHolder.getimg.visibility=View.GONE
-
-                        viewHolder.sentPdfView.visibility=View.GONE
-                        viewHolder.getPdfView.visibility=View.GONE
                         viewHolder.sendMsg.text=msgList[position].msg.toString()
                     }
                 }else{
                     if(holder.javaClass==GetViewHolder::class.java){
                         val viewHolder=holder as GetViewHolder
-                        viewHolder.sentContactView.visibility=View.GONE
-                        viewHolder.getContactView.visibility=View.GONE
-                        viewHolder.flsendImg.visibility=View.GONE
-                        viewHolder.flgetImg.visibility=View.GONE
+                        visiblityOff(viewHolder)
                         viewHolder.getMsg.visibility=View.VISIBLE
-                        viewHolder.sendMsg.visibility=View.GONE
-                        viewHolder.sendimg.visibility=View.GONE
-                        viewHolder.getimg.visibility=View.GONE
-
-                        viewHolder.sentPdfView.visibility=View.GONE
-                        viewHolder.getPdfView.visibility=View.GONE
                         viewHolder.getMsg.text=msgList[position].msg.toString()
                     }
                 }
@@ -327,137 +229,34 @@ class MesssageAdapter(val context: android.content.Context, val msgList: ArrayLi
                 return@setOnLongClickListener true
             }
         }
-
-
-
-
-//        if(holder.javaClass== SentViewHolder::class.java){
-//            //do the stuff for sent view holder
-//            val viewHolder=holder as SentViewHolder
-//            viewHolder.sendMsg.text=msgList[position].msg
-//            viewHolder.sendMsg.setOnLongClickListener {
-//
-//                onClickMsg.onLongClickMsg(position)
-//                return@setOnLongClickListener true
-//            }
-//
-//
-//        }
-//        else if (holder.javaClass== SentImage::class.java){
-//            val viewHolder=holder as SentImage
-////            holder.sendimg.
-//            holder.sendprogress.visibility=View.VISIBLE
-//            Glide.with(context).load(msgList[position].msg)
-//                .listener(object :RequestListener<Drawable>{
-//                    override fun onLoadFailed(
-//                        e: GlideException?,
-//                        model: Any?,
-//                        target: Target<Drawable>?,
-//                        isFirstResource: Boolean,
-//                    ): Boolean {
-//                        holder.sendprogress.visibility=View.GONE
-//                        return false
-//                    }
-//
-//                    override fun onResourceReady(
-//                        resource: Drawable?,
-//                        model: Any?,
-//                        target: Target<Drawable>?,
-//                        dataSource: DataSource?,
-//                        isFirstResource: Boolean,
-//                    ): Boolean {
-//                        holder.sendprogress.visibility=View.GONE
-//                        return false
-//                    }
-//
-//                })
-//                .into(viewHolder.sendimg)
-//            viewHolder.sendimg.setOnLongClickListener {
-//
-//                onClickMsg.onLongClickMsg(position)
-//                return@setOnLongClickListener true
-//            }
-//        }
-//       else if (holder.javaClass== getImage::class.java){
-//            val viewHolder=holder as getImage
-////            holder.sendimg.
-//            holder.recprogress.visibility=View.VISIBLE
-//            Glide.with(context).load(msgList[position].msg)
-//                .listener(object :RequestListener<Drawable>{
-//                    override fun onLoadFailed(
-//                        e: GlideException?,
-//                        model: Any?,
-//                        target: Target<Drawable>?,
-//                        isFirstResource: Boolean,
-//                    ): Boolean {
-//                        holder.recprogress.visibility=View.GONE
-//                        return false
-//                    }
-//
-//                    override fun onResourceReady(
-//                        resource: Drawable?,
-//                        model: Any?,
-//                        target: Target<Drawable>?,
-//                        dataSource: DataSource?,
-//                        isFirstResource: Boolean,
-//                    ): Boolean {
-//                        holder.recprogress.visibility=View.GONE
-//                        return false
-//                    }
-//
-//                })
-//                .into(viewHolder.getimg)
-//
-//            viewHolder.getimg.setOnLongClickListener {
-//
-//                onClickMsg.onLongClickMsg(position)
-//                return@setOnLongClickListener true
-//            }
-//        }
-//       else if(holder.javaClass== GetViewHolder::class.java){
-//            //do the stuff for recive view holder
-//            val viewHolder=holder as GetViewHolder
-//            viewHolder.getMsg.text=msgList[position].msg
-//            viewHolder.getMsg.setOnLongClickListener {
-//
-//                onClickMsg.onLongClickMsg(position)
-//                return@setOnLongClickListener true
-//            }
-//        }
-//        else{
-//            Log.d("Tag111","no view")
-//        }
     }
 
-//    class SentViewHolder(view: android.view.View):RecyclerView.ViewHolder(view){
-//
-//        val sendMsg=view.findViewById<TextView>(R.id.sendMsg)
-//
-//    }
+
+
     class GetViewHolder(view: android.view.View):RecyclerView.ViewHolder(view){
-        val getMsg=view.findViewById<TextView>(R.id.getMsg)
-        val sendMsg=view.findViewById<TextView>(R.id.sendMsg)
-        val sendimg=view.findViewById<ImageView>(R.id.sendimg)
-        val sendprogress=view.findViewById<ProgressBar>(R.id.sendrecprogress)
-        val getimg=view.findViewById<ImageView>(R.id.getImg)
-        val recprogress=view.findViewById<ProgressBar>(R.id.recprogress)
-        val flsendImg=view.findViewById<FrameLayout>(R.id.flsendImg)
-        val flgetImg=view.findViewById<FrameLayout>(R.id.flgetImg)
-        val msgLayout=view.findViewById<ConstraintLayout>(R.id.msgLayout)
-        val sentContactView=view.findViewById<LinearLayout>(R.id.sentContactView)
-        val getContactView=view.findViewById<LinearLayout>(R.id.getContactView)
-        val msName=view.findViewById<TextView>(R.id.msName)
-        val msNumber=view.findViewById<TextView>(R.id.msNumber)
-        val mgName=view.findViewById<TextView>(R.id.mgName)
-        val mgNumber=view.findViewById<TextView>(R.id.mgNumber)
-
-    val sentPdfView=view.findViewById<LinearLayout>(R.id.sentPdfView)
-    val getPdfView=view.findViewById<LinearLayout>(R.id.getPdfView)
-    val sendPdfName=view.findViewById<TextView>(R.id.sendpdfName)
-    val getPdfName=view.findViewById<TextView>(R.id.getpdfName)
+        val getMsg: TextView =view.findViewById(R.id.getMsg)
+        val sendMsg: TextView =view.findViewById(R.id.sendMsg)
+        val sendImg: ImageView =view.findViewById(R.id.sendimg)
+        val sendProgress: ProgressBar =view.findViewById(R.id.sendrecprogress)
+        val getImg: ImageView =view.findViewById(R.id.getImg)
+        val recProgress: ProgressBar =view.findViewById(R.id.recprogress)
+        val flSendImg: FrameLayout =view.findViewById(R.id.flsendImg)
+        val flGetImg: FrameLayout =view.findViewById(R.id.flgetImg)
+        val msgLayout: ConstraintLayout =view.findViewById(R.id.msgLayout)
+        val sentContactView: LinearLayout =view.findViewById(R.id.sentContactView)
+        val getContactView: LinearLayout =view.findViewById(R.id.getContactView)
+        val msName: TextView =view.findViewById(R.id.msName)
+        val msNumber: TextView =view.findViewById(R.id.msNumber)
+        val mgName: TextView =view.findViewById(R.id.mgName)
+        val mgNumber: TextView =view.findViewById(R.id.mgNumber)
+        val sentPdfView: LinearLayout =view.findViewById(R.id.sentPdfView)
+        val getPdfView: LinearLayout =view.findViewById(R.id.getPdfView)
+        val sendPdfName: TextView =view.findViewById(R.id.sendpdfName)
+        val getPdfName: TextView =view.findViewById(R.id.getpdfName)
 
     }
 
+    @SuppressLint("Range")
     fun getFileName(uri: Uri): String? {
         var result: String? = null
         if (uri.scheme == "content") {
@@ -479,12 +278,18 @@ class MesssageAdapter(val context: android.content.Context, val msgList: ArrayLi
         }
         return result
     }
-//    class SentImage(view: View):RecyclerView.ViewHolder(view){
-//        val sendimg=view.findViewById<ImageView>(R.id.sendimg)
-//        val sendprogress=view.findViewById<ProgressBar>(R.id.sendrecprogress)
-//    }
-//    class getImage(view: View):RecyclerView.ViewHolder(view){
-//        val getimg=view.findViewById<ImageView>(R.id.getImg)
-//        val recprogress=view.findViewById<ProgressBar>(R.id.recprogress)
-//    }
+
+    private fun visiblityOff(viewHolder: GetViewHolder) {
+        viewHolder.sentContactView.visibility=View.GONE
+        viewHolder.getContactView.visibility=View.GONE
+        viewHolder.sendImg.visibility=View.GONE
+        viewHolder.flSendImg.visibility=View.GONE
+        viewHolder.flGetImg.visibility=View.GONE
+        viewHolder.getImg.visibility=View.GONE
+        viewHolder.getMsg.visibility=View.GONE
+        viewHolder.sendMsg.visibility=View.GONE
+        viewHolder.sentPdfView.visibility=View.GONE
+        viewHolder.getPdfView.visibility=View.GONE
+        viewHolder.sendProgress.visibility=View.GONE
+    }
 }

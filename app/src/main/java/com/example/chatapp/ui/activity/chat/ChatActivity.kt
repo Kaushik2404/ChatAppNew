@@ -39,7 +39,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.chatapp.R
 import com.example.chatapp.adapter.FileDialog
-import com.example.chatapp.adapter.MesssageAdapter
+import com.example.chatapp.adapter.MessageAdapter
 import com.example.chatapp.databinding.ActivityChatBinding
 import com.example.chatapp.interfacefile.OnClickDilogFile
 import com.example.chatapp.data.modal.Contact
@@ -49,6 +49,7 @@ import com.example.chatapp.data.modal.Data
 import com.example.chatapp.data.modal.NotificationModel
 import com.example.chatapp.interfacefile.onClickMsg
 import com.example.chatapp.ui.NotificationViewModel
+import com.example.chatapp.ui.activity.FullScreenImageActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -71,7 +72,7 @@ class ChatActivity : AppCompatActivity() {
     private val PERMISSIONS_REQUEST_READ_CONTACTS = 100
 
     lateinit var bottomSheet: FileDialog
-    private lateinit var msgAdapter: MesssageAdapter
+    private lateinit var msgAdapter: MessageAdapter
     private lateinit var ImageUri: String
     private lateinit var photo: Uri
     lateinit var name: String
@@ -641,27 +642,27 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun setDataRec() {
-        msgAdapter = MesssageAdapter(this, msgList, object : onClickMsg {
+        msgAdapter = MessageAdapter(this, msgList, object : onClickMsg {
 
             override fun onLongClickMsg(pos: Int) {
 
 
-                val builder = AlertDialog.Builder(this@ChatActivity)
+                val builder= AlertDialog.Builder(this@ChatActivity)
                 builder.setCancelable(true)
                 builder.setIcon(R.drawable.baseline_delete_24)
                 builder.setTitle("Delete Data !")
                 builder.setMessage("Are you Confirm Delete this Data....")
-                builder.setPositiveButton("yes") { dialog, which ->
+                builder.setPositiveButton("yes"){dialog, which->
 
-                    deleteMsgView(msgList[pos].msgID.toString(), pos)
+                    deleteMsgView(msgList[pos].msgID.toString(),pos)
 
 //                    msgList.removeAt(pos)
 //                    msgAdapter.notifyItemRemoved(pos)
                 }
-                builder.setNegativeButton("NO") { dialog, which ->
+                builder.setNegativeButton("NO"){dialog,which->
                     dialog.dismiss()
                 }
-                val dialog = builder.create()
+                val dialog=builder.create()
                 dialog.show()
 //                msgList.removeAt(pos)
 //                msgAdapter.notifyItemRemoved(pos)
@@ -672,21 +673,33 @@ class ChatActivity : AppCompatActivity() {
 //                binding.PdfView.visibility=View.VISIBLE
 //                binding.chatView.visibility=View.GONE
 //                binding.contactView.visibility=View.GONE
-                val pdfPath = msgList[pos].msg?.toUri()
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.setDataAndType(pdfPath, "application/pdf")
-                try {
-                    startActivity(intent)
-                } catch (e: ActivityNotFoundException) {
-                    Log.d("PDFVIEW", "ok VIEW PDF ")
+
+                if(msgList[pos].type=="PDF"){
+                    val pdfPath = msgList[pos].msg?.toUri()
+                    val intent = Intent(Intent.ACTION_VIEW)
+                    intent.setDataAndType(pdfPath, "application/pdf")
+                    try {
+                        startActivity(intent)
+                    } catch (e: ActivityNotFoundException) {
+                        Log.d("PDFVIEW","ok VIEW PDF ")
+                    }
                 }
+                else if(msgList[pos].type=="image"){
+                    val imageUri: String? = msgList[pos].msg
+                    val intent = Intent(this@ChatActivity, FullScreenImageActivity::class.java).apply {
+                        putExtra("imageUri", imageUri)
+                    }
+                    startActivity(intent)
+                }
+
             }
         })
         binding.recyclerview.layoutManager = LinearLayoutManager(this)
         binding.recyclerview.setHasFixedSize(true)
         binding.recyclerview.adapter = msgAdapter
+
 //        binding.recyclerview.post(Runnable { binding.recyclerview.scrollToPosition(msgList.size - 1) })
-        binding.recyclerview.scrollToPosition(msgList.size - 1)
+        binding.recyclerview.scrollToPosition(msgList.size-1)
     }
 
     private fun updateMsgView(msgId: String, pos: Int) {
