@@ -19,9 +19,10 @@ import com.example.chatapp.R
 import com.example.chatapp.data.modal.GroupData
 import com.example.chatapp.data.modal.GroupList
 import com.example.chatapp.data.modal.User
+import com.example.chatapp.interfacefile.onClickMsg
 import de.hdodenhof.circleimageview.CircleImageView
 
-class GroupAdapter(private val context: Context, private var groupList:ArrayList<GroupData>):RecyclerView.Adapter<GroupAdapter.ViewHolder>() {
+class GroupAdapter(private val context: Context, private var groupList:ArrayList<GroupData>,val onClickMsg: onClickMsg):RecyclerView.Adapter<GroupAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val iteamView=LayoutInflater.from(parent.context).inflate(R.layout.group_layout,parent,false)
@@ -29,6 +30,10 @@ class GroupAdapter(private val context: Context, private var groupList:ArrayList
     }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             holder.name.text=groupList[position].groupName
+
+            holder.layout.setOnClickListener {
+                onClickMsg.onClickMsg(position)
+            }
     }
 
     override fun getItemCount(): Int {

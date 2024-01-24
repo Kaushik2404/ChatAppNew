@@ -143,14 +143,32 @@ class AddGroupActivity : AppCompatActivity() {
                 .id
 
             val groupData= GroupData(groupId,groupUserList,view.groupNameEdt.text.toString().trim())
+
             FirebaseFirestore.getInstance()
-                .collection("User")
-                .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
                 .collection("Group List")
                 .document(groupId)
                 .set(groupData)
                 .addOnSuccessListener {
                     Log.d("TAG11", "Group Created")
+
+                    groupUserList.forEach {
+                        FirebaseFirestore.getInstance()
+                            .collection("User")
+                            .document(it.id.toString())
+                            .collection("Group List")
+                            .document(groupId)
+                            .set(GroupList(groupId))
+                            .addOnSuccessListener {
+                                Log.d("TAG11", "Group Created")
+                                dialog.dismiss()
+                                onBackPressed()
+                            }
+                            .addOnFailureListener {
+                                Log.d("TAG11", "Group Creates Failed")
+                                Toast.makeText(this, "Failed",Toast.LENGTH_SHORT).show()
+                                dialog.dismiss()
+                            }
+                    }
                     dialog.dismiss()
                     onBackPressed()
                 }
@@ -159,6 +177,8 @@ class AddGroupActivity : AppCompatActivity() {
                     Toast.makeText(this, getString(R.string.failed_group_creation),Toast.LENGTH_SHORT).show()
                     dialog.dismiss()
                 }
+
+
         }
         dialog.show()
     }

@@ -20,9 +20,11 @@ import com.example.chatapp.R
 import com.example.chatapp.adapter.GroupAdapter
 import com.example.chatapp.adapter.UserAdapter
 import com.example.chatapp.data.modal.GroupData
+import com.example.chatapp.data.modal.GroupList
 import com.example.chatapp.ui.activity.ChatActivity
 import com.example.chatapp.data.modal.Message
 import com.example.chatapp.data.modal.User
+import com.example.chatapp.interfacefile.onClickMsg
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.Locale
@@ -137,7 +139,6 @@ class ChatFragment : Fragment() {
                     dialog.dismiss()
                 }
                 dialog.show()
-
             }
         })
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -191,26 +192,62 @@ class ChatFragment : Fragment() {
         }
     }
     private fun listenNewGroup() {
+        var id= mutableListOf<GroupList>()
 
-        db.collection("User")
+        FirebaseFirestore.getInstance()
+            .collection("User")
             .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
             .collection("Group List")
-            .addSnapshotListener { value, _ ->
+            .addSnapshotListener{ value, _ ->
                 value?.let {
-                    groupList.clear()
+                    id.clear()
                     if (!it.isEmpty) {
                         for (document in it.documents) {
-                                val group = document.toObject(GroupData::class.java)
-                                groupList.add(group!!)
-                                Log.d("TAG111", "${document.id} => ${document.data}")
-                            }
+                            val group = document.toObject(GroupList::class.java)
+                            id.add(group!!)
+                            Log.d("TAG111", "${document.id} => ${document.data}")
                         }
-                    setAdapterGroup()
+                        db.collection("Group List")
+                            .addSnapshotListener { value, _ ->
+                                value?.let {
+                                    groupList.clear()
+                                    if (!it.isEmpty) {
+                                        for (document in it.documents) {
+                                            val group = document.toObject(GroupData::class.java)
+                                           id.forEach {
+                                               if(it.id.toString() == group?.groupId.toString() ){
+                                                   groupList.add(group!!)
+                                                   Log.d("TAG111", "${document.id} => ${document.data}")
+                                               }
+                                           }
+                                        }
+                                    }
+                                    setAdapterGroup()
+                                }
+                            }
+
                     }
                 }
+            }
     }
     private fun setAdapterGroup() {
-        adapterGroup = GroupAdapter(context, groupList)
+        adapterGroup = GroupAdapter(context, groupList,object : onClickMsg{
+            override fun onLongClickMsg(pos: Int) {
+                TODO("Not yet implemented")
+            }
+            override fun onClickMsg(pos: Int) {
+                val intent= Intent(context, ChatActivity::class.java)
+                intent.putExtra("POS",pos)
+//                intent.putExtra("UID",userList[pos].email)
+                intent.putExtra("NAME",groupList[pos].groupName)
+                intent.putExtra("UID",groupList[pos].groupId)
+
+//                intent.putExtra("groupData",groupList)
+//                intent.putExtra("profileImage",userList[pos].profileImg)
+                startActivity(intent)
+            }
+
+        })
         recyclerViewGroup.layoutManager = LinearLayoutManager(context)
         recyclerViewGroup.setHasFixedSize(true)
         recyclerViewGroup.adapter = adapterGroup

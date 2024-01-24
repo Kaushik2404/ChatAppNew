@@ -77,14 +77,13 @@ class ChatActivity : AppCompatActivity() {
     lateinit var name: String
     lateinit var ID: String
     lateinit var userID: String
-    lateinit var Token: String
+    var Token: String=""
     lateinit var reciverEmail: String
     lateinit var currentMsg: String
     lateinit var type: String
     lateinit var launcher: ActivityResultLauncher<String>
     lateinit var data: ArrayList<Contact>
     lateinit var profileImage: String
-
     private var Count = 0
     private val TAG = "Chat"
     private val notificationViewModel: NotificationViewModel by viewModels()
@@ -165,7 +164,7 @@ class ChatActivity : AppCompatActivity() {
         reference.putFile(photo).addOnSuccessListener {
 
             val reference1: StorageReference =
-                FirebaseStorage.getInstance().getReference().child(photoName)
+                FirebaseStorage.getInstance().reference.child(photoName)
             reference1.downloadUrl.addOnSuccessListener { uri ->
 //
                 currentMsg = uri.toString()
