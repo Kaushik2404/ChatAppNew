@@ -24,11 +24,12 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.example.chatapp.R
 import com.example.chatapp.data.modal.Message
+import com.example.chatapp.data.modal.User
 import com.example.chatapp.interfacefile.onClickMsg
 import com.example.chatapp.util.GetUserName
 import com.google.firebase.auth.FirebaseAuth
 
-class MessageAdapter(val context: android.content.Context, private val msgList: ArrayList<Message>, private val onClickMsg: onClickMsg):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class MessageAdapter(val context: android.content.Context, private val msgList: ArrayList<Message>, private val userList: ArrayList<User>, private val onClickMsg: onClickMsg):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 
@@ -64,7 +65,7 @@ class MessageAdapter(val context: android.content.Context, private val msgList: 
                 if(FirebaseAuth.getInstance().currentUser?.email.toString()==msgList[position].sendId){
                     if(holder.javaClass==GetViewHolder::class.java){
                         val viewHolder=holder as GetViewHolder
-                        visiblityOff(viewHolder)
+                        visibilityOff(viewHolder)
                         viewHolder.sendImg.visibility=View.VISIBLE
                         viewHolder.flSendImg.visibility=View.VISIBLE
                         viewHolder.sendProgress.visibility=View.VISIBLE
@@ -101,11 +102,19 @@ class MessageAdapter(val context: android.content.Context, private val msgList: 
                 }else{
                     if(holder.javaClass==GetViewHolder::class.java){
                         val viewHolder=holder as GetViewHolder
-                        visiblityOff(viewHolder)
+                        visibilityOff(viewHolder)
                         if(msgList[position].reciverID?.contains("Group") == true){
                             viewHolder.userName.visibility=View.VISIBLE
                         }
-                        viewHolder.userName.text=GetUserName().getName(msgList[position].sendId.toString())
+                        var nameOk=""
+                        userList.let {
+                            it.forEach{ user->
+                                if(user.email== msgList[position].sendId){
+                                    nameOk=user.name.toString()
+                                }
+                            }
+                        }
+                        viewHolder.userName.text=nameOk
                         viewHolder.flGetImg.visibility=View.VISIBLE
                         viewHolder.getImg.visibility=View.VISIBLE
                         holder.recProgress.visibility=View.VISIBLE
@@ -146,7 +155,7 @@ class MessageAdapter(val context: android.content.Context, private val msgList: 
                 if(FirebaseAuth.getInstance().currentUser?.email.toString()==msgList[position].sendId){
                     if(holder.javaClass==GetViewHolder::class.java){
                         val viewHolder=holder as GetViewHolder
-                        visiblityOff(viewHolder)
+                        visibilityOff(viewHolder)
                         viewHolder.sentContactView.visibility=View.VISIBLE
                         val ContactMsg=msgList[position].msg.toString()
                         val list=ContactMsg.split("/")
@@ -169,11 +178,19 @@ class MessageAdapter(val context: android.content.Context, private val msgList: 
                 else{
                     if(holder.javaClass==GetViewHolder::class.java){
                         val viewHolder=holder as GetViewHolder
-                        visiblityOff(viewHolder)
+                        visibilityOff(viewHolder)
                         if(msgList[position].reciverID?.contains("Group") == true){
                             viewHolder.userName.visibility=View.VISIBLE
                         }
-                        viewHolder.userName.text=GetUserName().getName(msgList[position].sendId.toString())
+                        var nameOk=""
+                        userList.let {
+                            it.forEach{ user->
+                                if(user.email== msgList[position].sendId){
+                                    nameOk=user.name.toString()
+                                }
+                            }
+                        }
+                        viewHolder.userName.text=nameOk
                         viewHolder.getContactView.visibility=View.VISIBLE
                         val ContactMsg=msgList[position].msg.toString()
                         val list=ContactMsg.split("+")
@@ -188,7 +205,7 @@ class MessageAdapter(val context: android.content.Context, private val msgList: 
                 if(FirebaseAuth.getInstance().currentUser?.email.toString()==msgList[position].sendId){
                     if(holder.javaClass==GetViewHolder::class.java) {
                         val viewHolder = holder as GetViewHolder
-                        visiblityOff(viewHolder)
+                        visibilityOff(viewHolder)
                         viewHolder.sentPdfView.visibility = View.VISIBLE
                         val pdfUri = msgList[position].msg?.toUri()
                         val pdfName = getFileName(pdfUri!!)
@@ -202,11 +219,19 @@ class MessageAdapter(val context: android.content.Context, private val msgList: 
                 else{
                     if(holder.javaClass==GetViewHolder::class.java){
                         val viewHolder=holder as GetViewHolder
-                        visiblityOff(viewHolder)
+                        visibilityOff(viewHolder)
                         if(msgList[position].reciverID?.contains("Group") == true){
                             viewHolder.userName.visibility=View.VISIBLE
                         }
-                        viewHolder.userName.text=GetUserName().getName(msgList[position].sendId.toString())
+                        var nameOk=""
+                        userList.let {
+                            it.forEach{ user->
+                                if(user.email== msgList[position].sendId){
+                                    nameOk=user.name.toString()
+                                }
+                            }
+                        }
+                        viewHolder.userName.text=nameOk
                         viewHolder.getPdfView.visibility=View.VISIBLE
                         val pdfUri =msgList[position].msg?.toUri()
                         val pdfName=getFileName(pdfUri!!)
@@ -223,19 +248,26 @@ class MessageAdapter(val context: android.content.Context, private val msgList: 
 
                     if(holder.javaClass==GetViewHolder::class.java){
                         val viewHolder=holder as GetViewHolder
-                        visiblityOff(viewHolder)
+                        visibilityOff(viewHolder)
                         viewHolder.sendMsg.visibility=View.VISIBLE
                         viewHolder.sendMsg.text=msgList[position].msg.toString()
                     }
                 }else{
                     if(holder.javaClass==GetViewHolder::class.java){
                         val viewHolder=holder as GetViewHolder
-                        visiblityOff(viewHolder)
+                        visibilityOff(viewHolder)
                         if(msgList[position].reciverID?.contains("Group",false) == true){
                             viewHolder.userName.visibility=View.VISIBLE
                         }
-//                        viewHolder.userName.visibility=View.VISIBLE
-                        viewHolder.userName.text=GetUserName().getName(msgList[position].sendId.toString())
+                     var nameOk=""
+                        userList.let {
+                            it.forEach{ user->
+                                if(user.email== msgList[position].sendId){
+                                    nameOk=user.name.toString()
+                                }
+                            }
+                        }
+                        viewHolder.userName.text=nameOk
                         viewHolder.getMsg.visibility=View.VISIBLE
                         viewHolder.getMsg.text=msgList[position].msg.toString()
                     }
@@ -298,7 +330,7 @@ class MessageAdapter(val context: android.content.Context, private val msgList: 
         return result
     }
 
-    private fun visiblityOff(viewHolder: GetViewHolder) {
+    private fun visibilityOff(viewHolder: GetViewHolder) {
         viewHolder.sentContactView.visibility=View.GONE
         viewHolder.getContactView.visibility=View.GONE
         viewHolder.sendImg.visibility=View.GONE

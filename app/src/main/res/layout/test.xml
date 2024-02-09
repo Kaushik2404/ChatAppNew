@@ -8,16 +8,11 @@
     android:layout_margin="3dp"
     >
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
         <TextView
             android:visibility="visible"
             android:id="@+id/getMsgUserName"
             android:layout_width="wrap_content"
-            android:layout_height="20dp"
+            android:layout_height="wrap_content"
             android:text="hello"
             android:textColor="@color/black"
             android:paddingHorizontal="10dp"
@@ -43,20 +38,19 @@
             android:visibility="gone"
             />
         <!--    getMsg-->
-        <TextView
-            android:visibility="gone"
-            android:id="@+id/getMsg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="hello"
-            android:textColor="#5099E4"
-            android:padding="10dp"
-            android:textSize="18dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/messagesendbackget"
-            app:layout_constraintStart_toStartOf="parent"
-            />
+    <TextView
+        android:id="@+id/getMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/messagesendbackget"
+        android:padding="10dp"
+        android:text="hello"
+        android:textColor="#5099E4"
+        android:textSize="18dp"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/getMsgUserName" />
         <!--    sendImage-->
         <ImageView
             android:visibility="gone"
@@ -95,7 +89,7 @@
         </FrameLayout>
         <!--    getImage-->
         <ImageView
-            android:visibility="gone"
+            android:visibility="visible"
             android:id="@+id/getImg"
             android:layout_width="150dp"
             android:layout_height="150dp"
@@ -103,6 +97,7 @@
             android:padding="10dp"
             android:layout_marginHorizontal="10dp"
             android:background="@drawable/messagesendbackget"
+            app:layout_constraintTop_toBottomOf="@+id/getMsgUserName"
 
             />
         <FrameLayout
@@ -110,6 +105,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/flgetImg"
             android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/getMsgUserName"
 
             >
             <LinearLayout
@@ -189,6 +185,7 @@
             android:id="@+id/getContactView"
             android:background="@drawable/messagesendbackget"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/getMsgUserName"
             android:padding="10dp"
             android:layout_marginLeft="10dp"
             >
@@ -237,6 +234,7 @@
             android:id="@+id/getPdfView"
             android:background="@drawable/messagesendbackget"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/getMsgUserName"
             android:padding="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="50dp"
@@ -294,7 +292,5 @@
                 android:paddingRight="10dp"
                 />
         </LinearLayout>
-    </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

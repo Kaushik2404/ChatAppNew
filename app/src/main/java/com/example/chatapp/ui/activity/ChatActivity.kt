@@ -45,10 +45,10 @@ import com.example.chatapp.data.modal.Contact
 import com.example.chatapp.data.modal.Message
 import com.example.chatapp.data.modal.User
 import com.example.chatapp.data.modal.Data
-import com.example.chatapp.data.modal.GroupData
 import com.example.chatapp.data.modal.NotificationModel
 import com.example.chatapp.interfacefile.onClickMsg
 import com.example.chatapp.ui.NotificationViewModel
+import com.example.chatapp.util.GetUserName
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -64,6 +64,7 @@ class ChatActivity : AppCompatActivity() {
     lateinit var binding: ActivityChatBinding
     private val db = FirebaseFirestore.getInstance()
     var msgList = ArrayList<Message>()
+    var userList = ArrayList<User>()
 
     private val CAMERA_REQ = 101
     private val PDF_REQ = 102
@@ -96,8 +97,10 @@ class ChatActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         msgList = arrayListOf()
+        userList = arrayListOf()
         data = arrayListOf()
 
+        allUserGet()
 //        val reciverid = intent.getStringExtra("UID").toString()
 //        val senderid = FirebaseAuth.getInstance().currentUser?.email.toString()
 //        viewModel.getMsgList(reciverid, senderid)
@@ -361,7 +364,6 @@ class ChatActivity : AppCompatActivity() {
         binding.contactListView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE)
 
         binding.contactListView.setOnItemClickListener { parent, view, position, id ->
-
 
             val okNumber =
                 cursor!!.getString(cursor!!.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
@@ -644,8 +646,23 @@ class ChatActivity : AppCompatActivity() {
         }
     }
 
+    fun allUserGet(){
+        FirebaseFirestore.getInstance().collection("User").addSnapshotListener { value, _ ->
+            value?.let {
+                if (!it.isEmpty) {
+                    for (document in it.documents) {
+                            val user = document.toObject(User::class.java)
+                            if (user != null) {
+                                userList.add(user)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
     private fun setDataRec() {
-        msgAdapter = MessageAdapter(this, msgList, object : onClickMsg {
+        msgAdapter = MessageAdapter(this, msgList,userList, object : onClickMsg {
 
             override fun onLongClickMsg(pos: Int) {
 
