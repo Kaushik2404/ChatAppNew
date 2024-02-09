@@ -140,7 +140,8 @@ class AddGroupActivity : AppCompatActivity() {
                 .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
                 .collection("Group List")
                 .document()
-                .id
+                .id+"Group"
+
 
             val groupData= GroupData(groupId,groupUserList,view.groupNameEdt.text.toString().trim())
 

@@ -38,6 +38,8 @@ class ChatFragment : Fragment() {
     private lateinit var recyclerView:RecyclerView
     private lateinit var recyclerViewGroup:RecyclerView
     private lateinit var txview:TextView
+    private lateinit var txviewGroup:TextView
+    private lateinit var txviewPersonal:TextView
     private lateinit var context:Context
     private lateinit var adapter: UserAdapter
     private lateinit var adapterGroup: GroupAdapter
@@ -54,6 +56,8 @@ class ChatFragment : Fragment() {
         groupList = arrayListOf()
         recyclerView=view.findViewById(R.id.recyclerview)
         recyclerViewGroup=view.findViewById(R.id.recyclerview_group)
+        txviewPersonal=view.findViewById(R.id.txt_personal_chat)
+        txviewGroup=view.findViewById(R.id.txt_group_chat)
 
 //        userList = getListOfPlaces()
 //        setAdapter()
@@ -170,22 +174,26 @@ class ChatFragment : Fragment() {
                     if(userList.isNotEmpty()){
                         txview.visibility=View.GONE
                         recyclerView.visibility=View.VISIBLE
+                        txviewPersonal.visibility=View.VISIBLE
                         setAdapter()
                     }
                     else{
                         txview.visibility=View.VISIBLE
                         recyclerView.visibility=View.GONE
+                        txviewPersonal.visibility=View.VISIBLE
                     }
 
                 }else{
                     if(userList.isNotEmpty()){
                         txview.visibility=View.GONE
                         recyclerView.visibility=View.VISIBLE
+                        txviewPersonal.visibility=View.VISIBLE
                         setAdapter()
                     }
                     else{
                         txview.visibility=View.VISIBLE
                         recyclerView.visibility=View.GONE
+                        txviewPersonal.visibility=View.VISIBLE
                     }
                 }
             }
@@ -221,10 +229,33 @@ class ChatFragment : Fragment() {
                                                }
                                            }
                                         }
+                                        if(groupList.isNotEmpty()){
+                                            recyclerViewGroup.visibility=View.VISIBLE
+                                            txviewGroup.visibility=View.VISIBLE
+                                            setAdapterGroup()
+                                        }
+                                        else{
+                                            recyclerViewGroup.visibility=View.GONE
+                                            txviewGroup.visibility=View.GONE
+                                        }
                                     }
-                                    setAdapterGroup()
+                                    else{
+                                        if(groupList.isNotEmpty()){
+                                            recyclerViewGroup.visibility=View.VISIBLE
+                                            txviewGroup.visibility=View.VISIBLE
+                                            setAdapterGroup()
+                                        }
+                                        else{
+                                            recyclerViewGroup.visibility=View.GONE
+                                            txviewGroup.visibility=View.GONE
+                                        }
+                                    }
+
+
                                 }
                             }
+
+
 
                     }
                 }
@@ -246,7 +277,6 @@ class ChatFragment : Fragment() {
 //                intent.putExtra("profileImage",userList[pos].profileImg)
                 startActivity(intent)
             }
-
         })
         recyclerViewGroup.layoutManager = LinearLayoutManager(context)
         recyclerViewGroup.setHasFixedSize(true)

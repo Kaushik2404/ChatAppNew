@@ -45,10 +45,10 @@ import com.example.chatapp.data.modal.Contact
 import com.example.chatapp.data.modal.Message
 import com.example.chatapp.data.modal.User
 import com.example.chatapp.data.modal.Data
+import com.example.chatapp.data.modal.GroupData
 import com.example.chatapp.data.modal.NotificationModel
 import com.example.chatapp.interfacefile.onClickMsg
 import com.example.chatapp.ui.NotificationViewModel
-import com.example.chatapp.ui.activity.FullScreenImageActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -118,7 +118,11 @@ class ChatActivity : AppCompatActivity() {
 
     private fun setProfileImage() {
 
-        if (profileImage != null) {
+        if(reciverEmail.contains("Group")){
+            binding.chatBar.progrsschat.visibility = View.GONE
+            binding.chatBar.profilePicChat.setImageResource(R.drawable.gropu_icon)
+        }
+        else if (profileImage != null) {
             Glide.with(this).load(profileImage)
                 .listener(object : RequestListener<Drawable> {
                     override fun onLoadFailed(
@@ -147,7 +151,6 @@ class ChatActivity : AppCompatActivity() {
         } else {
             binding.chatBar.progrsschat.visibility = View.GONE
             binding.chatBar.profilePicChat.setImageResource(R.drawable.profile)
-
         }
     }
 
@@ -197,7 +200,7 @@ class ChatActivity : AppCompatActivity() {
                         .show()
                 }
                 notificationCheckCondition()
-                push("photo")
+                PushNotification("photo")
 
             }.addOnFailureListener {
                 mProgressDialog.dismiss()
@@ -294,7 +297,7 @@ class ChatActivity : AppCompatActivity() {
 
                 userMsgAdd("msg", binding.edtMsg.text.toString())
                 notificationCheckCondition()
-                push(msgOk)
+                PushNotification(msgOk)
                 chatDataInsert()
 
             }
@@ -390,7 +393,7 @@ class ChatActivity : AppCompatActivity() {
                 binding.chatView.visibility = View.VISIBLE
 
                 notificationCheckCondition()
-                push("Contact...")
+                PushNotification("Contact...")
             }.addOnFailureListener {
                 Toast.makeText(applicationContext, "Failed..Sending Contact", Toast.LENGTH_SHORT)
                     .show()
@@ -408,6 +411,11 @@ class ChatActivity : AppCompatActivity() {
         val calendar: Calendar = Calendar.getInstance()
         val format = SimpleDateFormat(" d MMM yyyy HH:mm:ss ")
         val time: String = format.format(calendar.time)
+
+        db.collection("Group List")
+            .document(reciverEmail)
+            .update("lastMsg", currentMsg, "lastTime", time)
+
         db.collection("User")
             .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
             .collection("FollowList")
@@ -440,7 +448,6 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun chatDataInsert() {
-
         val id = db.collection("Chat_Test").document().id
 
         val reciverid = intent.getStringExtra("UID").toString()
@@ -534,7 +541,7 @@ class ChatActivity : AppCompatActivity() {
                         }
 
                         notificationCheckCondition()
-                        push("photo")
+                        PushNotification("photo")
 
                     }.addOnFailureListener {
                         mProgressDialog.dismiss()
@@ -575,7 +582,6 @@ class ChatActivity : AppCompatActivity() {
                         if (FirebaseAuth.getInstance().currentUser?.email == document.get("email")) {
                             val user = document.toObject(User::class.java)
                             name = user?.name.toString()
-
                         }
                     }
                 }
@@ -585,26 +591,9 @@ class ChatActivity : AppCompatActivity() {
     }
 
     private fun listenNewMessage() {
-//        viewModel.msgList.observe(this, Observer {
-//            if (msgList.any { it.msgID == it.msgID }) {
-//
-//            } else {
-//               msgList = it
-//                if (this::msgAdapter.isInitialized) {
-//                    msgAdapter.notifyItemInserted(msgList.size - 1)
-//                }
-//            }
-//
-//        })
-//
-//        msgList.sortBy { it.time }
-//        Log.d("msglist",msgList.toString())
-//        setDataRec()
-
-
-        db.collection("Chat_Test").addSnapshotListener { value, error ->
-            val reciverid = intent.getStringExtra("UID").toString()
-            val senderid = FirebaseAuth.getInstance().currentUser?.email.toString()
+        db.collection("Chat_Test").addSnapshotListener { value, _  ->
+            val reciveId = intent.getStringExtra("UID").toString()
+            val senderId = FirebaseAuth.getInstance().currentUser?.email.toString()
 
             value?.let {
                 if (!it.isEmpty) {
@@ -613,7 +602,23 @@ class ChatActivity : AppCompatActivity() {
                             val msg = document.toObject(Message::class.java)
                             msg?.let { msg ->
 
-                                if ((msg.sendId == senderid && msg.reciverID == reciverid) || (msg.reciverID == senderid && msg.sendId == reciverid)) {
+                                if(reciveId.contains("Group")){
+                                    if((msg.sendId == senderId && msg.reciverID == reciveId) || (msg.reciverID == reciveId)){
+                                        if (msgList.any { it.msgID == msg.msgID }) {
+
+                                        } else {
+                                            msgList.add(msg)
+
+                                            if (this::msgAdapter.isInitialized) {
+
+                                                msgAdapter.notifyItemInserted(msgList.size - 1)
+                                            } else {
+
+                                            }
+                                        }
+                                    }
+                                }
+                                else if((msg.sendId == senderId && msg.reciverID == reciveId) || (msg.reciverID == senderId && msg.sendId == reciveId)) {
                                     if (msgList.any { it.msgID == msg.msgID }) {
 
                                     } else {
@@ -735,11 +740,14 @@ class ChatActivity : AppCompatActivity() {
         super.onBackPressed()
         Count = 0
         val ID = intent.getStringExtra("ID").toString()
-
         val calendar: Calendar = Calendar.getInstance()
         val format = SimpleDateFormat(" d MMM yyyy HH:mm:ss ")
         val time: String = format.format(calendar.time)
-
+//        if(reciverEmail.contains("Group")){
+//            db.collection("Group List")
+//                .document(reciverEmail)
+//                .update("lastMsg", currentMsg, "lastMsgTime", time)
+//        }
         db.collection("User")
             .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
             .collection("FollowList")
@@ -750,6 +758,12 @@ class ChatActivity : AppCompatActivity() {
             }
 
         if (msgList.isEmpty()) {
+//            if(reciverEmail.contains("Group")){
+//                db.collection("Group List")
+//                    .document(reciverEmail)
+//                    .update("lastMsg", "")
+//            }
+
             db.collection("User")
                 .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
                 .collection("FollowList")
@@ -797,7 +811,6 @@ class ChatActivity : AppCompatActivity() {
                     }
             }
         }
-
     }
 
     private fun notificationCheckCondition() {
@@ -826,7 +839,7 @@ class ChatActivity : AppCompatActivity() {
         }
     }
 
-    fun push(msg: String) {
+    fun PushNotification(msg: String) {
         Log.d("OK", ID)
         Log.d("OK", Token)
         notificationViewModel
@@ -838,7 +851,7 @@ class ChatActivity : AppCompatActivity() {
             )
     }
 
-    fun getFileName(uri: Uri): String? {
+    private fun getFileName(uri: Uri): String? {
         var result: String? = null
         if (uri.scheme == "content") {
             val cursor: Cursor? = contentResolver.query(uri, null, null, null, null)
@@ -937,7 +950,7 @@ class ChatActivity : AppCompatActivity() {
                         .show()
                 }
                 notificationCheckCondition()
-                push("PDF")
+                PushNotification("PDF")
 
             }.addOnFailureListener {
                 dialog.dismiss()

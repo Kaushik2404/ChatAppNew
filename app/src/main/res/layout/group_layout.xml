@@ -1,75 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:orientation="vertical"
+    android:id="@+id/group_layout">
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:elevation="10dp"
-  android:layout_marginVertical="5dp"
-    android:layout_marginHorizontal="10dp"
+    android:orientation="horizontal"
+    android:id="@+id/userView"
+    android:layout_margin="5dp"
     android:background="@drawable/back_user_list"
-    android:id="@+id/group_layout"
     >
-
-    <LinearLayout
-        android:layout_width="match_parent"
+    <RelativeLayout
+        android:layout_width="60dp"
         android:layout_height="60dp"
-        android:orientation="horizontal"
+        android:gravity="center"
         >
-        <RelativeLayout
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:gravity="center"
-            >
-
-        <ProgressBar
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/progress_group"
-            android:layout_centerInParent="true"
-            android:visibility="visible"
-            android:padding="15dp"
-            android:indeterminateDrawable="@drawable/custom_progress_bar"
-            />
-
         <de.hdodenhof.circleimageview.CircleImageView
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:padding="10dp"
-            android:src="@drawable/profile"
+            android:src="@drawable/gropu_icon"
             android:id="@+id/profile_image_group"
             />
+    </RelativeLayout>
 
-        </RelativeLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="1"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Kaushik A"
-            android:textSize="20dp"
-            android:textColor="@color/black"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="20dp"
-            android:textStyle="bold"
-            android:id="@+id/group_name"
-            android:layout_weight="1"
-            />
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Kaushik A"
+                android:textSize="20dp"
+                android:textColor="@color/black"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:textStyle="bold"
+                android:id="@+id/group_name"
+                android:layout_weight="1"
+                />
 
-<!--        <ImageView-->
-<!--            android:layout_width="40dp"-->
-<!--            android:layout_height="40dp"-->
-<!--            android:src="@drawable/ic_unfollow"-->
-<!--            android:layout_gravity="center_vertical"-->
-<!--            android:layout_marginRight="10dp"-->
-<!--            android:padding="5dp"-->
-<!--            android:id="@+id/btnFollow"-->
-<!--            />-->
+        </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="6351478024"
+                android:textSize="14dp"
+                android:textColor="@color/black"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:fontFamily="monospace"
+                android:id="@+id/GroupLastMessage"
+                android:layout_weight="1"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="02:30"
+                android:layout_marginRight="20dp"
+                android:textSize="14dp"
+                android:textColor="@color/black"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:fontFamily="monospace"
+                android:id="@+id/GroupMessageTime"
+                />
 
-
-
+        </LinearLayout>
 
     </LinearLayout>
 
+</LinearLayout>
 
 
 </LinearLayout>
+

@@ -25,6 +25,7 @@ import com.bumptech.glide.request.target.Target
 import com.example.chatapp.R
 import com.example.chatapp.data.modal.Message
 import com.example.chatapp.interfacefile.onClickMsg
+import com.example.chatapp.util.GetUserName
 import com.google.firebase.auth.FirebaseAuth
 
 class MessageAdapter(val context: android.content.Context, private val msgList: ArrayList<Message>, private val onClickMsg: onClickMsg):RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -101,6 +102,10 @@ class MessageAdapter(val context: android.content.Context, private val msgList: 
                     if(holder.javaClass==GetViewHolder::class.java){
                         val viewHolder=holder as GetViewHolder
                         visiblityOff(viewHolder)
+                        if(msgList[position].reciverID?.contains("Group") == true){
+                            viewHolder.userName.visibility=View.VISIBLE
+                        }
+                        viewHolder.userName.text=GetUserName().getName(msgList[position].sendId.toString())
                         viewHolder.flGetImg.visibility=View.VISIBLE
                         viewHolder.getImg.visibility=View.VISIBLE
                         holder.recProgress.visibility=View.VISIBLE
@@ -165,6 +170,10 @@ class MessageAdapter(val context: android.content.Context, private val msgList: 
                     if(holder.javaClass==GetViewHolder::class.java){
                         val viewHolder=holder as GetViewHolder
                         visiblityOff(viewHolder)
+                        if(msgList[position].reciverID?.contains("Group") == true){
+                            viewHolder.userName.visibility=View.VISIBLE
+                        }
+                        viewHolder.userName.text=GetUserName().getName(msgList[position].sendId.toString())
                         viewHolder.getContactView.visibility=View.VISIBLE
                         val ContactMsg=msgList[position].msg.toString()
                         val list=ContactMsg.split("+")
@@ -194,6 +203,10 @@ class MessageAdapter(val context: android.content.Context, private val msgList: 
                     if(holder.javaClass==GetViewHolder::class.java){
                         val viewHolder=holder as GetViewHolder
                         visiblityOff(viewHolder)
+                        if(msgList[position].reciverID?.contains("Group") == true){
+                            viewHolder.userName.visibility=View.VISIBLE
+                        }
+                        viewHolder.userName.text=GetUserName().getName(msgList[position].sendId.toString())
                         viewHolder.getPdfView.visibility=View.VISIBLE
                         val pdfUri =msgList[position].msg?.toUri()
                         val pdfName=getFileName(pdfUri!!)
@@ -218,6 +231,11 @@ class MessageAdapter(val context: android.content.Context, private val msgList: 
                     if(holder.javaClass==GetViewHolder::class.java){
                         val viewHolder=holder as GetViewHolder
                         visiblityOff(viewHolder)
+                        if(msgList[position].reciverID?.contains("Group",false) == true){
+                            viewHolder.userName.visibility=View.VISIBLE
+                        }
+//                        viewHolder.userName.visibility=View.VISIBLE
+                        viewHolder.userName.text=GetUserName().getName(msgList[position].sendId.toString())
                         viewHolder.getMsg.visibility=View.VISIBLE
                         viewHolder.getMsg.text=msgList[position].msg.toString()
                     }
@@ -253,6 +271,7 @@ class MessageAdapter(val context: android.content.Context, private val msgList: 
         val getPdfView: LinearLayout =view.findViewById(R.id.getPdfView)
         val sendPdfName: TextView =view.findViewById(R.id.sendpdfName)
         val getPdfName: TextView =view.findViewById(R.id.getpdfName)
+        val userName: TextView =view.findViewById(R.id.getMsgUserName)
 
     }
 
@@ -291,5 +310,6 @@ class MessageAdapter(val context: android.content.Context, private val msgList: 
         viewHolder.sentPdfView.visibility=View.GONE
         viewHolder.getPdfView.visibility=View.GONE
         viewHolder.sendProgress.visibility=View.GONE
+        viewHolder.userName.visibility=View.GONE
     }
 }

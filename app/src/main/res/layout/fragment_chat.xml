@@ -18,6 +18,19 @@
         android:queryBackground="@drawable/selectediteamedttext"
         />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Goup Chat"
+        android:textSize="@dimen/_14sdp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:layout_marginHorizontal="10dp"
+        android:paddingVertical="@dimen/_5sdp"
+        android:id="@+id/txt_group_chat"
+        />
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -32,6 +45,17 @@
        android:orientation="vertical"
 
        >
+       <TextView
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:text="Personal Chat"
+           android:textSize="@dimen/_14sdp"
+           android:textColor="@color/black"
+           android:textStyle="bold"
+           android:layout_marginHorizontal="10dp"
+           android:paddingVertical="@dimen/_5sdp"
+           android:id="@+id/txt_personal_chat"
+           />
        <androidx.recyclerview.widget.RecyclerView
            android:layout_width="match_parent"
            android:layout_height="match_parent"
