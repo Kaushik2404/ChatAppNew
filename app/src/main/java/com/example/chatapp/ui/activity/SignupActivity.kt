@@ -4,7 +4,6 @@ import android.app.ProgressDialog
 import android.content.ContentValues.TAG
 import android.content.Intent
 import android.database.Cursor
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,16 +15,8 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.VIEW_MODEL_STORE_OWNER_KEY
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
-import com.example.chatapp.R
 import com.example.chatapp.databinding.ActivitySignupBinding
-import com.example.chatapp.data.modal.Message
 import com.example.chatapp.data.modal.User
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
@@ -33,21 +24,18 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import kotlin.math.log
 
 class SignupActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignupBinding
-    lateinit var launcher: ActivityResultLauncher<String>
+    private lateinit var launcher: ActivityResultLauncher<String>
 
-     var ImageUri:String=""
-    private lateinit var ImageUriok:Uri
-    lateinit var okUri:String
-    lateinit var token:String
+     private var imageUri:String=""
+    private lateinit var imageUriok:Uri
+    private lateinit var okUri:String
+    private lateinit var token:String
 
      val auth:FirebaseAuth=FirebaseAuth.getInstance()
-     var db=FirebaseFirestore.getInstance()
+     private var db=FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,7 +56,7 @@ class SignupActivity : AppCompatActivity() {
 
         binding.signup.setOnClickListener {
             if(checkError()){
-                if(ImageUri!=""){
+                if(imageUri!=""){
                     val dialog = ProgressDialog(this)
                     dialog.setMessage("Login...")
                     dialog.show()
@@ -77,7 +65,7 @@ class SignupActivity : AppCompatActivity() {
                             if(task.isSuccessful){
 
                                 val reference1: StorageReference =
-                                    FirebaseStorage.getInstance().getReference().child("Profile").child(ImageUri)
+                                    FirebaseStorage.getInstance().reference.child("Profile").child(imageUri)
                                 reference1.downloadUrl.addOnSuccessListener { uri ->
                                     okUri=uri.toString()
                                     Log.d("uri",okUri)
@@ -141,7 +129,6 @@ class SignupActivity : AppCompatActivity() {
             }
             override fun afterTextChanged(s: Editable?) {
             }
-
         }
         )
 
@@ -163,14 +150,12 @@ class SignupActivity : AppCompatActivity() {
             ActivityResultContracts.GetContent()
         ) { result ->
             if(result!=null){
-                ImageUri = getFileName(result!!).toString()
-
-
+                imageUri = getFileName(result).toString()
                 Glide.with(this).load(result)
                     .into(binding.profileImage)
 
                 val reference: StorageReference =
-                    FirebaseStorage.getInstance().getReference().child("Profile").child(ImageUri)
+                    FirebaseStorage.getInstance().reference.child("Profile").child(imageUri)
                 reference.putFile(result).addOnSuccessListener {
                     Log.d("Image","sendInFirebase")
                 }.addOnFailureListener {

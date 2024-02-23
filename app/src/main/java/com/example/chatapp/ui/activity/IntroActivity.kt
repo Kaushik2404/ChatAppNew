@@ -17,8 +17,6 @@ import android.Manifest.permission.POST_NOTIFICATIONS
 import android.Manifest.permission.READ_CONTACTS
 import android.Manifest.permission.READ_SMS
 import android.util.Log
-
-
 class IntroActivity : AppCompatActivity() {
 
 
@@ -35,6 +33,7 @@ class IntroActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding=ActivityIntroBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         binding.login.setOnClickListener {
             val intent=Intent(applicationContext, LoginActivity::class.java)
             startActivity(intent)

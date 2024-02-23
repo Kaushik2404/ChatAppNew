@@ -8,5 +8,4 @@ class Message(
     var time:String?="",
     var type:String?=null,
     var view:String?="ON"
-) {
-}
+)
