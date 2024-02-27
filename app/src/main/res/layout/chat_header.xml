@@ -58,26 +58,29 @@ android:orientation="horizontal">
     />
     <ImageView
         android:id="@+id/call"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="15dp"
+        android:padding="5dp"
         android:src="@drawable/baseline_call_24"
         />
     <ImageView
         android:id="@+id/video"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="15dp"
+        android:padding="5dp"
         android:src="@drawable/baseline_videocam_24"
         />
     <ImageView
         android:id="@+id/info"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="15dp"
+        android:padding="5dp"
         android:src="@drawable/baseline_info_24"
         android:layout_marginRight="15dp"
         />

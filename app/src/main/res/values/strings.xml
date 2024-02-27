@@ -7,4 +7,7 @@
     <string name="group_name">Group Name</string>
     <string name="enter_your_group_name">Enter Your Group Name</string>
     <string name="failed_group_creation">Failed Group Creation</string>
+    <string name="follow">Follow</string>
+    <string name="message">Message</string>
+    <string name="unfollow">unfollow</string>
 </resources>

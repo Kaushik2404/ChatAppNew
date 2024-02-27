@@ -78,6 +78,7 @@ class ChatActivity : AppCompatActivity() {
     lateinit var name: String
     lateinit var ID: String
     lateinit var userID: String
+    lateinit var reciveUserName: String
     var Token: String=""
     lateinit var reciverEmail: String
     lateinit var currentMsg: String
@@ -104,7 +105,8 @@ class ChatActivity : AppCompatActivity() {
 //        val reciverid = intent.getStringExtra("UID").toString()
 //        val senderid = FirebaseAuth.getInstance().currentUser?.email.toString()
 //        viewModel.getMsgList(reciverid, senderid)
-        binding.chatBar.chatUserName.text = intent.getStringExtra("NAME")
+        reciveUserName= intent.getStringExtra("NAME").toString()
+        binding.chatBar.chatUserName.text =reciveUserName
         ID = intent.getStringExtra("ID").toString()
         userID = intent.getStringExtra("USERID").toString()
         reciverEmail = intent.getStringExtra("UID").toString()
@@ -218,12 +220,10 @@ class ChatActivity : AppCompatActivity() {
 
     private fun onclick() {
         binding.btnattachFile.setOnClickListener {
-
             bottomSheet = FileDialog(object : OnClickDilogFile {
                 override fun onClickGalary() {
                     getImageId()
                 }
-
                 override fun onClickCamera() {
                     if (ContextCompat.checkSelfPermission(
                             this@ChatActivity,
@@ -304,6 +304,14 @@ class ChatActivity : AppCompatActivity() {
                 chatDataInsert()
 
             }
+        }
+
+        binding.chatBar.info.setOnClickListener{
+            val intent=Intent(this,UserInfoActivity::class.java)
+            intent.putExtra("UserID",ID)
+            intent.putExtra("UserName",reciveUserName)
+            intent.putExtra("UserProfile", profileImage)
+            startActivity(intent)
         }
 
     }
