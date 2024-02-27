@@ -666,7 +666,6 @@ class ChatActivity : AppCompatActivity() {
 
             override fun onLongClickMsg(pos: Int) {
 
-
                 val builder= AlertDialog.Builder(this@ChatActivity)
                 builder.setCancelable(true)
                 builder.setIcon(R.drawable.baseline_delete_24)
@@ -711,6 +710,8 @@ class ChatActivity : AppCompatActivity() {
                     }
                     startActivity(intent)
                 }
+
+
 
             }
         })

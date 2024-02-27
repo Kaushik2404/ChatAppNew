@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -59,6 +60,7 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:src="@drawable/logochat"
+            android:scaleType="fitXY"
             android:padding="10dp"
             android:layout_marginHorizontal="10dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -88,19 +90,20 @@
             </LinearLayout>
         </FrameLayout>
         <!--    getImage-->
-        <ImageView
-            android:visibility="visible"
-            android:id="@+id/getImg"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:src="@drawable/logochat"
-            android:padding="10dp"
-            android:layout_marginHorizontal="10dp"
-            android:background="@drawable/messagesendbackget"
-            app:layout_constraintTop_toBottomOf="@+id/getMsgUserName"
+    <ImageView
+        android:id="@+id/getImg"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginHorizontal="10dp"
+        android:background="@drawable/messagesendbackget"
+        android:padding="10dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/logochat"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/getMsgUserName" />
 
-            />
-        <FrameLayout
+    <FrameLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/flgetImg"
@@ -136,6 +139,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:padding="10dp"
             android:layout_marginRight="10dp"
+            android:layout_marginLeft="@dimen/_30sdp"
             >
             <ImageView
                 android:layout_width="40dp"
@@ -188,6 +192,7 @@
             app:layout_constraintTop_toBottomOf="@+id/getMsgUserName"
             android:padding="10dp"
             android:layout_marginLeft="10dp"
+            android:layout_marginRight="@dimen/_30sdp"
             >
             <ImageView
                 android:layout_width="40dp"
@@ -237,7 +242,7 @@
             app:layout_constraintTop_toBottomOf="@+id/getMsgUserName"
             android:padding="10dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="50dp"
+            android:layout_marginRight="@dimen/_30sdp"
             >
             <ImageView
                 android:layout_width="40dp"
@@ -252,7 +257,7 @@
                 android:layout_height="wrap_content"
                 android:text="Kaushik"
                 android:textColor="@color/black"
-                android:textSize="16dp"
+                android:textSize="14dp"
                 android:layout_gravity="center_vertical"
                 android:id="@+id/getpdfName"
                 android:paddingLeft="10dp"
@@ -269,9 +274,8 @@
             android:background="@drawable/messagesendback"
             app:layout_constraintEnd_toEndOf="parent"
             android:padding="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginLeft="50dp"
-
+            android:layout_marginEnd="10dp"
+            android:layout_marginStart="@dimen/_50sdp"
             >
             <ImageView
                 android:layout_width="40dp"

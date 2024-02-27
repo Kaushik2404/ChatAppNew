@@ -1,9 +1,11 @@
 package com.example.chatapp.adapter
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.database.Cursor
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.provider.ContactsContract
 import android.provider.OpenableColumns
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +17,7 @@ import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -173,6 +176,10 @@ class MessageAdapter(val context: android.content.Context, private val msgList: 
                         }
 //                        viewHolder.msNumber.text="+"+list[1]
 
+                        viewHolder.msgLayout.setOnClickListener {
+                            saveToContacts(list[1].toString(),list[0])
+                        }
+
                     }
                 }
                 else{
@@ -194,11 +201,26 @@ class MessageAdapter(val context: android.content.Context, private val msgList: 
                         viewHolder.userName.text=nameOk
                         viewHolder.getContactView.visibility=View.VISIBLE
                         val ContactMsg=msgList[position].msg.toString()
-                        val list=ContactMsg.split("+")
+
+                        val list=ContactMsg.split("/")
                         Log.d("TAGcontact",list[1].toString())
                         Log.d("TAGcontact",list[0].toString())
-                        viewHolder.mgName.text=list[0].toString()
-                        viewHolder.mgNumber.text= "+ ${list[1]}"
+                        if(list[0].isNotEmpty()){
+                            viewHolder.mgName.text=list[0].toString()
+                        }else{
+                            viewHolder.mgName.text="Unknown.."
+                        }
+                        if(list[1].isNotEmpty()){
+                            viewHolder.mgNumber.text=list[1].toString()
+                        }else{
+                            viewHolder.mgNumber.text=""
+                        }
+//                        viewHolder.msNumber.text="+"+list[1]
+
+                        viewHolder.msgLayout.setOnClickListener {
+                            saveToContacts(list[1].toString(),list[0])
+                        }
+
                     }
                 }
             }
@@ -344,5 +366,13 @@ class MessageAdapter(val context: android.content.Context, private val msgList: 
         viewHolder.getPdfView.visibility=View.GONE
         viewHolder.sendProgress.visibility=View.GONE
         viewHolder.userName.visibility=View.GONE
+    }
+
+    private fun saveToContacts(phoneNumber: String,name:String) {
+        val intent = Intent(Intent.ACTION_INSERT)
+        intent.type = ContactsContract.Contacts.CONTENT_TYPE
+        intent.putExtra(ContactsContract.Intents.Insert.PHONE, phoneNumber)
+        intent.putExtra(ContactsContract.Intents.Insert.NAME, name)
+        context.startActivity(intent)
     }
 }
