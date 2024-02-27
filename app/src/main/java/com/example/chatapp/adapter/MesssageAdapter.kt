@@ -188,6 +188,7 @@ class MessageAdapter(val context: android.content.Context, private val msgList: 
                                 if(user.email== msgList[position].sendId){
                                     nameOk=user.name.toString()
                                 }
+
                             }
                         }
                         viewHolder.userName.text=nameOk

@@ -41,7 +41,7 @@ class SignupActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding=ActivitySignupBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        uplodeimage()
+        uplodeImage()
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
                 return@OnCompleteListener
@@ -136,16 +136,12 @@ class SignupActivity : AppCompatActivity() {
             val intent=Intent(applicationContext, LoginActivity::class.java)
             startActivity(intent)
             finish()
-
         }
-
     }
-
-
     private fun getImageId() {
         launcher.launch("image/*")
     }
-    private fun uplodeimage() {
+    private fun uplodeImage() {
         launcher = registerForActivityResult<String, Uri>(
             ActivityResultContracts.GetContent()
         ) { result ->
@@ -166,7 +162,7 @@ class SignupActivity : AppCompatActivity() {
         }
     }
 
-    fun getFileName(uri: Uri): String? {
+    private fun getFileName(uri: Uri): String? {
         var result: String? = null
         if (uri.scheme == "content") {
             val cursor: Cursor? = contentResolver.query(uri, null, null, null, null)
