@@ -39,6 +39,7 @@ android:orientation="vertical"
             android:orientation="horizontal"
             >
             <TextView
+                android:paddingLeft="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Kaushik A"
@@ -59,6 +60,7 @@ android:orientation="vertical"
             android:orientation="horizontal"
             >
             <TextView
+                android:paddingLeft="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="6351478024"

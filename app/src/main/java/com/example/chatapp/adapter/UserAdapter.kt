@@ -14,12 +14,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
-import com.example.chatapp.interfacefile.OnIteamClickUser
+import com.example.chatapp.interfacefile.OnItemClickUser
 import com.example.chatapp.R
 import com.example.chatapp.data.modal.User
 import de.hdodenhof.circleimageview.CircleImageView
 
-class UserAdapter(private val context: Context, private var userList:ArrayList<User>, val onIteamClickUser: OnIteamClickUser):RecyclerView.Adapter<UserAdapter.ViewHolder>() {
+class UserAdapter(private val context: Context, private var userList:ArrayList<User>, val onIteamClickUser: OnItemClickUser):RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
 
     fun filterList(filterList: ArrayList<User>) {

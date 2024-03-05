@@ -26,6 +26,7 @@ class UserInfoActivity : AppCompatActivity() {
    private var profileImage=""
    private var profileName=""
    private var profileId=""
+   private var groupId=""
    private var status:Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +37,6 @@ class UserInfoActivity : AppCompatActivity() {
         getData()
         setData()
         onClick()
-
 
     }
 
@@ -93,44 +93,57 @@ class UserInfoActivity : AppCompatActivity() {
     private fun setData() {
         setProfileImage()
         binding.userNameInfo.text=profileName
+
     }
 
     private fun setProfileImage() {
-        if(profileImage !=null){
-            Glide.with(applicationContext).load(profileImage)
-                .listener(object : RequestListener<Drawable> {
-                    override fun onLoadFailed(
-                        e: GlideException?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        isFirstResource: Boolean,
-                    ): Boolean {
-                        binding.progressInfoUserProfile.visibility= View.GONE
-                        return false
-                    }
-
-                    override fun onResourceReady(
-                        resource: Drawable?,
-                        model: Any?,
-                        target: Target<Drawable>?,
-                        dataSource: DataSource?,
-                        isFirstResource: Boolean,
-                    ): Boolean {
-                        binding.progressInfoUserProfile.visibility= View.GONE
-                        return false
-                    }
-
-                })
+        Log.d("TAG11","info------------$profileId")
+        if(groupId.contains("Group",false)){
+            binding.progressInfoUserProfile.visibility= View.GONE
+            binding.followUserInfoBtn.visibility=View.GONE
+            Glide.with(applicationContext).load(R.drawable.gropu_icon)
                 .into(binding.profileImage)
+        }else{
+            if(profileImage !=null){
+
+                Glide.with(applicationContext).load(profileImage)
+                    .listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            isFirstResource: Boolean,
+                        ): Boolean {
+                            binding.progressInfoUserProfile.visibility= View.GONE
+                            return false
+                        }
+
+                        override fun onResourceReady(
+                            resource: Drawable?,
+                            model: Any?,
+                            target: Target<Drawable>?,
+                            dataSource: DataSource?,
+                            isFirstResource: Boolean,
+                        ): Boolean {
+                            binding.progressInfoUserProfile.visibility= View.GONE
+                            return false
+                        }
+
+                    })
+                    .into(binding.profileImage)
+            }
         }
+
     }
 
     private fun getData() {
         profileId = intent.getStringExtra("UserID").toString()
         profileImage = intent.getStringExtra("UserProfile").toString()
         profileName= intent.getStringExtra("UserName").toString()
+        groupId= intent.getStringExtra("GroupId").toString()
 
-        Log.d("TAG11", "-------UserId$profileId")
-        Log.d("TAG11", "-------UserId$profileName")
+        Log.d("TAG11", "-------UserId---$profileId")
+        Log.d("TAG11", "-------UserId---$profileName")
+        Log.d("TAG11", "-------groupId---$groupId")
     }
 }

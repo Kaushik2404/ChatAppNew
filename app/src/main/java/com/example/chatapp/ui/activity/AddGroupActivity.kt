@@ -1,19 +1,14 @@
 package com.example.chatapp.ui.activity
 
-import android.app.Dialog
-import android.content.Intent
-import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.Window
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chatapp.R
-import com.example.chatapp.adapter.UserAdapter
 import com.example.chatapp.adapter.UserGroupAdapter
 import com.example.chatapp.data.modal.GroupData
 import com.example.chatapp.data.modal.GroupList
@@ -21,7 +16,6 @@ import com.example.chatapp.data.modal.User
 import com.example.chatapp.databinding.ActivityAddGroupBinding
 import com.example.chatapp.databinding.GroupAddDialogBinding
 import com.example.chatapp.interfacefile.OnClickGroupAdd
-import com.example.chatapp.interfacefile.OnIteamClickUser
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 

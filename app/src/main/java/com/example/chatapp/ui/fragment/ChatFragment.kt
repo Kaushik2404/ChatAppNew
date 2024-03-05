@@ -15,7 +15,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.chatapp.interfacefile.OnIteamClickUser
+import com.example.chatapp.interfacefile.OnItemClickUser
 import com.example.chatapp.R
 import com.example.chatapp.adapter.GroupAdapter
 import com.example.chatapp.adapter.UserAdapter
@@ -111,7 +111,7 @@ class ChatFragment : Fragment() {
         }
     }
     private fun setAdapter(){
-        adapter = UserAdapter(context, userList,object: OnIteamClickUser {
+        adapter = UserAdapter(context, userList,object: OnItemClickUser {
             override fun onClickUser(pos: Int) {
                 val intent= Intent(context, ChatActivity::class.java)
                 intent.putExtra("POS",pos)
@@ -155,7 +155,7 @@ class ChatFragment : Fragment() {
         db.collection("User")
             .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
             .collection("FollowList")
-            .addSnapshotListener { value, error ->
+            .addSnapshotListener { value, _ ->
             value?.let {
                 userList.clear()
                 if (!it.isEmpty) {
@@ -264,7 +264,27 @@ class ChatFragment : Fragment() {
     private fun setAdapterGroup() {
         adapterGroup = GroupAdapter(context, groupList,object : onClickMsg{
             override fun onLongClickMsg(pos: Int) {
-                TODO("Not yet implemented")
+//                val dialog = Dialog(context)
+//                dialog.requestWindowFeature(1)
+//                dialog.window!!.setBackgroundDrawable(ColorDrawable(0))
+//                dialog.setContentView(R.layout.dialog_exit)
+//                val textView = dialog.findViewById<TextView>(R.id.tv_yes)
+//                (dialog.findViewById<View>(R.id.tv_no) as TextView).setOnClickListener { dialog.dismiss() }
+//                textView.setOnClickListener {
+//                    db.collection("User")
+//                        .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
+//                        .collection("FollowList")
+//                        .document(userList[pos].id.toString())
+//                        .delete()
+//                        .addOnSuccessListener {
+//                            Log.d("TAG11", "DocumentSnapshot successfully deleted!")
+//                            adapter.notifyItemRemoved(pos)
+//                        }
+//                        .addOnFailureListener { e -> Log.w("TAG11", "Error deleting document", e) }
+//                    dialog.dismiss()
+//                }
+//                dialog.show()
+
             }
             override fun onClickMsg(pos: Int) {
                 val intent= Intent(context, ChatActivity::class.java)

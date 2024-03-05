@@ -16,7 +16,6 @@
             android:layout_height="wrap_content"
             android:text="hello"
             android:textColor="@color/black"
-            android:paddingHorizontal="10dp"
             android:textStyle="bold"
             android:textSize="14dp"
             android:layout_marginLeft="10dp"
@@ -32,28 +31,31 @@
             android:textColor="#5099E4"
             android:padding="10dp"
             android:textSize="18dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="@dimen/_50sdp"
             android:layout_marginRight="10dp"
             android:background="@drawable/messagesendback"
             app:layout_constraintEnd_toEndOf="parent"
             android:visibility="gone"
             />
         <!--    getMsg-->
+    <!--    sendImage-->
     <TextView
         android:id="@+id/getMsg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginRight="@dimen/_50sdp"
         android:background="@drawable/messagesendbackget"
         android:padding="10dp"
         android:text="hello"
         android:textColor="#5099E4"
         android:textSize="18dp"
         android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.028"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/getMsgUserName" />
-        <!--    sendImage-->
-        <ImageView
+
+    <ImageView
             android:visibility="gone"
             android:id="@+id/sendimg"
             android:background="@drawable/messagesendback"
@@ -99,7 +101,7 @@
         android:padding="10dp"
         android:scaleType="fitXY"
         android:src="@drawable/logochat"
-        android:visibility="visible"
+        android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/getMsgUserName" />
 

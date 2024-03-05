@@ -48,7 +48,6 @@ import com.example.chatapp.data.modal.Data
 import com.example.chatapp.data.modal.NotificationModel
 import com.example.chatapp.interfacefile.onClickMsg
 import com.example.chatapp.ui.NotificationViewModel
-import com.example.chatapp.util.GetUserName
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -71,7 +70,7 @@ class ChatActivity : AppCompatActivity() {
 
     private val PERMISSIONS_REQUEST_READ_CONTACTS = 100
 
-    lateinit var bottomSheet: FileDialog
+    private lateinit var bottomSheet: FileDialog
     private lateinit var msgAdapter: MessageAdapter
     private lateinit var ImageUri: String
     private lateinit var photo: Uri
@@ -79,7 +78,7 @@ class ChatActivity : AppCompatActivity() {
     lateinit var ID: String
     lateinit var userID: String
     lateinit var reciveUserName: String
-    var Token: String=""
+    var Token: String = ""
     lateinit var reciverEmail: String
     lateinit var currentMsg: String
     lateinit var type: String
@@ -89,8 +88,6 @@ class ChatActivity : AppCompatActivity() {
     private var Count = 0
     private val TAG = "Chat"
     private val notificationViewModel: NotificationViewModel by viewModels()
-//    private val viewModel: ChatViewModel by viewModels()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -105,8 +102,8 @@ class ChatActivity : AppCompatActivity() {
 //        val reciverid = intent.getStringExtra("UID").toString()
 //        val senderid = FirebaseAuth.getInstance().currentUser?.email.toString()
 //        viewModel.getMsgList(reciverid, senderid)
-        reciveUserName= intent.getStringExtra("NAME").toString()
-        binding.chatBar.chatUserName.text =reciveUserName
+        reciveUserName = intent.getStringExtra("NAME").toString()
+        binding.chatBar.chatUserName.text = reciveUserName
         ID = intent.getStringExtra("ID").toString()
         userID = intent.getStringExtra("USERID").toString()
         reciverEmail = intent.getStringExtra("UID").toString()
@@ -123,11 +120,10 @@ class ChatActivity : AppCompatActivity() {
 
     private fun setProfileImage() {
 
-        if(reciverEmail.contains("Group")){
+        if (reciverEmail.contains("Group")) {
             binding.chatBar.progrsschat.visibility = View.GONE
             binding.chatBar.profilePicChat.setImageResource(R.drawable.gropu_icon)
-        }
-        else if (profileImage != null) {
+        } else if (profileImage != null) {
             Glide.with(this).load(profileImage)
                 .listener(object : RequestListener<Drawable> {
                     override fun onLoadFailed(
@@ -205,7 +201,7 @@ class ChatActivity : AppCompatActivity() {
                         .show()
                 }
                 notificationCheckCondition()
-                PushNotification("photo")
+                pushNotification("photo")
 
             }.addOnFailureListener {
                 mProgressDialog.dismiss()
@@ -224,6 +220,7 @@ class ChatActivity : AppCompatActivity() {
                 override fun onClickGalary() {
                     getImageId()
                 }
+
                 override fun onClickCamera() {
                     if (ContextCompat.checkSelfPermission(
                             this@ChatActivity,
@@ -300,17 +297,18 @@ class ChatActivity : AppCompatActivity() {
 
                 userMsgAdd("msg", binding.edtMsg.text.toString())
                 notificationCheckCondition()
-                PushNotification(msgOk)
+                pushNotification(msgOk)
                 chatDataInsert()
 
             }
         }
 
-        binding.chatBar.info.setOnClickListener{
-            val intent=Intent(this,UserInfoActivity::class.java)
-            intent.putExtra("UserID",ID)
-            intent.putExtra("UserName",reciveUserName)
+        binding.chatBar.info.setOnClickListener {
+            val intent = Intent(this, UserInfoActivity::class.java)
+            intent.putExtra("UserID", ID)
+            intent.putExtra("UserName", reciveUserName)
             intent.putExtra("UserProfile", profileImage)
+            intent.putExtra("GroupId", reciverEmail)
             startActivity(intent)
         }
 
@@ -403,7 +401,7 @@ class ChatActivity : AppCompatActivity() {
                 binding.chatView.visibility = View.VISIBLE
 
                 notificationCheckCondition()
-                PushNotification("Contact...")
+                pushNotification("Contact...")
             }.addOnFailureListener {
                 Toast.makeText(applicationContext, "Failed..Sending Contact", Toast.LENGTH_SHORT)
                     .show()
@@ -551,7 +549,7 @@ class ChatActivity : AppCompatActivity() {
                         }
 
                         notificationCheckCondition()
-                        PushNotification("photo")
+                        pushNotification("photo")
 
                     }.addOnFailureListener {
                         mProgressDialog.dismiss()
@@ -597,23 +595,22 @@ class ChatActivity : AppCompatActivity() {
                 }
             }
         }
-
     }
 
     private fun listenNewMessage() {
-        db.collection("Chat_Test").addSnapshotListener { value, _  ->
+        db.collection("Chat_Test").addSnapshotListener { value, _ ->
             val reciveId = intent.getStringExtra("UID").toString()
             val senderId = FirebaseAuth.getInstance().currentUser?.email.toString()
 
-            value?.let {
+            value?.let { it ->
                 if (!it.isEmpty) {
                     for (document in it.documents) {
                         if (FirebaseAuth.getInstance().currentUser?.email != document.get("email")) {
                             val msg = document.toObject(Message::class.java)
                             msg?.let { msg ->
 
-                                if(reciveId.contains("Group")){
-                                    if((msg.sendId == senderId && msg.reciverID == reciveId) || (msg.reciverID == reciveId)){
+                                if (reciveId.contains("Group")) {
+                                    if ((msg.sendId == senderId && msg.reciverID == reciveId) || (msg.reciverID == reciveId)) {
                                         if (msgList.any { it.msgID == msg.msgID }) {
 
                                         } else {
@@ -627,8 +624,7 @@ class ChatActivity : AppCompatActivity() {
                                             }
                                         }
                                     }
-                                }
-                                else if((msg.sendId == senderId && msg.reciverID == reciveId) || (msg.reciverID == senderId && msg.sendId == reciveId)) {
+                                } else if ((msg.sendId == senderId && msg.reciverID == reciveId) || (msg.reciverID == senderId && msg.sendId == reciveId)) {
                                     if (msgList.any { it.msgID == msg.msgID }) {
 
                                     } else {
@@ -647,49 +643,49 @@ class ChatActivity : AppCompatActivity() {
 //
                     }
                     msgList.sortBy { it.time }
-                    Log.d("msglist",msgList.toString())
+                    Log.d("msglist", msgList.toString())
                     setDataRec()
                 }
             }
         }
     }
 
-    fun allUserGet(){
+    private fun allUserGet() {
         FirebaseFirestore.getInstance().collection("User").addSnapshotListener { value, _ ->
             value?.let {
                 if (!it.isEmpty) {
                     for (document in it.documents) {
-                            val user = document.toObject(User::class.java)
-                            if (user != null) {
-                                userList.add(user)
-                            }
+                        val user = document.toObject(User::class.java)
+                        if (user != null) {
+                            userList.add(user)
                         }
                     }
                 }
             }
         }
+    }
 
     private fun setDataRec() {
-        msgAdapter = MessageAdapter(this, msgList,userList, object : onClickMsg {
+        msgAdapter = MessageAdapter(this, msgList, userList, object : onClickMsg {
 
             override fun onLongClickMsg(pos: Int) {
 
-                val builder= AlertDialog.Builder(this@ChatActivity)
+                val builder = AlertDialog.Builder(this@ChatActivity)
                 builder.setCancelable(true)
                 builder.setIcon(R.drawable.baseline_delete_24)
                 builder.setTitle("Delete Data !")
                 builder.setMessage("Are you Confirm Delete this Data....")
-                builder.setPositiveButton("yes"){dialog, which->
+                builder.setPositiveButton("yes") { _, _ ->
 
-                    deleteMsgView(msgList[pos].msgID.toString(),pos)
+                    deleteMsgView(msgList[pos].msgID.toString(), pos)
 
 //                    msgList.removeAt(pos)
 //                    msgAdapter.notifyItemRemoved(pos)
                 }
-                builder.setNegativeButton("NO"){dialog,which->
+                builder.setNegativeButton("NO") { dialog, which ->
                     dialog.dismiss()
                 }
-                val dialog=builder.create()
+                val dialog = builder.create()
                 dialog.show()
 //                msgList.removeAt(pos)
 //                msgAdapter.notifyItemRemoved(pos)
@@ -701,26 +697,23 @@ class ChatActivity : AppCompatActivity() {
 //                binding.chatView.visibility=View.GONE
 //                binding.contactView.visibility=View.GONE
 
-                if(msgList[pos].type=="PDF"){
+                if (msgList[pos].type == "PDF") {
                     val pdfPath = msgList[pos].msg?.toUri()
                     val intent = Intent(Intent.ACTION_VIEW)
                     intent.setDataAndType(pdfPath, "application/pdf")
                     try {
                         startActivity(intent)
                     } catch (e: ActivityNotFoundException) {
-                        Log.d("PDFVIEW","ok VIEW PDF ")
+                        Log.d("PDFVIEW", "ok VIEW PDF ")
                     }
-                }
-                else if(msgList[pos].type=="image"){
+                } else if (msgList[pos].type == "image") {
                     val imageUri: String? = msgList[pos].msg
-                    val intent = Intent(this@ChatActivity, FullScreenImageActivity::class.java).apply {
-                        putExtra("imageUri", imageUri)
-                    }
+                    val intent =
+                        Intent(this@ChatActivity, FullScreenImageActivity::class.java).apply {
+                            putExtra("imageUri", imageUri)
+                        }
                     startActivity(intent)
                 }
-
-
-
             }
         })
         binding.recyclerview.layoutManager = LinearLayoutManager(this)
@@ -728,7 +721,7 @@ class ChatActivity : AppCompatActivity() {
         binding.recyclerview.adapter = msgAdapter
 
 //        binding.recyclerview.post(Runnable { binding.recyclerview.scrollToPosition(msgList.size - 1) })
-        binding.recyclerview.scrollToPosition(msgList.size-1)
+        binding.recyclerview.scrollToPosition(msgList.size - 1)
     }
 
     private fun updateMsgView(msgId: String, pos: Int) {
@@ -865,7 +858,7 @@ class ChatActivity : AppCompatActivity() {
         }
     }
 
-    fun PushNotification(msg: String) {
+    private fun pushNotification(msg: String) {
         Log.d("OK", ID)
         Log.d("OK", Token)
         notificationViewModel
@@ -976,7 +969,7 @@ class ChatActivity : AppCompatActivity() {
                         .show()
                 }
                 notificationCheckCondition()
-                PushNotification("PDF")
+                pushNotification("PDF")
 
             }.addOnFailureListener {
                 dialog.dismiss()

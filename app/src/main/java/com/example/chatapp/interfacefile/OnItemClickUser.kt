@@ -1,6 +1,6 @@
 package com.example.chatapp.interfacefile
 
-interface OnIteamClickUser {
+interface OnItemClickUser {
     fun onClickUser(pos:Int)
     fun onLongClick(pos:Int)
 }
