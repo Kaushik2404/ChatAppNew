@@ -189,7 +189,6 @@ class UserProfile : Fragment() {
             mProgressDialog.show()
             dialog.dismiss()
 
-
             if(email.text.toString().isNotEmpty() && pass.text.toString().isNotEmpty()){
                 FirebaseFirestore.getInstance().collection("User")
                     .document(FirebaseAuth.getInstance().currentUser?.uid.toString())
@@ -212,6 +211,7 @@ class UserProfile : Fragment() {
                             }
                     }
             }else{
+                mProgressDialog.dismiss()
                 Toast.makeText(context, "Filed not blank", Toast.LENGTH_SHORT).show()
             }
         }
